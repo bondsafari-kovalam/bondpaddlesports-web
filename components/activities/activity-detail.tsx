@@ -37,6 +37,7 @@ import {
 } from '@/lib/activities'
 import { formatPrice, locationHref } from '@/lib/locations'
 import { IS_DEV, ROUTES } from '@/lib/site'
+import { RevealGroup, RevealLines } from '@/components/motion/reveal'
 
 /** Missing values: hidden for guests, flagged in development so the team can fill them in. */
 function valueOrPending(value: ReactNode | undefined) {
@@ -64,7 +65,7 @@ export function ActivityDetailHero({ activity }: { activity: Activity }) {
             </ol>
           </nav>
           <span className="inline-flex rounded-full bg-white/10 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider text-[#8fe8f4]">{activity.category}</span>
-          <h1 className="mt-5 font-display text-5xl font-black leading-[.95] tracking-tight sm:text-6xl lg:text-7xl">{activity.name}</h1>
+          <h1 className="mt-5 font-display text-5xl font-black leading-[.95] tracking-tight sm:text-6xl lg:text-7xl"><RevealLines>{activity.name}</RevealLines></h1>
           <p className="mt-5 max-w-lg text-base leading-7 text-white/80 sm:text-lg">{activity.summary}</p>
           <div className="mt-8 flex flex-wrap gap-3">
             <a href="#book" className={`inline-flex min-h-12 items-center rounded-full bg-[#f5b82e] px-6 text-sm font-extrabold uppercase tracking-[0.12em] text-[#06263b] transition hover:bg-white ${focusRing}`}>{canPreviewBooking ? 'Book this experience' : 'Check availability'} <ArrowRight className="ml-2 size-4" aria-hidden /></a>
@@ -81,7 +82,7 @@ export function ActivityOverview({ activity }: { activity: Activity }) {
   return (
     <section aria-labelledby="overview-title">
       <Eyebrow>The experience</Eyebrow>
-      <h2 id="overview-title" className="mt-3 font-display text-3xl font-black sm:text-4xl">What to expect</h2>
+      <h2 id="overview-title" className="mt-3 font-display text-3xl font-black sm:text-4xl"><RevealLines>What to expect</RevealLines></h2>
       <p className="mt-4 max-w-2xl text-base leading-7 text-[#3d5862]">{activity.description ?? activity.summary}</p>
       {!activity.description && <div className="mt-6"><DevNote title="Overview">Add the approved full description: what the session involves, who it suits, whether it is beginner-friendly and what makes it distinctive. Avoid promises about wildlife, scenery or routes unless confirmed.</DevNote></div>}
     </section>
@@ -171,7 +172,7 @@ export function ActivitySafetySection({ activity }: { activity: Activity }) {
   return (
     <section id="safety" aria-labelledby="safety-title" className="scroll-mt-6 rounded-3xl bg-[#0b3850] p-6 text-white sm:p-8">
       <ShieldCheck className="size-8 text-[#00c8e8]" strokeWidth={1.4} aria-hidden />
-      <h2 id="safety-title" className="mt-4 font-display text-3xl font-black">Safety & preparation</h2>
+      <h2 id="safety-title" className="mt-4 font-display text-3xl font-black"><RevealLines>Safety & preparation</RevealLines></h2>
       <p className="mt-2 max-w-xl text-sm leading-6 text-white/70">Everything you need to know before you get on the water.</p>
       <dl className="mt-6 grid gap-5 sm:grid-cols-2">
         {rows.map(([label, value]) => (
@@ -228,10 +229,10 @@ export function ActivityLocationList({ activity }: { activity: Activity }) {
   return (
     <section id="locations" aria-labelledby="where-title" className="scroll-mt-6">
       <Eyebrow>Available locations</Eyebrow>
-      <h2 id="where-title" className="mt-3 font-display text-3xl font-black sm:text-4xl">Where can you experience this?</h2>
+      <h2 id="where-title" className="mt-3 font-display text-3xl font-black sm:text-4xl"><RevealLines>Where can you experience this?</RevealLines></h2>
       {offerings.some((offering) => offering.source === 'demo') && <p className="mt-3 max-w-2xl text-sm leading-6 text-[#57717b]">Locations marked “preview pairing” are demonstration data until Bond confirms where {activity.name.toLowerCase()} runs.</p>}
       {offerings.length ? (
-        <div className="mt-8 grid gap-4">{offerings.map((offering) => <ActivityLocationCard key={offering.locationSlug} offering={offering} activity={activity} />)}</div>
+        <RevealGroup className="mt-8 grid gap-4">{offerings.map((offering) => <ActivityLocationCard key={offering.locationSlug} offering={offering} activity={activity} />)}</RevealGroup>
       ) : (
         <div className="mt-6 rounded-3xl bg-white p-6 ring-1 ring-[#06263b]/5">
           <MapPin className="size-7 text-[#00a9c3]" strokeWidth={1.4} aria-hidden />
@@ -290,8 +291,8 @@ export function RelatedActivities({ activity }: { activity: Activity }) {
   return (
     <section aria-labelledby="related-title">
       <Eyebrow>You might also like</Eyebrow>
-      <h2 id="related-title" className="mt-3 font-display text-3xl font-black">Related experiences</h2>
-      <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{related.map((item) => <ActivityCard key={item.slug} activity={item} />)}</div>
+      <h2 id="related-title" className="mt-3 font-display text-3xl font-black"><RevealLines>Related experiences</RevealLines></h2>
+      <RevealGroup className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{related.map((item) => <ActivityCard key={item.slug} activity={item} />)}</RevealGroup>
     </section>
   )
 }
@@ -309,8 +310,7 @@ export function ActivityNextSteps({ activity }: { activity: Activity }) {
   return (
     <section aria-labelledby="next-title">
       <h2 id="next-title" className="font-display text-2xl font-bold">Your next step</h2>
-      <div className="mt-6 grid gap-4 md:grid-cols-3">
-        {steps.map((step, index) => {
+      <RevealGroup className="mt-6 grid gap-4 md:grid-cols-3">{steps.map((step, index) => {
           const item = nextStepContent[step]
           const dark = index === 0
           return (
@@ -322,7 +322,7 @@ export function ActivityNextSteps({ activity }: { activity: Activity }) {
             </div>
           )
         })}
-      </div>
+      </RevealGroup>
     </section>
   )
 }
@@ -346,7 +346,7 @@ export function ActivityFAQ({ activity }: { activity: Activity }) {
   return (
     <section aria-labelledby="faq-title">
       <Eyebrow>Good to know</Eyebrow>
-      <h2 id="faq-title" className="mt-3 font-display text-3xl font-black">Frequently asked questions</h2>
+      <h2 id="faq-title" className="mt-3 font-display text-3xl font-black"><RevealLines>Frequently asked questions</RevealLines></h2>
       <div className="mt-6 divide-y divide-[#dfe6e5] overflow-hidden rounded-3xl bg-white ring-1 ring-[#06263b]/5">
         {activity.faqs.map((faq) => (
           <details key={faq.question} className="group">
@@ -367,7 +367,7 @@ export function ActivityFinalCTA({ bookHref = '#book' }: { bookHref?: string }) 
     <section className="relative overflow-hidden bg-[#f0783e] px-5 py-20 text-[#06263b] lg:px-8">
       <div className="absolute -right-20 -top-28 size-96 rounded-full border-[52px] border-white/10" aria-hidden />
       <div className="relative mx-auto flex max-w-7xl flex-col justify-between gap-8 lg:flex-row lg:items-end">
-        <h2 className="max-w-2xl font-display text-4xl font-black sm:text-5xl">Your next adventure<br />is waiting.</h2>
+        <h2 className="max-w-2xl font-display text-4xl font-black sm:text-5xl"><RevealLines>Your next adventure<br />is waiting.</RevealLines></h2>
         <div className="flex flex-wrap gap-3">
           <a href={bookHref} className="inline-flex min-h-12 items-center rounded-full bg-[#06263b] px-6 text-sm font-extrabold uppercase tracking-[0.1em] text-white">Find a session <ArrowRight className="ml-2 size-4" aria-hidden /></a>
           <a href={ROUTES.locations} className="inline-flex min-h-12 items-center rounded-full border border-[#06263b]/30 px-6 text-sm font-bold">Explore locations</a>

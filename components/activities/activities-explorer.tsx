@@ -8,6 +8,7 @@ import { Eyebrow, LocationStatusBadge, focusRing } from '@/components/locations/
 import { activities, activitiesAt, activityHref } from '@/lib/activities'
 import { locationHref, locations } from '@/lib/locations'
 import { ROUTES } from '@/lib/site'
+import { RevealGroup, RevealLines } from '@/components/motion/reveal'
 
 const featured = activities.filter((activity) => activity.featured)
 
@@ -18,7 +19,7 @@ export function ActivitiesHero() {
       <div className="relative mx-auto grid max-w-7xl gap-12 px-5 lg:grid-cols-[1fr_1.05fr] lg:items-center lg:px-8">
         <div>
           <p className="mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-[#8fe8f4]"><span className="h-px w-10 bg-[#f5b82e]" /> Explore our experiences</p>
-          <h1 className="font-display text-5xl font-black leading-[.95] tracking-tight sm:text-7xl">Find your rhythm<br /><span className="text-[#f5b82e]">on the water.</span></h1>
+          <h1 className="font-display text-5xl font-black leading-[.95] tracking-tight sm:text-7xl"><RevealLines>Find your rhythm<br /><span className="text-[#f5b82e]">on the water.</span></RevealLines></h1>
           <p className="mt-6 max-w-lg text-base leading-7 text-white/80 sm:text-lg">Discover Kerala from a different perspective. Paddle through peaceful backwaters, explore beautiful waterways and find an experience that matches your pace.</p>
           <div className="mt-8 flex flex-wrap gap-3">
             <a href="#all-activities" className={`inline-flex min-h-12 items-center rounded-full bg-[#f5b82e] px-6 text-sm font-extrabold uppercase tracking-[0.12em] text-[#06263b] transition hover:bg-white ${focusRing}`}>Explore activities <ArrowRight className="ml-2 size-4" aria-hidden /></a>
@@ -26,14 +27,13 @@ export function ActivitiesHero() {
           </div>
         </div>
         {/* Replace these placeholders with approved Bond paddling photography or video. */}
-        <div className="grid grid-cols-3 gap-3" aria-hidden>
-          {featured.map((activity, index) => (
+        <RevealGroup className="grid grid-cols-3 gap-3" aria-hidden>{featured.map((activity, index) => (
             <div key={activity.slug} className={index === 1 ? 'translate-y-8' : ''}>
               <ActivityVisual activity={activity} showLabel={false} className="aspect-[3/5] rounded-3xl" />
               <p className="mt-3 text-center text-xs font-bold uppercase tracking-[0.16em] text-white/70">{activity.slug === 'stand-up-paddleboarding' ? 'SUP' : activity.name}</p>
             </div>
           ))}
-        </div>
+        </RevealGroup>
       </div>
     </section>
   )
@@ -45,10 +45,9 @@ function LocationAvailabilityOverview() {
     <section className="bg-[#eef2ed] px-5 py-20 lg:px-8 lg:py-24" aria-labelledby="by-location">
       <div className="mx-auto max-w-7xl">
         <Eyebrow>Activities by location</Eyebrow>
-        <h2 id="by-location" className="mt-3 font-display text-4xl font-black sm:text-5xl">Where can you paddle?</h2>
+        <h2 id="by-location" className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>Where can you paddle?</RevealLines></h2>
         <p className="mt-4 flex max-w-2xl gap-2 text-sm leading-6 text-[#3d5862]"><Info className="mt-1 size-4 shrink-0 text-[#c95a22]" aria-hidden />Activity line-ups marked “preview” are demonstration pairings until Bond confirms what runs at each location. Session times appear here once the booking engine is connected.</p>
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {shown.map((location) => {
+        <RevealGroup className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{shown.map((location) => {
             const offered = activitiesAt(location.slug)
             return (
               <article key={location.slug} className="flex flex-col rounded-3xl bg-white p-6 ring-1 ring-[#06263b]/5">
@@ -67,7 +66,7 @@ function LocationAvailabilityOverview() {
               </article>
             )
           })}
-        </div>
+        </RevealGroup>
       </div>
     </section>
   )
@@ -92,16 +91,16 @@ export function ActivitiesExplorer() {
 
       <section className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28" aria-labelledby="featured-title">
         <div className="grid gap-6 lg:grid-cols-[1fr_1fr] lg:items-end">
-          <div><Eyebrow>Choose an activity first</Eyebrow><h2 id="featured-title" className="mt-3 font-display text-4xl font-black tracking-tight sm:text-5xl">Your kind of adventure<br />starts here.</h2></div>
+          <div><Eyebrow>Choose an activity first</Eyebrow><h2 id="featured-title" className="mt-3 font-display text-4xl font-black tracking-tight sm:text-5xl"><RevealLines>Your kind of adventure<br />starts here.</RevealLines></h2></div>
           <p className="max-w-lg text-base leading-7 text-[#3d5862]">From a relaxed first paddle to a guided water trail, discover experiences designed around your interests, the location and the conditions.</p>
         </div>
-        <div className="mt-12 grid gap-5 md:grid-cols-3">{featured.map((activity) => <ActivityCategoryCard key={activity.slug} activity={activity} />)}</div>
+        <RevealGroup className="mt-12 grid gap-5 md:grid-cols-3">{featured.map((activity) => <ActivityCategoryCard key={activity.slug} activity={activity} />)}</RevealGroup>
       </section>
 
       <section id="all-activities" className="scroll-mt-6 bg-white/60 px-5 py-20 lg:px-8 lg:py-24" aria-labelledby="all-title">
         <div className="mx-auto max-w-7xl">
           <Eyebrow>Explore all activities</Eyebrow>
-          <h2 id="all-title" className="mt-3 font-display text-4xl font-black sm:text-5xl">Every way onto the water.</h2>
+          <h2 id="all-title" className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>Every way onto the water.</RevealLines></h2>
 
           <div className="mt-10 rounded-3xl bg-white p-4 shadow-[0_20px_60px_rgba(6,38,59,.10)] sm:p-6">
             <ActivityFilters activities={activities} filters={filters} setFilters={setFilters} resultCount={results.length} drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
@@ -127,7 +126,7 @@ export function ActivitiesExplorer() {
               <button type="button" onClick={() => setFilters(emptyActivityFilters)} className={`mt-6 min-h-11 rounded-full bg-[#06263b] px-5 text-sm font-bold text-white ${focusRing}`}>Clear all filters</button>
             </div>
           ) : (
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{results.map((activity) => <ActivityCard key={activity.slug} activity={activity} />)}</div>
+            <RevealGroup className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{results.map((activity) => <ActivityCard key={activity.slug} activity={activity} />)}</RevealGroup>
           )}
         </div>
       </section>

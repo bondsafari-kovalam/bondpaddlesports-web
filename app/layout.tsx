@@ -1,5 +1,6 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
+import { MotionProvider } from '@/components/motion/motion-provider'
 import { CartProvider } from '@/components/shop/cart'
 import { SITE_URL } from '@/lib/site'
 import './globals.css'
@@ -35,7 +36,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
-        <CartProvider>{children}</CartProvider>
+        <MotionProvider>
+          <CartProvider>{children}</CartProvider>
+        </MotionProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

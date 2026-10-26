@@ -1,6 +1,7 @@
 import { MapPinned } from 'lucide-react'
 import { NotifyMeButton } from '@/components/locations/notify-me'
 import { DESTINATION_TARGET, HUBS, PHASES, STATUS_LABELS, type Location } from '@/lib/locations'
+import { RevealGroup } from '@/components/motion/reveal'
 
 export function LocationRoadmap({ locations, showSummary = true }: { locations: Location[]; showSummary?: boolean }) {
   const phases = PHASES.map((phase) => ({ phase, items: locations.filter((location) => location.phase === phase) })).filter(({ items }) => items.length > 0)
@@ -20,8 +21,7 @@ export function LocationRoadmap({ locations, showSummary = true }: { locations: 
           </dl>
         </div>
       )}
-      <ol className="grid gap-px bg-white/10 md:grid-cols-3">
-        {phases.map(({ phase, items }) => (
+      <RevealGroup as="ol" className="grid gap-px bg-white/10 md:grid-cols-3">{phases.map(({ phase, items }) => (
           <li key={phase} className="bg-[#0b3850] p-6 sm:p-7">
             <p className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.18em] text-[#f5b82e]"><MapPinned className="size-4" aria-hidden />{phase}</p>
             <ul className="mt-5 divide-y divide-white/10">
@@ -40,7 +40,7 @@ export function LocationRoadmap({ locations, showSummary = true }: { locations: 
             </ul>
           </li>
         ))}
-      </ol>
+      </RevealGroup>
     </div>
   )
 }

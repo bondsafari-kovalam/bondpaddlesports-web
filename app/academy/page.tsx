@@ -20,6 +20,7 @@ import {
   linkArrow,
 } from '@/components/academy/academy-sections'
 import { COURSE_CATEGORIES, courseSessions } from '@/lib/academy'
+import { RevealGroup } from '@/components/motion/reveal'
 
 const description = 'Bond Safari Academy: paddlesport courses in Kerala from first paddle to instructor, leader and coach pathways, the Bond Paddle Guide Programme and school programmes.'
 
@@ -54,9 +55,8 @@ export default function AcademyPage() {
           <SectionHeading id="intro" eyebrow="Why the Academy" title={<>Learn on the water.<br />Grow with every stroke.</>} />
           <div>
             <p className="text-base leading-7 text-[#3d5862]">The Academy is for anyone who wants to:</p>
-            <ul className="mt-5 grid gap-3 sm:grid-cols-2">
-              {purposes.map((purpose) => <li key={purpose} className="flex gap-3 rounded-2xl bg-white p-4 text-sm font-semibold ring-1 ring-[#06263b]/5"><Check className="size-5 shrink-0 text-[#14785a]" aria-hidden />{purpose}</li>)}
-            </ul>
+            <RevealGroup as="ul" className="mt-5 grid gap-3 sm:grid-cols-2">{purposes.map((purpose) => <li key={purpose} className="flex gap-3 rounded-2xl bg-white p-4 text-sm font-semibold ring-1 ring-[#06263b]/5"><Check className="size-5 shrink-0 text-[#14785a]" aria-hidden />{purpose}</li>)}
+            </RevealGroup>
           </div>
         </div>
         <div className="mt-16"><h2 className="sr-only">Who is the Academy for?</h2><AcademyAudienceCards /></div>
@@ -65,7 +65,7 @@ export default function AcademyPage() {
       <section className="bg-white/60 px-5 py-20 lg:px-8 lg:py-28" aria-labelledby="categories">
         <div className="mx-auto max-w-7xl">
           <SectionHeading id="categories" eyebrow="Course categories" title="Four ways to learn." intro="Prices are the supplied 2027 rates; final payable amounts, including tax, are confirmed at enrolment." action={<a href="/academy/courses" className={linkArrow}>All courses <ArrowRight className="ml-1 size-4" aria-hidden /></a>} />
-          <div className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-4">{COURSE_CATEGORIES.map((category) => <CourseCategoryCard key={category.id} id={category.id} />)}</div>
+          <RevealGroup className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-4">{COURSE_CATEGORIES.map((category) => <CourseCategoryCard key={category.id} id={category.id} />)}</RevealGroup>
         </div>
       </section>
 

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { ArrowRight, MapPin, MapPinOff } from 'lucide-react'
 import { LocationStatusBadge, focusRing } from '@/components/locations/primitives'
 import { REGIONS, locationHref, type Location } from '@/lib/locations'
+import { RevealGroup } from '@/components/motion/reveal'
 
 const MAPS_EMBED_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY
 
@@ -50,8 +51,7 @@ export function LocationMap({ locations }: { locations: Location[] }) {
               <MapPinOff className="mt-0.5 size-5 shrink-0 text-[#c95a22]" aria-hidden />
               <p><strong className="text-[#06263b]">Map placeholder — not an interactive map.</strong> The live map appears once Google Maps is configured and verified meeting-point coordinates are supplied. Locations are grouped by region below.</p>
             </div>
-            <div className="mt-5 grid flex-1 gap-3 sm:grid-cols-3">
-              {REGIONS.map((region) => {
+            <RevealGroup className="mt-5 grid flex-1 gap-3 sm:grid-cols-3">{REGIONS.map((region) => {
                 const inRegion = locations.filter((location) => location.region === region)
                 return (
                   <div key={region} className="rounded-2xl border border-dashed border-[#06263b]/15 p-4">
@@ -63,7 +63,7 @@ export function LocationMap({ locations }: { locations: Location[] }) {
                   </div>
                 )
               })}
-            </div>
+            </RevealGroup>
             {selected?.hasDetailPage && (
               <a href={locationHref(selected)} className={`mt-5 inline-flex w-fit items-center gap-2 rounded-full bg-[#06263b] px-5 py-3 text-sm font-bold text-white ${focusRing}`}>View {selected.name} <ArrowRight className="size-4" aria-hidden /></a>
             )}

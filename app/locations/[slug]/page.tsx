@@ -17,6 +17,7 @@ import { SiteFooter } from '@/components/site/site-footer'
 import { SiteHeader } from '@/components/site/site-header'
 import { STATUS_LABELS, getLocation, locationHref, locations, type Location } from '@/lib/locations'
 import { SITE_NAME, SITE_URL } from '@/lib/site'
+import { RevealGroup, RevealLines } from '@/components/motion/reveal'
 
 type Props = { params: Promise<{ slug: string }> }
 
@@ -109,10 +110,10 @@ export default async function LocationPage({ params }: Props) {
         <section className="bg-[#eef2ed] px-5 py-20 lg:px-8" aria-labelledby="more-locations">
           <div className="mx-auto max-w-7xl">
             <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-              <div><p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#c95a22]">Keep exploring</p><h2 id="more-locations" className="mt-3 font-display text-3xl font-black sm:text-4xl">More places to paddle</h2></div>
+              <div><p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#c95a22]">Keep exploring</p><h2 id="more-locations" className="mt-3 font-display text-3xl font-black sm:text-4xl"><RevealLines>More places to paddle</RevealLines></h2></div>
               <a href="/locations" className="text-sm font-bold text-[#0b7f95]">All locations →</a>
             </div>
-            <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{others.map((other) => <LocationCard key={other.slug} location={other} />)}</div>
+            <RevealGroup className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{others.map((other) => <LocationCard key={other.slug} location={other} />)}</RevealGroup>
           </div>
         </section>
 

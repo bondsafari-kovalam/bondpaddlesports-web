@@ -5,6 +5,7 @@ import { ShopCategoryCard } from '@/components/shop/product-bits'
 import { ShopCatalogue } from '@/components/shop/shop-catalogue'
 import { BookingAddOnSection, BulkOrderSection, FulfilmentAndSupport, MembershipSection, PaddlingEssentials, PageHero, ShopShell, StarterKitSection, ghost, gold } from '@/components/shop/shop-sections'
 import { SHOP_CATEGORIES } from '@/lib/shop'
+import { RevealGroup, RevealLines } from '@/components/motion/reveal'
 
 const description = 'The Bond Safari Shop: apparel, waterwear, paddling equipment, Academy starter kits and made-to-order SUP boards and kayaks. Delivery across India.'
 
@@ -28,8 +29,8 @@ export default function ShopPage() {
 
       <section className="mx-auto max-w-7xl px-5 py-20 lg:px-8" aria-labelledby="categories">
         <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#c95a22]">Shop by category</p>
-        <h2 id="categories" className="mt-3 font-display text-4xl font-black sm:text-5xl">What do you need?</h2>
-        <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-5">{SHOP_CATEGORIES.map((category) => <ShopCategoryCard key={category.id} category={category} />)}</div>
+        <h2 id="categories" className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>What do you need?</RevealLines></h2>
+        <RevealGroup className="mt-10 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-5">{SHOP_CATEGORIES.map((category) => <ShopCategoryCard key={category.id} category={category} />)}</RevealGroup>
       </section>
 
       <div className="mx-auto max-w-7xl px-5 pb-20 lg:px-8"><ShopCatalogue /></div>

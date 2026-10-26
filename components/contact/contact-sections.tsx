@@ -10,6 +10,7 @@ import { contactChannels, whatsappHref, type ContactEnquiryType } from '@/lib/co
 import { locationHref, locations } from '@/lib/locations'
 import { ROUTES } from '@/lib/site'
 import { cn } from '@/lib/utils'
+import { RevealGroup, RevealLines } from '@/components/motion/reveal'
 
 const gold = `inline-flex min-h-12 items-center justify-center rounded-full bg-[#f5b82e] px-6 text-sm font-extrabold uppercase tracking-[0.12em] text-[#06263b] transition hover:bg-white ${focusRing}`
 const ghost = `inline-flex min-h-12 items-center justify-center rounded-full border border-white/40 px-6 text-sm font-bold text-white transition hover:bg-white/10 ${focusRing}`
@@ -26,7 +27,7 @@ export function ContactHero() {
       <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
         <div className="max-w-3xl">
           <p className="mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-[#8fe8f4]"><span className="h-px w-10 bg-[#f5b82e]" /> Get in touch</p>
-          <h1 className="font-display text-5xl font-black leading-[.95] tracking-tight sm:text-7xl">Let’s get you<br /><span className="text-[#f5b82e]">on the water.</span></h1>
+          <h1 className="font-display text-5xl font-black leading-[.95] tracking-tight sm:text-7xl"><RevealLines>Let’s get you<br /><span className="text-[#f5b82e]">on the water.</span></RevealLines></h1>
           <p className="mt-7 max-w-xl text-base leading-7 text-white/80 sm:text-lg">Have a question about a paddling experience, a location, an Academy course, or a group booking? We’re here to help you plan your next adventure with Bond Safari.</p>
           <div className="mt-9 flex flex-wrap gap-3">
             <a href={`#${FORM_ID}`} className={gold}>Send an enquiry <ArrowRight className="ml-2 size-4" aria-hidden /></a>
@@ -48,8 +49,7 @@ export function ContactOptions() {
   return (
     <section className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-24" aria-labelledby="options-title">
       <h2 id="options-title" className="sr-only">Contact options</h2>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {options.map(({ icon: Icon, title, text, cta, type, href }, i) => (
+      <RevealGroup className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{options.map(({ icon: Icon, title, text, cta, type, href }, i) => (
           <article key={title} className={`flex flex-col rounded-3xl p-6 ${i === 3 ? 'bg-[#0b3850] text-white' : 'bg-white ring-1 ring-[#06263b]/5'}`}>
             <Icon className={`size-8 ${i === 3 ? 'text-[#f5b82e]' : 'text-[#00a9c3]'}`} strokeWidth={1.4} aria-hidden />
             <h3 className="mt-6 font-display text-xl font-bold">{title}</h3>
@@ -59,7 +59,7 @@ export function ContactOptions() {
               : <a href={href} className={cn('mt-5', textLink, 'text-[#f5b82e] hover:text-white', focusRing)}>{cta} <ArrowRight className="ml-1 size-4" aria-hidden /></a>}
           </article>
         ))}
-      </div>
+      </RevealGroup>
     </section>
   )
 }
@@ -74,7 +74,7 @@ export function ContactFormSection() {
       <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1.4fr_1fr]">
         <div>
           <Eyebrow>Send an enquiry</Eyebrow>
-          <h2 id="form-title" tabIndex={-1} className="mt-3 font-display text-4xl font-black outline-none sm:text-5xl">How can we help?</h2>
+          <h2 id="form-title" tabIndex={-1} className="mt-3 font-display text-4xl font-black outline-none sm:text-5xl"><RevealLines>How can we help?</RevealLines></h2>
           <p className="mt-4 max-w-xl text-base leading-7 text-[#3d5862]">Send us your question and the relevant details. We’ll review your enquiry and respond using the contact information you provide.</p>
           <div className="mt-10 rounded-3xl bg-white p-6 shadow-[0_20px_60px_rgba(6,38,59,.12)] ring-1 ring-[#06263b]/5 sm:p-8"><ContactForm /></div>
         </div>
@@ -120,10 +120,9 @@ export function ContactLocations() {
     <section className="bg-[#eef2ed] px-5 py-20 lg:px-8 lg:py-28" aria-labelledby="locations-title">
       <div className="mx-auto max-w-7xl">
         <Eyebrow>Locations</Eyebrow>
-        <h2 id="locations-title" className="mt-3 font-display text-4xl font-black sm:text-5xl">Find your way to the water.</h2>
+        <h2 id="locations-title" className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>Find your way to the water.</RevealLines></h2>
         <p className="mt-4 max-w-xl text-base leading-7 text-[#3d5862]">Explore our operating locations and check the relevant meeting-point information before your visit.</p>
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {contactLocations.map((location) => {
+        <RevealGroup className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">{contactLocations.map((location) => {
             const meeting = location.visitorInfo.meetingPointAddress ?? location.meetingPoint
             const directions = location.coordinates ? `https://www.google.com/maps/dir/?api=1&destination=${location.coordinates.lat},${location.coordinates.lng}` : undefined
             return (
@@ -145,7 +144,7 @@ export function ContactLocations() {
               </article>
             )
           })}
-        </div>
+        </RevealGroup>
         <div className="mt-10">
           <h3 className="sr-only">Map</h3>
           <LocationMap locations={contactLocations} />
@@ -165,9 +164,8 @@ export function QuickHelp() {
   return (
     <section className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28" aria-labelledby="quick-title">
       <Eyebrow>Quick help</Eyebrow>
-      <h2 id="quick-title" className="mt-3 font-display text-4xl font-black sm:text-5xl">Looking for something specific?</h2>
-      <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {items.map(({ icon: Icon, title, text, cta, href }) => (
+      <h2 id="quick-title" className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>Looking for something specific?</RevealLines></h2>
+      <RevealGroup className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{items.map(({ icon: Icon, title, text, cta, href }) => (
           <article key={title} className="flex flex-col rounded-3xl bg-white p-6 ring-1 ring-[#06263b]/5">
             <Icon className="size-7 text-[#00a9c3]" strokeWidth={1.4} aria-hidden />
             <h3 className="mt-5 font-display text-lg font-bold">{title}</h3>
@@ -175,7 +173,7 @@ export function QuickHelp() {
             {href ? <a href={href} className={`mt-5 ${textLink} ${focusRing}`}>{cta} <ArrowRight className="ml-1 size-4" aria-hidden /></a> : <div className="mt-5"><ComingSoonLink>{cta}</ComingSoonLink></div>}
           </article>
         ))}
-      </div>
+      </RevealGroup>
     </section>
   )
 }
@@ -186,13 +184,13 @@ export function GroupAndAcademyBanners() {
       <div className="relative overflow-hidden rounded-3xl bg-[#f0783e] p-8 text-[#06263b] sm:p-10">
         <div className="absolute -right-20 -top-28 size-80 rounded-full border-[44px] border-white/10" aria-hidden />
         <Users className="relative size-9" strokeWidth={1.4} aria-hidden />
-        <h2 className="relative mt-6 font-display text-3xl font-black sm:text-4xl">Planning an experience for your group?</h2>
+        <h2 className="relative mt-6 font-display text-3xl font-black sm:text-4xl"><RevealLines>Planning an experience for your group?</RevealLines></h2>
         <p className="relative mt-3 max-w-lg text-sm leading-6 text-[#06263b]/80">Whether you’re organising a corporate outing, a school visit, or a day out with friends, tell us about your plans and explore the available options. An enquiry doesn’t confirm a booking.</p>
         <a href={ROUTES.groups} className={`relative mt-7 ${dark}`}>Plan a group experience</a>
       </div>
       <div className="rounded-3xl bg-[#0b3850] p-8 text-white sm:p-10">
         <GraduationCap className="size-9 text-[#f5b82e]" strokeWidth={1.4} aria-hidden />
-        <h2 className="mt-6 font-display text-3xl font-black">Interested in learning to paddle?</h2>
+        <h2 className="mt-6 font-display text-3xl font-black"><RevealLines>Interested in learning to paddle?</RevealLines></h2>
         <p className="mt-3 text-sm leading-6 text-white/70">Explore the Bond Safari Academy and get in touch with questions about courses, training opportunities, and upcoming programmes.</p>
         <a href={ROUTES.academy} className={`mt-7 ${gold}`}>Explore the Academy</a>
       </div>
@@ -211,7 +209,7 @@ export function ContactFAQ() {
   return (
     <section className="mx-auto max-w-4xl px-5 pb-20 lg:pb-28" aria-labelledby="faq-title">
       <Eyebrow>FAQs</Eyebrow>
-      <h2 id="faq-title" className="mt-3 font-display text-4xl font-black">Quick answers.</h2>
+      <h2 id="faq-title" className="mt-3 font-display text-4xl font-black"><RevealLines>Quick answers.</RevealLines></h2>
       <div className="mt-8 divide-y divide-[#dfe6e5] overflow-hidden rounded-3xl bg-white ring-1 ring-[#06263b]/5">
         {faqs.map(({ q, a }) => (
           <details key={q} className="group">
@@ -231,7 +229,7 @@ export function ContactFinalCTA() {
       <Ripples className="absolute -right-24 top-1/2 size-[40rem] -translate-y-1/2" />
       <div className="relative mx-auto flex max-w-7xl flex-col justify-between gap-8 lg:flex-row lg:items-end">
         <div>
-          <h2 className="max-w-2xl font-display text-4xl font-black sm:text-6xl">Your next adventure is <span className="text-[#f5b82e]">closer than you think.</span></h2>
+          <h2 className="max-w-2xl font-display text-4xl font-black sm:text-6xl"><RevealLines>Your next adventure is <span className="text-[#f5b82e]">closer than you think.</span></RevealLines></h2>
           <p className="mt-4 max-w-xl text-base text-white/70">Explore Kerala from the water with Bond Safari Paddle Sports.</p>
         </div>
         <div className="flex flex-wrap gap-3">

@@ -5,6 +5,7 @@ import { Search, SearchX, SlidersHorizontal, X } from 'lucide-react'
 import { CourseCard } from '@/components/academy/course-card'
 import { focusRing } from '@/components/locations/primitives'
 import { CAMPUSES, COURSE_CATEGORIES, COURSE_STATUS_LABELS, courseSessions, courses, type Course } from '@/lib/academy'
+import { RevealGroup } from '@/components/motion/reveal'
 
 type Filters = { query: string; category: string; discipline: string; level: string; campus: string; month: string; price: string; status: string }
 type FacetKey = Exclude<keyof Filters, 'query'>
@@ -158,7 +159,7 @@ export function CourseCatalogue() {
               return (
                 <div key={category.id}>
                   <div className="mb-5 flex flex-wrap items-baseline justify-between gap-2"><h2 className="font-display text-2xl font-bold">{category.name}</h2><p className="text-sm text-[#57717b]">{category.summary}</p></div>
-                  <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{inCategory.map((course) => <CourseCard key={course.slug} course={course} />)}</div>
+                  <RevealGroup className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{inCategory.map((course) => <CourseCard key={course.slug} course={course} />)}</RevealGroup>
                 </div>
               )
             })}

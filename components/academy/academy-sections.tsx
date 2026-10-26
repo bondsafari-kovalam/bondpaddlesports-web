@@ -7,6 +7,7 @@ import { Eyebrow, focusRing } from '@/components/locations/primitives'
 import { SiteFooter } from '@/components/site/site-footer'
 import { SiteHeader } from '@/components/site/site-header'
 import { CAMPUSES, COURSE_CATEGORIES, PARTNER_STATEMENT, PATHWAY_STAGES, courses, formatRupees, getCourse, type CourseCategoryId } from '@/lib/academy'
+import { RevealGroup, RevealLines } from '@/components/motion/reveal'
 
 export const goldButton = `inline-flex min-h-12 items-center justify-center rounded-full bg-[#f5b82e] px-6 text-sm font-extrabold uppercase tracking-[0.12em] text-[#06263b] transition hover:bg-white ${focusRing}`
 export const ghostButton = `inline-flex min-h-12 items-center justify-center rounded-full border border-white/40 px-6 text-sm font-bold text-white transition hover:bg-white/10 ${focusRing}`
@@ -53,7 +54,7 @@ export function AcademyHero({ eyebrow, title, description, actions, breadcrumb, 
           )}
           <div className="max-w-3xl">
             <p className="mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-[#8fe8f4]"><span className="h-px w-10 bg-[#f5b82e]" /> {eyebrow}</p>
-            <h1 className="font-display text-5xl font-black leading-[.98] tracking-tight sm:text-6xl lg:text-7xl">{title}</h1>
+            <h1 className="font-display text-5xl font-black leading-[.98] tracking-tight sm:text-6xl lg:text-7xl"><RevealLines>{title}</RevealLines></h1>
             <p className="mt-6 max-w-xl text-base leading-7 text-white/80 sm:text-lg">{description}</p>
             {actions && <div className="mt-8 flex flex-wrap gap-3">{actions}</div>}
           </div>
@@ -70,7 +71,7 @@ export function SectionHeading({ eyebrow, title, intro, id, tone = 'light', acti
     <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
       <div className="max-w-2xl">
         <Eyebrow tone={tone === 'dark' ? 'cyan' : 'orange'}>{eyebrow}</Eyebrow>
-        <h2 id={id} className="mt-3 font-display text-4xl font-black tracking-tight sm:text-5xl">{title}</h2>
+        <h2 id={id} className="mt-3 font-display text-4xl font-black tracking-tight sm:text-5xl"><RevealLines>{title}</RevealLines></h2>
         {intro && <div className={`mt-4 text-base leading-7 ${tone === 'dark' ? 'text-white/70' : 'text-[#3d5862]'}`}>{intro}</div>}
       </div>
       {action}
@@ -87,8 +88,7 @@ const audiences: { icon: LucideIcon; title: string; text: string; cta: string; h
 
 export function AcademyAudienceCards() {
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      {audiences.map(({ icon: Icon, title, text, cta, href }) => (
+    <RevealGroup className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{audiences.map(({ icon: Icon, title, text, cta, href }) => (
         <article key={title} className="flex flex-col rounded-3xl bg-white p-6 ring-1 ring-[#06263b]/5 transition hover:shadow-[0_20px_50px_rgba(6,38,59,.10)]">
           <Icon className="size-8 text-[#00a9c3]" strokeWidth={1.4} aria-hidden />
           <h3 className="mt-8 font-display text-xl font-bold">{title}</h3>
@@ -96,7 +96,7 @@ export function AcademyAudienceCards() {
           <a href={href} className={`mt-5 ${linkArrow} ${focusRing}`}>{cta} <ArrowRight className="ml-1 size-4" aria-hidden /></a>
         </article>
       ))}
-    </div>
+    </RevealGroup>
   )
 }
 
@@ -128,8 +128,7 @@ export function CourseCategoryCard({ id }: { id: CourseCategoryId }) {
 export function QualificationPathway({ tone = 'dark' }: { tone?: 'dark' | 'light' }) {
   const dark = tone === 'dark'
   return (
-    <ol className="grid gap-3 sm:grid-cols-2 lg:grid-cols-6">
-      {PATHWAY_STAGES.map((stage, index) => (
+    <RevealGroup as="ol" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-6">{PATHWAY_STAGES.map((stage, index) => (
         <li key={stage.id} className="relative">
           <a href={stage.href} className={`group flex h-full flex-col rounded-3xl p-5 transition ${dark ? 'bg-white/[.06] hover:bg-white/10' : 'bg-white ring-1 ring-[#06263b]/5 hover:shadow-[0_20px_50px_rgba(6,38,59,.10)]'} ${focusRing}`}>
             <span className={`flex size-10 items-center justify-center rounded-full font-display text-sm font-bold ${index < 2 ? 'bg-[#00c8e8] text-[#06263b]' : index < 5 ? 'bg-[#f5b82e] text-[#06263b]' : 'bg-[#f0783e] text-[#06263b]'}`}>{String(index + 1).padStart(2, '0')}</span>
@@ -140,14 +139,13 @@ export function QualificationPathway({ tone = 'dark' }: { tone?: 'dark' | 'light
           {index < PATHWAY_STAGES.length - 1 && <ChevronRight className={`absolute -right-3 top-1/2 z-10 hidden size-5 -translate-y-1/2 lg:block ${dark ? 'text-[#f5b82e]' : 'text-[#c95a22]'}`} aria-hidden />}
         </li>
       ))}
-    </ol>
+    </RevealGroup>
   )
 }
 
 export function CampusCards() {
   return (
-    <div className="grid gap-4 md:grid-cols-3">
-      {CAMPUSES.map((campus) => (
+    <RevealGroup className="grid gap-4 md:grid-cols-3">{CAMPUSES.map((campus) => (
         <article key={campus.id} className="rounded-3xl bg-white p-6 ring-1 ring-[#06263b]/5">
           <span className="inline-flex rounded-full bg-[#fff1cf] px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider text-[#7a4f00]">{campus.planned}</span>
           <h3 className="mt-5 flex items-center gap-2 font-display text-2xl font-bold"><MapPin className="size-5 text-[#00a9c3]" aria-hidden />{campus.name}</h3>
@@ -155,7 +153,7 @@ export function CampusCards() {
           <ul className="mt-5 flex flex-wrap gap-2">{campus.focus.map((focus) => <li key={focus} className="rounded-full bg-[#eef2ed] px-3 py-1.5 text-xs font-semibold">{focus}</li>)}</ul>
         </article>
       ))}
-    </div>
+    </RevealGroup>
   )
 }
 
@@ -167,7 +165,7 @@ export function GuideProgrammeFeature({ ctaHref = '/academy/careers' }: { ctaHre
       <div className="relative grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-end">
         <div>
           <Eyebrow tone="cyan">Careers on the water</Eyebrow>
-          <h2 className="mt-3 font-display text-4xl font-black sm:text-5xl">Bond Paddle Guide Programme</h2>
+          <h2 className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>Bond Paddle Guide Programme</RevealLines></h2>
           <p className="mt-4 max-w-xl text-base leading-7 text-white/70">Bond’s professional guide-training programme for people who want to build a future on the water. Programme structure, schedule, entry requirements and training locations will be published once confirmed.</p>
           <a href={ctaHref} className={`mt-8 ${goldButton}`}>Explore the guide programme <ArrowRight className="ml-2 size-4" aria-hidden /></a>
         </div>
@@ -190,7 +188,7 @@ export function PartnerNote() {
 }
 
 export function FeaturedCourses() {
-  return <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{courses.filter((course) => course.featured).map((course) => <CourseCard key={course.slug} course={course} />)}</div>
+  return <RevealGroup className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{courses.filter((course) => course.featured).map((course) => <CourseCard key={course.slug} course={course} />)}</RevealGroup>
 }
 
 export function NoDatesState({ courseName }: { courseName?: string }) {
@@ -208,7 +206,7 @@ export function LearningStories() {
     <div className="grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:items-center">
       <div>
         <Eyebrow>Learning with the Academy</Eyebrow>
-        <h2 className="mt-3 font-display text-4xl font-black sm:text-5xl">Learn on the water,<br />not just about it.</h2>
+        <h2 className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>Learn on the water,<br />not just about it.</RevealLines></h2>
       </div>
       <div className="space-y-4 text-base leading-7 text-[#3d5862]">
         <p className="flex gap-3"><BookOpen className="mt-1 size-5 shrink-0 text-[#00a9c3]" aria-hidden />Courses are built around time on the water, with each stage of the pathway setting out what you’ll learn and what you’ll be able to do next.</p>
@@ -223,7 +221,7 @@ export function AcademyFinalCTA() {
     <section className="relative overflow-hidden bg-[#f0783e] px-5 py-20 text-[#06263b] lg:px-8">
       <div className="absolute -right-20 -top-28 size-96 rounded-full border-[52px] border-white/10" aria-hidden />
       <div className="relative mx-auto flex max-w-7xl flex-col justify-between gap-8 lg:flex-row lg:items-end">
-        <h2 className="max-w-2xl font-display text-4xl font-black sm:text-5xl">Ready to take<br />your next step?</h2>
+        <h2 className="max-w-2xl font-display text-4xl font-black sm:text-5xl"><RevealLines>Ready to take<br />your next step?</RevealLines></h2>
         <div className="flex flex-wrap gap-3">
           <a href="/academy/courses" className="inline-flex min-h-12 items-center rounded-full bg-[#06263b] px-6 text-sm font-extrabold uppercase tracking-[0.1em] text-white">Explore courses <ArrowRight className="ml-2 size-4" aria-hidden /></a>
           <a href="/academy/qualification-pathway" className="inline-flex min-h-12 items-center rounded-full border border-[#06263b]/30 px-6 text-sm font-bold">Find your pathway</a>

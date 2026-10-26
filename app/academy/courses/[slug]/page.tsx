@@ -6,6 +6,7 @@ import { CourseCard } from '@/components/academy/course-card'
 import { AcademyFAQ, CourseBookingPanel, CourseDetailHero, CourseInformationGrid, CourseKit, CourseOverview, QualificationOutcome, TutorProfiles } from '@/components/academy/course-detail'
 import { courseHref, courses, getCourse } from '@/lib/academy'
 import { SITE_URL } from '@/lib/site'
+import { RevealGroup, RevealLines } from '@/components/motion/reveal'
 
 type Props = { params: Promise<{ slug: string }> }
 
@@ -56,8 +57,8 @@ export default async function CoursePage({ params }: Props) {
       {related.length > 0 && (
         <section className="bg-[#eef2ed] px-5 py-20 lg:px-8" aria-labelledby="related">
           <div className="mx-auto max-w-7xl">
-            <h2 id="related" className="font-display text-3xl font-black">More in this category</h2>
-            <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{related.map((other) => <CourseCard key={other.slug} course={other} />)}</div>
+            <h2 id="related" className="font-display text-3xl font-black"><RevealLines>More in this category</RevealLines></h2>
+            <RevealGroup className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{related.map((other) => <CourseCard key={other.slug} course={other} />)}</RevealGroup>
           </div>
         </section>
       )}

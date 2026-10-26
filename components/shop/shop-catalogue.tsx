@@ -6,6 +6,7 @@ import { useCart } from '@/components/shop/cart'
 import { ProductCard } from '@/components/shop/product-bits'
 import { focusRing } from '@/components/locations/primitives'
 import { SHOP_CATEGORIES, getCategory, isPurchasable, priceFor, products, salesMethod, variantsFor, type Product, type ShopCategoryId } from '@/lib/shop'
+import { RevealGroup, RevealLines } from '@/components/motion/reveal'
 
 type Filters = { query: string; category: string; type: string; size: string; colour: string; price: string; availability: string; fulfilment: string }
 type FacetKey = Exclude<keyof Filters, 'query'>
@@ -104,7 +105,7 @@ export function ShopCatalogue({ fixedCategory, heading = true }: { fixedCategory
       {heading && (
         <div className="mb-8">
           <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#c95a22]">All products</p>
-          <h2 id="catalogue-title" className="mt-3 font-display text-4xl font-black sm:text-5xl">Find your next water essential.</h2>
+          <h2 id="catalogue-title" className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>Find your next water essential.</RevealLines></h2>
         </div>
       )}
       <div className="rounded-3xl bg-white p-4 shadow-[0_20px_60px_rgba(6,38,59,.10)] sm:p-6">
@@ -152,7 +153,7 @@ export function ShopCatalogue({ fixedCategory, heading = true }: { fixedCategory
           <button type="button" onClick={() => setFilters({ ...empty, category: fixedCategory ?? '' })} className={`mt-6 min-h-11 rounded-full bg-[#06263b] px-5 text-sm font-bold text-white ${focusRing}`}>Clear filters</button>
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 xl:grid-cols-4">{sorted.map((p) => <ProductCard key={p.slug} product={p} />)}</div>
+        <RevealGroup className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 xl:grid-cols-4">{sorted.map((p) => <ProductCard key={p.slug} product={p} />)}</RevealGroup>
       )}
     </section>
   )

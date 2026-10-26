@@ -15,6 +15,7 @@ import {
 } from '@/lib/academy'
 import { getCourseSessions } from '@/lib/academy-service'
 import { IS_DEV } from '@/lib/site'
+import { RevealGroup, RevealLines } from '@/components/motion/reveal'
 
 const pendingText = 'Pending confirmation'
 
@@ -35,7 +36,7 @@ export function CourseDetailHero({ course }: { course: Course }) {
             <span className="rounded-full bg-white/10 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider text-[#8fe8f4]">{categoryName(course.category)}</span>
             <CourseStatusBadge status={course.status} />
           </div>
-          <h1 className="mt-5 font-display text-5xl font-black leading-[.95] tracking-tight sm:text-6xl">{course.name}</h1>
+          <h1 className="mt-5 font-display text-5xl font-black leading-[.95] tracking-tight sm:text-6xl"><RevealLines>{course.name}</RevealLines></h1>
           <p className="mt-5 max-w-lg text-base leading-7 text-white/80 sm:text-lg">{course.summary}</p>
           <p className="mt-6 flex items-baseline gap-3"><CoursePrice course={course} className="text-3xl text-[#f5b82e]" />{course.price ? <span className="text-xs text-white/60">2027 rate · tax inclusion to be confirmed</span> : null}</p>
           <div className="mt-8 flex flex-wrap gap-3">
@@ -56,7 +57,7 @@ export function CourseOverview({ course }: { course: Course }) {
   return (
     <section aria-labelledby="overview-title">
       <Eyebrow>Course overview</Eyebrow>
-      <h2 id="overview-title" className="mt-3 font-display text-3xl font-black sm:text-4xl">What this course covers</h2>
+      <h2 id="overview-title" className="mt-3 font-display text-3xl font-black sm:text-4xl"><RevealLines>What this course covers</RevealLines></h2>
       <p className="mt-4 max-w-2xl text-base leading-7 text-[#3d5862]">{course.description ?? course.summary}</p>
       {!course.description && <div className="mt-6"><DevNote title="Overview">Add the approved description from the Paddle UK qualification documents: what learners cover, who it’s for, outcomes, and what they can do afterwards within the qualification’s actual remit.</DevNote></div>}
     </section>
@@ -108,7 +109,7 @@ export function QualificationOutcome({ course }: { course: Course }) {
   return (
     <section aria-labelledby="outcome-title" className="rounded-3xl bg-[#0b3850] p-6 text-white sm:p-8">
       <GraduationCap className="size-8 text-[#00c8e8]" strokeWidth={1.4} aria-hidden />
-      <h2 id="outcome-title" className="mt-4 font-display text-3xl font-black">Qualification outcome</h2>
+      <h2 id="outcome-title" className="mt-4 font-display text-3xl font-black"><RevealLines>Qualification outcome</RevealLines></h2>
       <p className="mt-3 max-w-2xl text-sm leading-6 text-white/70">Instructor and leader qualifications have different remits: one does not grant the permissions of the other. The exact scope, limitations and water environments for {course.name} come from the Paddle UK Qualification Pathway.</p>
       <dl className="mt-6 grid gap-5 sm:grid-cols-2">
         <div><dt className="text-xs font-bold uppercase tracking-wider text-[#8fe8f4]">Scope after qualifying</dt><dd className="mt-1 text-sm text-white/85">{course.outcomeScope ?? <span className="italic text-white/60">Awaiting the approved qualification remit.</span>}</dd></div>
@@ -181,8 +182,7 @@ export function TutorProfiles({ course }: { course: Course }) {
   return (
     <section aria-labelledby="tutors-title">
       <h2 id="tutors-title" className="font-display text-2xl font-bold">Your tutors</h2>
-      <div className="mt-6 grid gap-4 sm:grid-cols-2">
-        {assigned.map((tutor) => (
+      <RevealGroup className="mt-6 grid gap-4 sm:grid-cols-2">{assigned.map((tutor) => (
           <article key={tutor.id} className="rounded-3xl bg-white p-6 ring-1 ring-[#06263b]/5">
             <h3 className="font-display text-lg font-bold">{tutor.name}</h3>
             <p className="text-sm text-[#57717b]">{tutor.role}</p>
@@ -190,7 +190,7 @@ export function TutorProfiles({ course }: { course: Course }) {
             <ul className="mt-3 flex flex-wrap gap-1.5">{tutor.qualifications.map((q) => <li key={q} className="rounded-full bg-[#eef2ed] px-2.5 py-1 text-xs font-semibold">{q}</li>)}</ul>
           </article>
         ))}
-      </div>
+      </RevealGroup>
     </section>
   )
 }
@@ -201,7 +201,7 @@ export function AcademyFAQ({ faqs, policies }: { faqs: Faq[]; policies?: { cance
   return (
     <section aria-labelledby="faq-title">
       <Eyebrow>FAQs & policies</Eyebrow>
-      <h2 id="faq-title" className="mt-3 font-display text-3xl font-black">Good to know</h2>
+      <h2 id="faq-title" className="mt-3 font-display text-3xl font-black"><RevealLines>Good to know</RevealLines></h2>
       <div className="mt-6 divide-y divide-[#dfe6e5] overflow-hidden rounded-3xl bg-white ring-1 ring-[#06263b]/5">
         {items.map((faq) => (
           <details key={faq.question} className="group">

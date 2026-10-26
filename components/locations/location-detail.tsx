@@ -5,12 +5,13 @@ import { NotifyMeButton } from '@/components/locations/notify-me'
 import { DevNote, Eyebrow, IllustrativeLabel, LocationStatusBadge, Pending, focusRing } from '@/components/locations/primitives'
 import { ACTIVITY_LABELS, formatDate, formatPrice, type Location, type VisitorInfo } from '@/lib/locations'
 import { IS_DEV, ROUTES } from '@/lib/site'
+import { HeroImage, RevealGroup, RevealLines } from '@/components/motion/reveal'
 
 export function LocationDetailHero({ location }: { location: Location }) {
   const isOperating = location.status === 'operating'
   return (
-    <section className="relative flex min-h-[600px] items-end bg-[#06263b] pb-16 pt-36 text-white lg:min-h-[660px] lg:pb-20">
-      {location.image ? <img src={location.image.src} alt={location.image.alt} className="absolute inset-0 size-full object-cover" /> : <div className="absolute inset-0"><LocationImageFallback label="" /></div>}
+    <section className="relative flex min-h-[600px] items-end overflow-hidden bg-[#06263b] pb-16 pt-36 text-white lg:min-h-[660px] lg:pb-20">
+      {location.image ? <HeroImage src={location.image.src} alt={location.image.alt} /> : <div className="absolute inset-0"><LocationImageFallback label="" /></div>}
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(6,38,59,.92)_0%,rgba(6,38,59,.6)_50%,rgba(6,38,59,.2)_100%)]" />
       <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(6,38,59,.95),transparent_60%)]" />
       {location.image?.illustrative && <IllustrativeLabel className="absolute bottom-4 right-4 z-10" />}
@@ -26,7 +27,7 @@ export function LocationDetailHero({ location }: { location: Location }) {
         </nav>
         <div className="max-w-2xl">
           <LocationStatusBadge status={location.status} />
-          <h1 className="mt-5 font-display text-5xl font-black leading-[.95] tracking-tight sm:text-7xl">{location.name}</h1>
+          <h1 className="mt-5 font-display text-5xl font-black leading-[.95] tracking-tight sm:text-7xl"><RevealLines>{location.name}</RevealLines></h1>
           <p className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm font-semibold text-[#8fe8f4]">
             <span className="flex items-center gap-1.5"><MapPin className="size-4" aria-hidden />{location.context}</span>
             {location.waterTypes.length > 0 && <span>{location.waterTypes.join(' · ')}</span>}
@@ -56,7 +57,7 @@ export function LocationOverview({ location }: { location: Location }) {
   return (
     <section aria-labelledby="overview-title">
       <Eyebrow>About this location</Eyebrow>
-      <h2 id="overview-title" className="mt-3 font-display text-3xl font-black sm:text-4xl">{location.status === 'operating' ? 'Your paddle starts here.' : 'Something new on the water.'}</h2>
+      <h2 id="overview-title" className="mt-3 font-display text-3xl font-black sm:text-4xl"><RevealLines>{location.status === 'operating' ? 'Your paddle starts here.' : 'Something new on the water.'}</RevealLines></h2>
       {location.summary && <p className="mt-4 max-w-2xl text-base leading-7 text-[#3d5862]">{location.summary}</p>}
       <dl className="mt-8 grid gap-px overflow-hidden rounded-3xl bg-[#dfe6e5] sm:grid-cols-2">
         {facts.map(([label, value]) => (
@@ -75,10 +76,9 @@ export function LocationActivityList({ location }: { location: Location }) {
   return (
     <section id="activities" aria-labelledby="activities-title" className="scroll-mt-6">
       <Eyebrow>Activities available here</Eyebrow>
-      <h2 id="activities-title" className="mt-3 font-display text-3xl font-black">Choose your rhythm</h2>
+      <h2 id="activities-title" className="mt-3 font-display text-3xl font-black"><RevealLines>Choose your rhythm</RevealLines></h2>
       {location.activities.length > 0 ? (
-        <div className="mt-8 grid gap-4 sm:grid-cols-2">
-          {location.activities.map((activity) => (
+        <RevealGroup className="mt-8 grid gap-4 sm:grid-cols-2">{location.activities.map((activity) => (
             <article key={activity.id} className="overflow-hidden rounded-3xl bg-white ring-1 ring-[#06263b]/5">
               <div className="aspect-[16/9]">{activity.image ? <img src={activity.image.src} alt={activity.image.alt} loading="lazy" className="size-full object-cover" /> : <LocationImageFallback label="" />}</div>
               <div className="p-6">
@@ -93,7 +93,7 @@ export function LocationActivityList({ location }: { location: Location }) {
               </div>
             </article>
           ))}
-        </div>
+        </RevealGroup>
       ) : (
         <div className="mt-6 space-y-4">
           <div className="rounded-3xl bg-white p-6 ring-1 ring-[#06263b]/5">
@@ -123,9 +123,8 @@ export function LocationVisitorInformation({ location }: { location: Location })
   return (
     <section aria-labelledby="visitor-info-title">
       <Eyebrow>Plan your visit</Eyebrow>
-      <h2 id="visitor-info-title" className="mt-3 font-display text-3xl font-black sm:text-4xl">Good to know</h2>
-      <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {groups.map(({ title, icon: Icon, items, extra }) => (
+      <h2 id="visitor-info-title" className="mt-3 font-display text-3xl font-black sm:text-4xl"><RevealLines>Good to know</RevealLines></h2>
+      <RevealGroup className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">{groups.map(({ title, icon: Icon, items, extra }) => (
           <div key={title} id={title === 'Booking policies' ? 'booking-policies' : undefined} className="scroll-mt-6 rounded-3xl bg-white p-6 ring-1 ring-[#06263b]/5">
             <h3 className="flex items-center gap-2.5 font-display text-lg font-bold"><Icon className="size-5 text-[#00a9c3]" aria-hidden />{title}</h3>
             <dl className="mt-4 space-y-3.5">
@@ -139,7 +138,7 @@ export function LocationVisitorInformation({ location }: { location: Location })
             {extra && <div className="mt-4 border-t border-[#eef2ed] pt-4">{extra}</div>}
           </div>
         ))}
-      </div>
+      </RevealGroup>
     </section>
   )
 }
@@ -151,9 +150,8 @@ export function LocationGallery({ location }: { location: Location }) {
     <section aria-labelledby="gallery-title">
       <h2 id="gallery-title" className="font-display text-2xl font-bold">Gallery</h2>
       {media.length > 0 ? (
-        <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-3">
-          {media.map((image) => <img key={image.src} src={image.src} alt={image.alt} loading="lazy" decoding="async" className="aspect-square w-full rounded-2xl object-cover" />)}
-        </div>
+        <RevealGroup className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-3">{media.map((image) => <img key={image.src} src={image.src} alt={image.alt} loading="lazy" decoding="async" className="aspect-square w-full rounded-2xl object-cover" />)}
+        </RevealGroup>
       ) : (
         <div className="mt-4">
           <DevNote title="Gallery">No approved photos or videos are configured for {location.name}. Add them to <code>gallery</code>; guest images need recorded written permission, and identifiable children need parent or guardian consent. This section is hidden in production until media exists.</DevNote>
@@ -185,9 +183,8 @@ export function LocationRelatedExperiences({ location }: { location: Location })
       {approved.length > 0 && (
         <>
           <Eyebrow>Make a day of it</Eyebrow>
-          <h2 id="related-title" className="mt-3 font-display text-3xl font-black">More with Bond Safari</h2>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2">
-            {approved.map((experience) => (
+          <h2 id="related-title" className="mt-3 font-display text-3xl font-black"><RevealLines>More with Bond Safari</RevealLines></h2>
+          <RevealGroup className="mt-6 grid gap-4 sm:grid-cols-2">{approved.map((experience) => (
               <div key={experience.name} className="rounded-3xl bg-[#0b3850] p-6 text-white">
                 <Sparkles className="size-6 text-[#f5b82e]" aria-hidden />
                 <h3 className="mt-6 font-display text-xl font-bold">{experience.name}</h3>
@@ -195,7 +192,7 @@ export function LocationRelatedExperiences({ location }: { location: Location })
                 <p className="mt-3 text-xs text-white/60">Separate eligibility and safety requirements apply.</p>
               </div>
             ))}
-          </div>
+          </RevealGroup>
         </>
       )}
       {pending.length > 0 && (

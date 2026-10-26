@@ -4,6 +4,7 @@ import { NotifyMeButton } from '@/components/locations/notify-me'
 import { Eyebrow, focusRing } from '@/components/locations/primitives'
 import { BOND_BLUE_OPTIONS, COMPARISON, PEARL_RULES, PLANS, SEASON_PASS, TIERS, formatRupee, type Plan } from '@/lib/membership'
 import { ROUTES } from '@/lib/site'
+import { RevealGroup, RevealLines } from '@/components/motion/reveal'
 
 const gold = `inline-flex min-h-12 items-center justify-center rounded-full bg-[#f5b82e] px-6 text-sm font-extrabold uppercase tracking-[0.12em] text-[#06263b] transition hover:bg-white ${focusRing}`
 const ghostDark = `inline-flex min-h-12 items-center justify-center rounded-full border border-white/40 px-6 text-sm font-bold text-white transition hover:bg-white/10 ${focusRing}`
@@ -33,7 +34,7 @@ export function MembershipHero() {
       <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
         <div className="max-w-3xl">
           <p className="mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-[#8fe8f4]"><span className="h-px w-10 bg-[#f5b82e]" /> Bond Safari Membership</p>
-          <h1 className="font-display text-5xl font-black leading-[.95] tracking-tight sm:text-7xl">More time on the water.<br /><span className="text-[#f5b82e]">More ways to belong.</span></h1>
+          <h1 className="font-display text-5xl font-black leading-[.95] tracking-tight sm:text-7xl"><RevealLines>More time on the water.<br /><span className="text-[#f5b82e]">More ways to belong.</span></RevealLines></h1>
           <p className="mt-7 max-w-xl text-base leading-7 text-white/80 sm:text-lg">Discover a better way to paddle. Join the Bond Safari community, earn rewards, unlock member benefits, and make every adventure count.</p>
           <div className="mt-9 flex flex-wrap gap-3">
             <a href="#plans" className={gold}>Explore memberships <ArrowRight className="ml-2 size-4" aria-hidden /></a>
@@ -54,7 +55,7 @@ export function PlanCards() {
   return (
     <section id="plans" className="scroll-mt-6 mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28" aria-labelledby="plans-title">
       <Eyebrow>Choose your membership</Eyebrow>
-      <h2 id="plans-title" className="mt-3 font-display text-4xl font-black tracking-tight sm:text-5xl">Three ways to paddle more.</h2>
+      <h2 id="plans-title" className="mt-3 font-display text-4xl font-black tracking-tight sm:text-5xl"><RevealLines>Three ways to paddle more.</RevealLines></h2>
       <div className="mt-12 grid gap-5 lg:grid-cols-3 lg:items-stretch">
         <article id="club" className="flex scroll-mt-6 flex-col rounded-3xl bg-white p-7 ring-1 ring-[#06263b]/10">
           <Users className="size-8 text-[#00a9c3]" strokeWidth={1.4} aria-hidden />
@@ -120,7 +121,7 @@ export function ComparisonTable() {
     <section id="compare" className="scroll-mt-6 bg-white/60 px-5 py-20 lg:px-8 lg:py-24" aria-labelledby="compare-title">
       <div className="mx-auto max-w-7xl">
         <Eyebrow>Compare</Eyebrow>
-        <h2 id="compare-title" className="mt-3 font-display text-4xl font-black sm:text-5xl">Find your fit.</h2>
+        <h2 id="compare-title" className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>Find your fit.</RevealLines></h2>
 
         <div className="mt-10 hidden overflow-hidden rounded-3xl bg-white ring-1 ring-[#06263b]/10 md:block">
           <table className="w-full text-left text-sm">
@@ -142,8 +143,7 @@ export function ComparisonTable() {
           </table>
         </div>
 
-        <div className="mt-10 grid gap-4 md:hidden">
-          {columnNames.map((name, col) => (
+        <RevealGroup className="mt-10 grid gap-4 md:hidden">{columnNames.map((name, col) => (
             <section key={name} aria-label={name} className={`rounded-3xl p-5 ${col === 1 ? 'bg-[#0b3850] text-white' : 'bg-white ring-1 ring-[#06263b]/10'}`}>
               <h3 className="font-display text-xl font-bold">{name}</h3>
               <dl className={`mt-3 divide-y text-sm ${col === 1 ? 'divide-white/10' : 'divide-[#eef2ed]'}`}>
@@ -151,7 +151,7 @@ export function ComparisonTable() {
               </dl>
             </section>
           ))}
-        </div>
+        </RevealGroup>
       </div>
     </section>
   )
@@ -170,7 +170,7 @@ export function PearlsSection() {
         <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-end">
           <div>
             <Eyebrow tone="cyan">Bond Safari Pearls</Eyebrow>
-            <h2 id="pearls-title" className="mt-3 font-display text-4xl font-black sm:text-5xl">Every adventure brings you<br /><span className="text-[#f5b82e]">closer to the next.</span></h2>
+            <h2 id="pearls-title" className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>Every adventure brings you<br /><span className="text-[#f5b82e]">closer to the next.</span></RevealLines></h2>
             <p className="mt-5 max-w-xl text-base leading-7 text-white/70">Earn Pearls on eligible purchases and use them to save on future experiences with participating Bond businesses.</p>
           </div>
           <div className="flex items-center gap-4 rounded-3xl bg-white/[.07] p-6">
@@ -179,8 +179,7 @@ export function PearlsSection() {
           </div>
         </div>
 
-        <ol className="mt-14 grid gap-3 md:grid-cols-3">
-          {steps.map(({ icon: Icon, title, text }, i) => (
+        <RevealGroup as="ol" className="mt-14 grid gap-3 md:grid-cols-3">{steps.map(({ icon: Icon, title, text }, i) => (
             <li key={title} className="relative rounded-3xl bg-white/[.06] p-6">
               <span className="font-display text-sm font-bold text-[#f5b82e]">0{i + 1}</span>
               <Icon className="mt-6 size-8 text-[#00c8e8]" strokeWidth={1.3} aria-hidden />
@@ -189,12 +188,12 @@ export function PearlsSection() {
               {i < steps.length - 1 && <ArrowRight className="absolute -right-4 top-1/2 z-10 hidden size-6 -translate-y-1/2 text-[#f5b82e] md:block" aria-hidden />}
             </li>
           ))}
-        </ol>
+        </RevealGroup>
 
         <div className="mt-12 grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
           <div>
             <h3 className="font-display text-lg font-bold">The rules</h3>
-            <ul className="mt-4 grid gap-2.5 sm:grid-cols-2">{PEARL_RULES.map((rule) => <li key={rule} className="flex gap-3 text-sm leading-6 text-white/80"><CircleDollarSign className="mt-0.5 size-4 shrink-0 text-[#00c8e8]" aria-hidden />{rule}</li>)}</ul>
+            <RevealGroup as="ul" className="mt-4 grid gap-2.5 sm:grid-cols-2">{PEARL_RULES.map((rule) => <li key={rule} className="flex gap-3 text-sm leading-6 text-white/80"><CircleDollarSign className="mt-0.5 size-4 shrink-0 text-[#00c8e8]" aria-hidden />{rule}</li>)}</RevealGroup>
           </div>
           <a href="#tiers" className={gold}>Discover your rewards <ArrowRight className="ml-2 size-4" aria-hidden /></a>
         </div>
@@ -207,10 +206,9 @@ export function TierProgression() {
   return (
     <section id="tiers" className="scroll-mt-6 mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28" aria-labelledby="tiers-title">
       <Eyebrow>Club tiers</Eyebrow>
-      <h2 id="tiers-title" className="mt-3 font-display text-4xl font-black sm:text-5xl">Go deeper with every paddle.</h2>
+      <h2 id="tiers-title" className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>Go deeper with every paddle.</RevealLines></h2>
       <p className="mt-4 max-w-xl text-base leading-7 text-[#3d5862]">Bond Safari Club has four tiers. How you move between them is set by the loyalty programme rules, which will be published here.</p>
-      <ol className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {TIERS.map((tier, i) => (
+      <RevealGroup as="ol" className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{TIERS.map((tier, i) => (
           <li key={tier.name} className="relative overflow-hidden rounded-3xl p-6 text-white" style={{ background: `linear-gradient(160deg, ${['#1aa6bf', '#0b7f95', '#0b3850', '#041a29'][i]}, ${['#0b7f95', '#0b3850', '#06263b', '#020d16'][i]})` }}>
             <svg viewBox="0 0 200 60" className="absolute inset-x-0 bottom-0 w-full opacity-30" aria-hidden><path d={`M0 ${30 - i * 4} Q50 ${15 - i * 3} 100 ${30 - i * 4} T200 ${30 - i * 4} V60 H0Z`} fill="#fff" fillOpacity={0.15 + i * 0.05} /></svg>
             <span className="relative font-display text-sm font-bold text-white/70">Tier {i + 1}</span>
@@ -219,7 +217,7 @@ export function TierProgression() {
             <p className="relative mt-4 text-xs text-white/60">{tier.threshold ?? 'Criteria set by the programme rules'}</p>
           </li>
         ))}
-      </ol>
+      </RevealGroup>
     </section>
   )
 }
@@ -237,7 +235,7 @@ export function DashboardPreview() {
       <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1fr_1.1fr] lg:items-center">
         <div>
           <Eyebrow>Your member account</Eyebrow>
-          <h2 id="dashboard-title" className="mt-3 font-display text-4xl font-black sm:text-5xl">Everything in one place.</h2>
+          <h2 id="dashboard-title" className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>Everything in one place.</RevealLines></h2>
           <p className="mt-5 max-w-lg text-base leading-7 text-[#3d5862]">Your member ID, Pearls, renewal date, free paddle hour and Season Pass status, in your Bond account. Member accounts will open once sign-up goes live.</p>
         </div>
         <div className="relative">
@@ -282,7 +280,7 @@ export function FamilySection() {
         </div>
         <div>
           <Eyebrow>Family & community</Eyebrow>
-          <h2 id="family-title" className="mt-3 font-display text-4xl font-black sm:text-5xl">Bring your people.<br />Share the adventure.</h2>
+          <h2 id="family-title" className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>Bring your people.<br />Share the adventure.</RevealLines></h2>
           <p className="mt-5 text-base leading-7 text-[#3d5862]">Paddling is better together. Bond Blue Family is an annual membership for your household at {formatRupee(family.price)} a year, with Bond Blue member benefits.</p>
           <p className="mt-3 text-sm text-[#57717b]">{family.coverage ?? 'Who a family membership covers will be confirmed in the membership terms. Ask us if you’d like the details before you join.'}</p>
           <div className="mt-8 flex flex-wrap gap-3">
@@ -305,16 +303,15 @@ export function HowToJoin() {
     <section id="join" className="scroll-mt-6 bg-white px-5 py-20 lg:px-8 lg:py-24" aria-labelledby="join-title">
       <div className="mx-auto max-w-7xl">
         <Eyebrow>How to join</Eyebrow>
-        <h2 id="join-title" className="mt-3 font-display text-4xl font-black sm:text-5xl">Three steps to the water.</h2>
-        <ol className="mt-12 grid gap-4 md:grid-cols-3">
-          {steps.map(({ icon: Icon, title, text }, i) => (
+        <h2 id="join-title" className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>Three steps to the water.</RevealLines></h2>
+        <RevealGroup as="ol" className="mt-12 grid gap-4 md:grid-cols-3">{steps.map(({ icon: Icon, title, text }, i) => (
             <li key={title} className="rounded-3xl bg-[#f6f3ec] p-6">
               <div className="flex items-center gap-3"><span className="flex size-10 items-center justify-center rounded-full bg-[#06263b] font-display text-sm font-bold text-white">{i + 1}</span><Icon className="size-6 text-[#00a9c3]" aria-hidden /></div>
               <h3 className="mt-6 font-display text-xl font-bold">{title}</h3>
               <p className="mt-2 text-sm leading-6 text-[#57717b]">{text}</p>
             </li>
           ))}
-        </ol>
+        </RevealGroup>
         <div className="mt-8 flex flex-wrap items-center gap-3">
           <JoinButton plan="club" label="Join Bond Safari Club — free" />
           <p className="text-sm text-[#57717b]">Sign-up isn’t live yet; we’ll let you know when it opens.</p>
@@ -343,7 +340,7 @@ export function MembershipFAQ() {
   return (
     <section id="faq" className="scroll-mt-6 mx-auto max-w-4xl px-5 py-20 lg:py-28" aria-labelledby="faq-title">
       <Eyebrow>FAQs</Eyebrow>
-      <h2 id="faq-title" className="mt-3 font-display text-4xl font-black sm:text-5xl">Questions, answered.</h2>
+      <h2 id="faq-title" className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>Questions, answered.</RevealLines></h2>
       <div className="mt-10 divide-y divide-[#dfe6e5] overflow-hidden rounded-3xl bg-white ring-1 ring-[#06263b]/5">
         {faqs.map(({ id, q, a }) => (
           <details key={q} id={id} className="group scroll-mt-6">
@@ -362,7 +359,7 @@ export function MembershipFinalCTA() {
       <Ripples className="absolute -right-20 top-1/2 size-[36rem] -translate-y-1/2" />
       <div className="relative mx-auto flex max-w-7xl flex-col justify-between gap-8 lg:flex-row lg:items-end">
         <div>
-          <h2 className="max-w-2xl font-display text-4xl font-black sm:text-5xl">Your next adventure starts with membership.</h2>
+          <h2 className="max-w-2xl font-display text-4xl font-black sm:text-5xl"><RevealLines>Your next adventure starts with membership.</RevealLines></h2>
           <p className="mt-4 text-base text-white/70">Find your place on the water with Bond Safari.</p>
         </div>
         <div className="flex flex-wrap gap-3">

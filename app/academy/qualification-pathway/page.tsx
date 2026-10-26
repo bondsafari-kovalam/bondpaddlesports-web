@@ -3,6 +3,7 @@ import { ArrowRight, ChevronDown, Waves } from 'lucide-react'
 import { AcademyFinalCTA, AcademyHero, AcademyShell, PartnerNote, QualificationPathway, SectionHeading, goldButton } from '@/components/academy/academy-sections'
 import { Pending, focusRing } from '@/components/locations/primitives'
 import { QUALIFICATION_LEVELS, WATER_ENVIRONMENTS, courseHref, courses, type QualificationLevelInfo } from '@/lib/academy'
+import { RevealGroup } from '@/components/motion/reveal'
 
 const description = 'The Bond Safari Academy qualification pathway: Try, Learn, Qualify, Lead, Coach, Tutor. Personal Awards, Instructor, Leader, Coach and Tutor levels explained.'
 
@@ -90,15 +91,14 @@ export default function PathwayPage() {
       <section className="bg-[#06263b] px-5 py-20 text-white lg:px-8 lg:py-24" aria-labelledby="environments">
         <div className="mx-auto max-w-7xl">
           <SectionHeading id="environments" tone="dark" eyebrow="Water environments" title="Where each qualification applies." intro="Qualifications are tied to specific water environments. Each course lists only the environments its qualification actually covers." />
-          <ol className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {WATER_ENVIRONMENTS.map((env, index) => (
+          <RevealGroup as="ol" className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{WATER_ENVIRONMENTS.map((env, index) => (
               <li key={env.id} className="rounded-3xl bg-white/[.06] p-6">
                 <Waves className="size-7 text-[#00c8e8]" strokeWidth={1.2 + index * 0.4} aria-hidden />
                 <h3 className="mt-6 font-display text-2xl font-bold">{env.name}</h3>
                 <p className="mt-2 text-sm leading-6 text-white/65">{env.definition ?? <span className="italic">Definition from the Paddle UK pathway document, pending.</span>}</p>
               </li>
             ))}
-          </ol>
+          </RevealGroup>
         </div>
       </section>
 

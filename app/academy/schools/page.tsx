@@ -3,6 +3,7 @@ import { ArrowRight, CalendarRange, School, ShieldCheck, Target, Users } from 'l
 import { SchoolEnquiryForm } from '@/components/academy/academy-forms'
 import { AcademyHero, AcademyShell, CampusCards, SectionHeading, goldButton } from '@/components/academy/academy-sections'
 import { DevNote, Pending } from '@/components/locations/primitives'
+import { RevealGroup } from '@/components/motion/reveal'
 
 const description = 'Structured paddling programmes for schools and colleges in Kerala with Bond Safari Academy, including the Schools Paddle Year.'
 
@@ -33,15 +34,14 @@ export default function SchoolsPage() {
 
       <section className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-24" aria-labelledby="programme">
         <SectionHeading id="programme" eyebrow="The programme" title="Built for schools." />
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {blocks.map(({ icon: Icon, title, text }) => (
+        <RevealGroup className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{blocks.map(({ icon: Icon, title, text }) => (
             <article key={title} className="rounded-3xl bg-white p-6 ring-1 ring-[#06263b]/5">
               <Icon className="size-8 text-[#00a9c3]" strokeWidth={1.4} aria-hidden />
               <h3 className="mt-6 font-display text-xl font-bold">{title}</h3>
               <p className="mt-2 text-sm leading-6 text-[#57717b]">{text ?? <Pending>Approved content from the Academy to be added.</Pending>}</p>
             </article>
           ))}
-        </div>
+        </RevealGroup>
         <div className="mt-6"><DevNote title="Schools">Add the approved sample term plan, learning objectives and the client’s safety and safeguarding information. Don’t publish prices, safeguarding claims or outcomes until supplied.</DevNote></div>
       </section>
 

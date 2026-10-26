@@ -10,6 +10,7 @@ import { Eyebrow, focusRing } from '@/components/locations/primitives'
 import { Ripples } from '@/components/membership/membership-sections'
 import { activities, activityHref } from '@/lib/activities'
 import { CONTACT, ROUTES } from '@/lib/site'
+import { RevealGroup, RevealLines } from '@/components/motion/reveal'
 
 const gold = `inline-flex min-h-12 items-center justify-center rounded-full bg-[#f5b82e] px-6 text-sm font-extrabold uppercase tracking-[0.12em] text-[#06263b] transition hover:bg-white ${focusRing}`
 const ghost = `inline-flex min-h-12 items-center justify-center rounded-full border border-white/40 px-6 text-sm font-bold text-white transition hover:bg-white/10 ${focusRing}`
@@ -25,7 +26,7 @@ export function SafetyHero() {
       <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
         <div className="max-w-3xl">
           <p className="mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-[#8fe8f4]"><span className="h-px w-10 bg-[#f5b82e]" /> Safety & Responsible Tourism</p>
-          <h1 className="font-display text-5xl font-black leading-[.95] tracking-tight sm:text-7xl">Adventure is better<br /><span className="text-[#f5b82e]">when we care.</span></h1>
+          <h1 className="font-display text-5xl font-black leading-[.95] tracking-tight sm:text-7xl"><RevealLines>Adventure is better<br /><span className="text-[#f5b82e]">when we care.</span></RevealLines></h1>
           <p className="mt-7 max-w-xl text-base leading-7 text-white/80 sm:text-lg">Enjoy Kerala’s waterways with thoughtful preparation, responsible paddling, and respect for the places and people that make every experience special.</p>
           <div className="mt-9 flex flex-wrap gap-3">
             <a href="#before-you-paddle" className={gold}>Before you paddle <ArrowRight className="ml-2 size-4" aria-hidden /></a>
@@ -49,17 +50,16 @@ export function SafetyApproachSection() {
       <div className="grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:items-center">
         <div>
           <Eyebrow>Our approach to safety</Eyebrow>
-          <h2 id="approach-title" className="mt-3 font-display text-4xl font-black tracking-tight sm:text-5xl">Enjoy the adventure. Respect the conditions.</h2>
+          <h2 id="approach-title" className="mt-3 font-display text-4xl font-black tracking-tight sm:text-5xl"><RevealLines>Enjoy the adventure. Respect the conditions.</RevealLines></h2>
           <p className="mt-5 text-base leading-7 text-[#3d5862]">Every paddling experience depends on the activity, location, water conditions, and the people taking part. We encourage every participant to understand the requirements of their chosen activity, follow the guidance provided by the team, and communicate any concerns before getting on the water.</p>
-          <ul className="mt-10 grid gap-3 sm:grid-cols-2">
-            {principles.map(([Icon, title, text]) => (
+          <RevealGroup as="ul" className="mt-10 grid gap-3 sm:grid-cols-2">{principles.map(([Icon, title, text]) => (
               <li key={title} className="rounded-3xl bg-white p-6 ring-1 ring-[#06263b]/5">
                 <span className="flex size-11 items-center justify-center rounded-full bg-[#e1f6fa]"><Icon className="size-5 text-[#0b7f95]" aria-hidden /></span>
                 <h3 className="mt-5 font-display text-lg font-bold">{title}</h3>
                 <p className="mt-2 text-sm leading-6 text-[#57717b]">{text}</p>
               </li>
             ))}
-          </ul>
+          </RevealGroup>
         </div>
         <PhotoPlaceholder icon={Compass} label="A paddler preparing before a session" className="aspect-[4/5] rounded-3xl" />
       </div>
@@ -83,15 +83,14 @@ export function BeforeYouPaddle() {
     <section id="before-you-paddle" className="scroll-mt-6 bg-[#06263b] px-5 py-20 text-white lg:px-8 lg:py-28" aria-labelledby="checklist-title">
       <div className="mx-auto max-w-7xl">
         <Eyebrow tone="cyan">Before you paddle</Eyebrow>
-        <h2 id="checklist-title" className="mt-3 max-w-3xl font-display text-4xl font-black sm:text-5xl">A few things to check <span className="text-[#f5b82e]">before you head out.</span></h2>
-        <ul className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {checks.map(([Icon, text]) => (
+        <h2 id="checklist-title" className="mt-3 max-w-3xl font-display text-4xl font-black sm:text-5xl"><RevealLines>A few things to check <span className="text-[#f5b82e]">before you head out.</span></RevealLines></h2>
+        <RevealGroup as="ul" className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{checks.map(([Icon, text]) => (
             <li key={text} className="flex gap-4 rounded-3xl bg-white/[.06] p-5">
               <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[#00c8e8]/15"><Icon className="size-5 text-[#00c8e8]" aria-hidden /></span>
               <span className="pt-2 text-sm leading-6 text-white/85">{text}</span>
             </li>
           ))}
-        </ul>
+        </RevealGroup>
         <p className="mt-8 flex gap-3 rounded-2xl bg-[#f5b82e] p-5 text-sm font-semibold text-[#06263b]"><AlertCircle className="size-5 shrink-0" aria-hidden />Requirements vary by activity and location. Review the information provided for your specific session before arriving.</p>
       </div>
     </section>
@@ -110,7 +109,7 @@ export function EquipmentGuidance() {
         <PhotoPlaceholder icon={LifeBuoy} label="Paddling equipment ready for a session" className="aspect-[4/3] rounded-3xl lg:aspect-[4/5]" />
         <div>
           <Eyebrow>Equipment & guidance</Eyebrow>
-          <h2 id="equipment-title" className="mt-3 font-display text-4xl font-black sm:text-5xl">The right preparation makes a difference.</h2>
+          <h2 id="equipment-title" className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>The right preparation makes a difference.</RevealLines></h2>
           <p className="mt-5 text-base leading-7 text-[#3d5862]">Different paddling activities and locations have different equipment and preparation needs. Follow the instructions provided for your session and ask the team if you are unsure what to bring.</p>
           <ul className="mt-8 space-y-3">
             {cards.map(([Icon, title, text]) => (
@@ -136,11 +135,10 @@ export function WeatherConditions() {
         <div className="mt-12 grid gap-10 lg:grid-cols-[1.1fr_1fr]">
           <div>
             <Eyebrow>Weather & water conditions</Eyebrow>
-            <h2 id="conditions-title" className="mt-3 font-display text-4xl font-black sm:text-5xl">Nature sets the conditions.</h2>
+            <h2 id="conditions-title" className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>Nature sets the conditions.</RevealLines></h2>
             <p className="mt-5 text-base leading-7 text-[#3d5862]">Water-based activities depend on environmental and operational conditions. Weather, water levels, currents, visibility, and other local factors may affect whether an activity can safely proceed.</p>
-            <ul className="mt-8 grid gap-3 sm:grid-cols-2">
-              {items.map(([Icon, text]) => <li key={text} className="flex items-center gap-3 rounded-2xl bg-white p-4 text-sm font-semibold"><Icon className="size-5 shrink-0 text-[#00a9c3]" aria-hidden />{text}</li>)}
-            </ul>
+            <RevealGroup as="ul" className="mt-8 grid gap-3 sm:grid-cols-2">{items.map(([Icon, text]) => <li key={text} className="flex items-center gap-3 rounded-2xl bg-white p-4 text-sm font-semibold"><Icon className="size-5 shrink-0 text-[#00a9c3]" aria-hidden />{text}</li>)}
+            </RevealGroup>
           </div>
           <aside className="h-fit rounded-3xl bg-[#0b3850] p-7 text-white" aria-labelledby="session-change">
             <AlertCircle className="size-8 text-[#f5b82e]" strokeWidth={1.4} aria-hidden />
@@ -168,20 +166,19 @@ export function ResponsibleTourismSection() {
         <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-end">
           <div>
             <Eyebrow>Responsible tourism</Eyebrow>
-            <h2 id="tourism-title" className="mt-3 font-display text-4xl font-black sm:text-5xl">Explore with respect. Leave a lighter footprint.</h2>
+            <h2 id="tourism-title" className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>Explore with respect. Leave a lighter footprint.</RevealLines></h2>
           </div>
           <p className="text-base leading-7 text-[#3d5862]">Kerala’s waterways connect natural landscapes, local communities, and everyday life. Responsible tourism means enjoying these places thoughtfully and respecting the environment and people who share them.</p>
         </div>
         <PhotoPlaceholder icon={Leaf} label="A natural Kerala landscape by the water" className="mt-12 aspect-[16/6] rounded-3xl" />
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {tourismPrinciples.map(({ icon: Icon, title, points }) => (
+        <RevealGroup className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{tourismPrinciples.map(({ icon: Icon, title, points }) => (
             <article key={title} className="rounded-3xl bg-white p-6 ring-1 ring-[#14785a]/10">
               <Icon className="size-8 text-[#14785a]" strokeWidth={1.4} aria-hidden />
               <h3 className="mt-6 font-display text-xl font-bold">{title}</h3>
               <ul className="mt-4 space-y-2 text-sm leading-6 text-[#3d5862]">{points.map((point) => <li key={point} className="flex gap-2"><Leaf className="mt-1.5 size-3 shrink-0 text-[#14785a]" aria-hidden />{point}</li>)}</ul>
             </article>
           ))}
-        </div>
+        </RevealGroup>
       </div>
     </section>
   )
@@ -194,18 +191,17 @@ export function LocalCulture() {
       <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:items-center">
         <div>
           <Eyebrow>Local culture & community</Eyebrow>
-          <h2 id="culture-title" className="mt-3 font-display text-4xl font-black sm:text-5xl">Every place has a story.</h2>
+          <h2 id="culture-title" className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>Every place has a story.</RevealLines></h2>
           <p className="mt-5 text-base leading-7 text-[#3d5862]">Exploring Kerala’s waterways is also an opportunity to appreciate the places and communities connected to them. Travel thoughtfully, respect local people, and approach each destination with curiosity and care.</p>
           <a href={ROUTES.locations} className={`mt-8 ${dark}`}>Explore our locations</a>
         </div>
-        <ul className="grid gap-3 sm:grid-cols-3">
-          {highlights.map(([Icon, text], i) => (
+        <RevealGroup as="ul" className="grid gap-3 sm:grid-cols-3">{highlights.map(([Icon, text], i) => (
             <li key={text} className={`flex flex-col rounded-3xl p-6 ${i === 1 ? 'bg-[#0b3850] text-white sm:translate-y-6' : 'bg-white ring-1 ring-[#06263b]/5'}`}>
               <Icon className={`size-8 ${i === 1 ? 'text-[#f5b82e]' : 'text-[#00a9c3]'}`} strokeWidth={1.4} aria-hidden />
               <p className="mt-10 font-display text-lg font-bold leading-snug">{text}</p>
             </li>
           ))}
-        </ul>
+        </RevealGroup>
       </div>
     </section>
   )
@@ -224,7 +220,7 @@ export function GroupPreparation() {
       <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1fr_1.4fr] lg:items-start">
         <div>
           <Eyebrow>Groups & families</Eyebrow>
-          <h2 id="groups-title" className="mt-3 font-display text-4xl font-black">Good experiences begin with good preparation.</h2>
+          <h2 id="groups-title" className="mt-3 font-display text-4xl font-black"><RevealLines>Good experiences begin with good preparation.</RevealLines></h2>
           <p className="mt-4 text-sm leading-6 text-[#57717b]">Not every activity suits every participant, and arrangements vary by location. The team will discuss what’s possible for your group.</p>
           <a href={ROUTES.groups} className={`mt-8 ${dark}`}>Plan a group experience</a>
         </div>
@@ -260,7 +256,7 @@ export function SafetyFAQ() {
   return (
     <section className="mx-auto max-w-4xl px-5 py-20 lg:py-28" aria-labelledby="faq-title">
       <Eyebrow>Safety FAQs</Eyebrow>
-      <h2 id="faq-title" className="mt-3 font-display text-4xl font-black sm:text-5xl">Questions people ask.</h2>
+      <h2 id="faq-title" className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>Questions people ask.</RevealLines></h2>
       <div className="mt-10 divide-y divide-[#dfe6e5] overflow-hidden rounded-3xl bg-white ring-1 ring-[#06263b]/5">
         {faqs.map(({ q, a }) => (
           <details key={q} className="group">
@@ -286,9 +282,8 @@ export function SafetyByActivity() {
     <section className="bg-white/60 px-5 py-20 lg:px-8 lg:py-24" aria-labelledby="by-activity-title">
       <div className="mx-auto max-w-7xl">
         <Eyebrow>Safety information by activity</Eyebrow>
-        <h2 id="by-activity-title" className="mt-3 font-display text-4xl font-black sm:text-5xl">Know your activity.</h2>
-        <div className="mt-12 grid gap-4 md:grid-cols-3">
-          {core.map((activity) => {
+        <h2 id="by-activity-title" className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>Know your activity.</RevealLines></h2>
+        <RevealGroup className="mt-12 grid gap-4 md:grid-cols-3">{core.map((activity) => {
             const Icon = activityIcons[activity.slug]
             return (
               <article key={activity.slug} className="flex flex-col rounded-3xl bg-white p-7 ring-1 ring-[#06263b]/5">
@@ -299,7 +294,7 @@ export function SafetyByActivity() {
               </article>
             )
           })}
-        </div>
+        </RevealGroup>
       </div>
     </section>
   )
@@ -311,14 +306,13 @@ export function PolicyLinks() {
     <section className="mx-auto max-w-7xl px-5 pb-20 lg:px-8" aria-labelledby="policies-title">
       <h2 id="policies-title" className="font-display text-2xl font-bold">Frequently needed policies</h2>
       <p className="mt-2 text-sm text-[#57717b]">These policies are awaiting approval and will be linked here once published.</p>
-      <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {policies.map((policy) => (
+      <RevealGroup as="ul" className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{policies.map((policy) => (
           <li key={policy} className="flex min-h-16 items-center gap-3 rounded-2xl border border-dashed border-[#06263b]/15 bg-white px-5 text-sm">
             <FileText className="size-5 shrink-0 text-[#57717b]" aria-hidden />
             <span><span className="block font-semibold">{policy}</span><span className="text-xs text-[#57717b]">Coming soon</span></span>
           </li>
         ))}
-      </ul>
+      </RevealGroup>
     </section>
   )
 }
@@ -334,7 +328,7 @@ export function SafetyHelp() {
       <div className="flex flex-col justify-between gap-8 rounded-3xl bg-white p-8 ring-1 ring-[#06263b]/5 sm:p-12 lg:flex-row lg:items-center">
         <div className="max-w-xl">
           <Sparkles className="size-8 text-[#00a9c3]" strokeWidth={1.4} aria-hidden />
-          <h2 id="help-title" className="mt-5 font-display text-3xl font-black sm:text-4xl">Questions before you paddle?</h2>
+          <h2 id="help-title" className="mt-5 font-display text-3xl font-black sm:text-4xl"><RevealLines>Questions before you paddle?</RevealLines></h2>
           <p className="mt-3 text-base leading-7 text-[#3d5862]">Not sure which activity is right for you, or need to confirm a participation requirement? Contact the Bond Safari team before making your plans.</p>
         </div>
         <div className="flex flex-wrap gap-3">
@@ -354,7 +348,7 @@ export function SafetyFinalCTA() {
       <Ripples className="absolute -right-24 top-1/2 size-[40rem] -translate-y-1/2" />
       <div className="relative mx-auto flex max-w-7xl flex-col justify-between gap-8 lg:flex-row lg:items-end">
         <div>
-          <h2 className="max-w-2xl font-display text-4xl font-black sm:text-6xl">Discover the water. <span className="text-[#f5b82e]">Care for the place.</span></h2>
+          <h2 className="max-w-2xl font-display text-4xl font-black sm:text-6xl"><RevealLines>Discover the water. <span className="text-[#f5b82e]">Care for the place.</span></RevealLines></h2>
           <p className="mt-4 max-w-xl text-base text-white/70">Find your next paddling experience and explore Kerala thoughtfully with Bond Safari.</p>
         </div>
         <div className="flex flex-wrap gap-3">

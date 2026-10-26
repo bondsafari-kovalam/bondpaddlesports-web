@@ -6,6 +6,7 @@ import { ProductGallery, ProductPurchasePanel, ProductSpecifications } from '@/c
 import { ShopShell } from '@/components/shop/shop-sections'
 import { categoryHref, getCategory, getProduct, productHref, products, type Product } from '@/lib/shop'
 import { SITE_URL } from '@/lib/site'
+import { RevealGroup, RevealLines } from '@/components/motion/reveal'
 
 type Props = { params: Promise<{ slug: string }> }
 
@@ -64,7 +65,7 @@ export default async function ProductPage({ params }: Props) {
           <ProductGallery product={item} />
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#0b7f95]">{category.name} · {item.type}</p>
-            <h1 className="mt-2 font-display text-4xl font-black sm:text-5xl">{item.name}</h1>
+            <h1 className="mt-2 font-display text-4xl font-black sm:text-5xl"><RevealLines>{item.name}</RevealLines></h1>
             <div className="mt-6"><ProductPurchasePanel product={item} /></div>
           </div>
         </div>
@@ -78,8 +79,8 @@ export default async function ProductPage({ params }: Props) {
         </div>
         {related.length > 0 && (
           <section className="mt-20" aria-labelledby="related">
-            <h2 id="related" className="font-display text-3xl font-black">You might also need</h2>
-            <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 xl:grid-cols-4">{related.map((p) => <ProductCard key={p.slug} product={p} />)}</div>
+            <h2 id="related" className="font-display text-3xl font-black"><RevealLines>You might also need</RevealLines></h2>
+            <RevealGroup className="mt-8 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 xl:grid-cols-4">{related.map((p) => <ProductCard key={p.slug} product={p} />)}</RevealGroup>
           </section>
         )}
       </div>

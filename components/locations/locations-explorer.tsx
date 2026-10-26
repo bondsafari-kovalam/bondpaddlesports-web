@@ -8,6 +8,7 @@ import { LocationMap } from '@/components/locations/location-map'
 import { LocationRoadmap } from '@/components/locations/location-roadmap'
 import { Eyebrow, IllustrativeLabel, focusRing } from '@/components/locations/primitives'
 import { DESTINATION_TARGET, locations, type Location } from '@/lib/locations'
+import { HeroImage, RevealGroup, RevealLines } from '@/components/motion/reveal'
 
 const heroImage = locations.find((location) => location.status === 'operating' && location.image)?.image
 
@@ -16,15 +17,15 @@ export function LocationsHero({ query, onQueryChange }: { query: string; onQuery
   const openingSoon = locations.filter((location) => location.status === 'opening-soon').length
 
   return (
-    <section className="relative flex min-h-[640px] items-end bg-[#06263b] pb-14 pt-40 text-white lg:min-h-[700px] lg:pb-20">
-      {heroImage && <img src={heroImage.src} alt="" className="absolute inset-0 size-full object-cover" />}
+    <section className="relative flex min-h-[640px] items-end overflow-hidden bg-[#06263b] pb-14 pt-40 text-white lg:min-h-[700px] lg:pb-20">
+      {heroImage && <HeroImage src={heroImage.src} alt="" />}
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(6,38,59,.92)_0%,rgba(6,38,59,.6)_50%,rgba(6,38,59,.2)_100%)]" />
       <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(6,38,59,.95),transparent_60%)]" />
       {heroImage?.illustrative && <IllustrativeLabel className="absolute bottom-4 right-4 z-10" />}
       <div className="relative mx-auto w-full max-w-7xl px-5 lg:px-8">
         <div className="max-w-2xl">
           <p className="mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-[#8fe8f4]"><span className="h-px w-10 bg-[#f5b82e]" /> Explore Kerala</p>
-          <h1 className="font-display text-5xl font-black leading-[.95] tracking-tight sm:text-7xl">Find your place<br /><span className="text-[#f5b82e]">on the water.</span></h1>
+          <h1 className="font-display text-5xl font-black leading-[.95] tracking-tight sm:text-7xl"><RevealLines>Find your place<br /><span className="text-[#f5b82e]">on the water.</span></RevealLines></h1>
           <p className="mt-6 max-w-lg text-base leading-7 text-white/80 sm:text-lg">From peaceful backwaters and heritage waterways to coastal adventures, discover the places where your next paddle begins.</p>
           <form className="mt-8 flex max-w-xl flex-col gap-3 sm:flex-row" onSubmit={(event) => { event.preventDefault(); document.getElementById('directory')?.scrollIntoView({ behavior: 'smooth' }) }} role="search">
             <div className="flex-1"><LocationSearch id="hero-location-search" value={query} onChange={onQueryChange} tone="dark" /></div>
@@ -49,7 +50,7 @@ export function LocationGrid({ title, description, locations }: { title: string;
         <h3 className="font-display text-2xl font-bold">{title}</h3>
         {description && <p className="text-sm text-[#57717b]">{description}</p>}
       </div>
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{locations.map((location) => <LocationCard key={location.slug} location={location} />)}</div>
+      <RevealGroup className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{locations.map((location) => <LocationCard key={location.slug} location={location} />)}</RevealGroup>
     </section>
   )
 }
