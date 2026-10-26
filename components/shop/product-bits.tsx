@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ArrowRight, Backpack, BadgePercent, Check, LifeBuoy, Sailboat, Shirt, ShoppingBag, Waves, type LucideIcon } from 'lucide-react'
+import { ArrowRight, BadgePercent, Check, ShoppingBag } from 'lucide-react'
 import { useCart } from '@/components/shop/cart'
 import { focusRing } from '@/components/locations/primitives'
 import {
@@ -20,24 +20,47 @@ import {
   type Variant,
 } from '@/lib/shop'
 
-export const CATEGORY_ICONS: Record<ShopCategoryId, LucideIcon> = {
-  apparel: Shirt,
-  waterwear: Waves,
-  'paddling-equipment': LifeBuoy,
-  'academy-starter-kits': Backpack,
-  'boards-and-kayaks': Sailboat,
+const CATEGORY_IMAGES: Record<ShopCategoryId, { src: string; alt: string }> = {
+  apparel: {
+    src: 'https://images.unsplash.com/photo-1622445275463-afa2ab738c34?auto=format&fit=crop&w=1000&q=85',
+    alt: 'Model wearing a plain T-shirt and cap outdoors',
+  },
+  waterwear: {
+    src: 'https://images.unsplash.com/photo-1761279668226-151d09384afb?auto=format&fit=crop&w=1000&q=85',
+    alt: 'Woman in swimwear relaxing on a paddleboard',
+  },
+  'paddling-equipment': {
+    src: 'https://images.unsplash.com/photo-1689753423166-d246faaf5a54?auto=format&fit=crop&w=1000&q=85',
+    alt: 'Kayaker wearing a helmet and buoyancy aid',
+  },
+  'academy-starter-kits': {
+    src: 'https://images.unsplash.com/photo-1780049503868-76af0eccd11b?auto=format&fit=crop&w=1000&q=85',
+    alt: 'Kayak and life jackets ready by the water',
+  },
+  'boards-and-kayaks': {
+    src: 'https://images.unsplash.com/photo-1769852635551-f6a97498e61e?auto=format&fit=crop&w=1000&q=85',
+    alt: 'Kayaks and paddleboards stacked on a beach',
+  },
 }
 
-/** Approved product photography when supplied; otherwise a clearly replaceable placeholder. */
+/** Show product photography when supplied; otherwise use an illustrative category image. */
 export function ProductVisual({ product, className = '', label = true }: { product: Product; className?: string; label?: boolean }) {
   const image = product.images[0]
-  if (image) return <img src={image.src} alt={image.alt} loading="lazy" decoding="async" className={`object-cover ${className}`} />
-  const Icon = CATEGORY_ICONS[product.category]
+  if (image && !image.illustrative) return <img src={image.src} alt={image.alt} loading="lazy" decoding="async" className={`object-cover ${className}`} />
+  if (image?.illustrative) {
+    return (
+      <div className={`relative overflow-hidden bg-[#06263b] ${className}`} role="img" aria-label={image.alt}>
+        <img src={image.src} alt="" loading="lazy" decoding="async" className="size-full object-cover" />
+        <span className="absolute bottom-2 right-2 rounded-full bg-[#06263b]/75 px-2 py-1 text-[9px] font-semibold text-white/90 backdrop-blur">Illustrative</span>
+      </div>
+    )
+  }
+  const illustration = CATEGORY_IMAGES[product.category]
   return (
-    <div className={`relative flex flex-col items-center justify-center overflow-hidden bg-[linear-gradient(160deg,#eef2ed,#dfe9e8)] ${className}`} role="img" aria-label={`${product.name}: product photo coming soon`}>
-      <div className="absolute -right-10 -top-10 size-40 rounded-full border-[16px] border-[#00a9c3]/10" aria-hidden />
-      <Icon className="relative size-14 text-[#0b3850]/70 transition duration-500 group-hover:scale-110" strokeWidth={1} aria-hidden />
-      {label && <span className="relative mt-3 text-[11px] font-semibold text-[#57717b]">Product photo coming soon</span>}
+    <div className={`group relative overflow-hidden bg-[#06263b] ${className}`} role="img" aria-label={`${product.name}: illustrative category image`}>
+      <img src={illustration.src} alt="" loading="lazy" decoding="async" className="size-full object-cover transition duration-700 group-hover:scale-105" />
+      <span className="absolute bottom-2 right-2 rounded-full bg-[#06263b]/75 px-2 py-1 text-[9px] font-semibold text-white/90 backdrop-blur">Illustrative</span>
+      {label && <span className="sr-only">Illustrative category image</span>}
     </div>
   )
 }
@@ -108,12 +131,12 @@ export function ProductCard({ product }: { product: Product }) {
 }
 
 export function ShopCategoryCard({ category }: { category: ShopCategory }) {
-  const Icon = CATEGORY_ICONS[category.id]
+  const image = CATEGORY_IMAGES[category.id]
   return (
     <a href={categoryHref(category.id)} className={`group flex flex-col overflow-hidden rounded-3xl bg-white ring-1 ring-[#06263b]/5 transition hover:-translate-y-0.5 hover:shadow-[0_20px_50px_rgba(6,38,59,.12)] ${focusRing}`}>
-      <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_30%_20%,#104963,#06263b_70%)]">
-        <div className="absolute -right-10 -top-10 size-40 rounded-full border-[16px] border-[#00c8e8]/10" aria-hidden />
-        <Icon className="relative size-10 text-[#00c8e8] transition duration-500 group-hover:scale-110 sm:size-14" strokeWidth={1.1} aria-hidden />
+      <div className="relative aspect-[4/3] overflow-hidden bg-[#06263b]">
+        <img src={image.src} alt={image.alt} loading="lazy" decoding="async" className="size-full object-cover transition duration-700 group-hover:scale-105" />
+        <span className="absolute bottom-3 right-3 rounded-full bg-[#06263b]/75 px-2.5 py-1 text-[10px] font-semibold text-white/90 backdrop-blur">Illustrative image</span>
         {category.salesMethod !== 'standard' && <span className="absolute left-3 top-3 rounded-full bg-[#fff1cf] px-2.5 py-1 text-[10px] font-extrabold uppercase text-[#7a4f00]">{category.salesMethod === 'made-to-order' ? 'Enquiry' : 'With courses'}</span>}
       </div>
       <div className="flex flex-1 flex-col p-4 sm:p-5">

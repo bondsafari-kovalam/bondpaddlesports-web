@@ -151,6 +151,11 @@ export const locations: Location[] = [
     meetingPoint: 'Thattukadavu Jetty',
     activities: [],
     startingPrice: 1200,
+    image: {
+      src: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1600&q=85',
+      alt: 'Illustrative view of paddling on Kerala backwaters',
+      illustrative: true,
+    },
     hasDetailPage: true,
     visitorInfo: { meetingPointAddress: 'Thattukadavu Jetty, North Paravur, Kerala' },
   },

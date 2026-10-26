@@ -1,4 +1,4 @@
-import { ArrowRight, Compass, GraduationCap, LifeBuoy, Medal, School, ShieldCheck, Sparkles, Users, type LucideIcon } from 'lucide-react'
+import { ArrowRight, Compass, GraduationCap, LifeBuoy, Medal, School, Sparkles, Users, type LucideIcon } from 'lucide-react'
 import { NotifyMeButton } from '@/components/locations/notify-me'
 import { focusRing } from '@/components/locations/primitives'
 import { cn } from '@/lib/utils'
@@ -26,14 +26,32 @@ export const LEVEL_ICONS: Record<QualificationLevel, LucideIcon> = {
   Programme: School,
 }
 
-/** Replaceable placeholder until approved Academy photography is supplied. */
+const categoryVisuals: Record<Course['category'], { src: string; alt: string }> = {
+  'start-paddling': {
+    src: 'https://images.unsplash.com/photo-1647036003499-94eebb3388c7?auto=format&fit=crop&w=1400&q=85',
+    alt: 'Illustrative canoe paddle on a lake at sunrise',
+  },
+  'become-an-instructor': {
+    src: 'https://images.unsplash.com/photo-1668866451605-b067bd3c9569?auto=format&fit=crop&w=1400&q=85',
+    alt: 'Illustrative group paddling together on a river',
+  },
+  'lead-and-coach': {
+    src: 'https://images.unsplash.com/photo-1767471716671-60052b672451?auto=format&fit=crop&w=1400&q=85',
+    alt: 'Illustrative paddler navigating white-water rapids',
+  },
+  programmes: {
+    src: 'https://images.unsplash.com/photo-1543411789-1a67a2ac05c6?auto=format&fit=crop&w=1400&q=85',
+    alt: 'Illustrative group canoe trip on a river',
+  },
+}
+
+/** Category illustrations until approved Bond Safari Academy photography is supplied. */
 export function CourseVisual({ course, className = '' }: { course: Course; className?: string }) {
-  const Icon = LEVEL_ICONS[course.level] ?? ShieldCheck
+  const visual = categoryVisuals[course.category]
   return (
-    <div className={`relative flex items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_30%_20%,#104963,#06263b_70%)] ${className}`} aria-hidden>
-      <div className="absolute -right-10 -top-10 size-40 rounded-full border-[16px] border-[#00c8e8]/10" />
-      <div className="absolute -bottom-16 -left-8 size-44 rounded-full border-[18px] border-[#f5b82e]/10" />
-      <Icon className="relative size-10 text-[#00c8e8] transition duration-500 group-hover:scale-110" strokeWidth={1.2} />
+    <div className={`group relative overflow-hidden bg-[#06263b] ${className}`} role="img" aria-label={visual.alt}>
+      <img src={visual.src} alt="" loading="lazy" decoding="async" className="size-full object-cover transition duration-700 group-hover:scale-105" />
+      <span className="absolute bottom-3 right-3 rounded-full bg-[#06263b]/75 px-3 py-1.5 text-[10px] font-semibold text-white/90 backdrop-blur">Illustrative image</span>
     </div>
   )
 }

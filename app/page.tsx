@@ -13,6 +13,7 @@ import {
   Star,
   Waves,
 } from 'lucide-react'
+import { DatePicker } from '@/components/booking/date-picker'
 import { SiteFooter } from '@/components/site/site-footer'
 import { SiteHeader } from '@/components/site/site-header'
 
@@ -48,6 +49,7 @@ const experiences = [
 
 export default function Page() {
   const [selectedActivity, setSelectedActivity] = useState('Any activity')
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [submitted, setSubmitted] = useState(false)
 
   return (
@@ -75,7 +77,7 @@ export default function Page() {
           <div className="grid gap-3 md:grid-cols-4">
             <label className="rounded-2xl border border-[#dfe6e5] bg-[#f8faf8] px-4 py-3 text-xs font-bold uppercase tracking-wider text-[#57717b]">Location<select className="mt-2 block w-full bg-transparent text-sm font-semibold normal-case tracking-normal text-[#06263b] outline-none"><option>Muziris–Kottapuram</option><option>Muziris–North Paravur</option><option>Kovalam — coming soon</option></select></label>
             <label className="rounded-2xl border border-[#dfe6e5] bg-[#f8faf8] px-4 py-3 text-xs font-bold uppercase tracking-wider text-[#57717b]">Activity<select value={selectedActivity} onChange={(e) => setSelectedActivity(e.target.value)} className="mt-2 block w-full bg-transparent text-sm font-semibold normal-case tracking-normal text-[#06263b] outline-none"><option>Any activity</option><option>Kayaking</option><option>Canoeing</option><option>Stand-up paddleboarding</option></select></label>
-            <label className="rounded-2xl border border-[#dfe6e5] bg-[#f8faf8] px-4 py-3 text-xs font-bold uppercase tracking-wider text-[#57717b]">Date<input type="date" className="mt-2 block w-full bg-transparent text-sm font-semibold normal-case tracking-normal text-[#06263b] outline-none" /></label>
+            <DatePicker value={selectedDate} onChange={setSelectedDate} />
             <button onClick={() => setSubmitted(true)} className="rounded-2xl bg-[#06263b] px-5 py-4 text-sm font-extrabold uppercase tracking-[0.1em] text-white transition hover:bg-[#0b3850]">{submitted ? 'Request received' : 'Find sessions'} <ArrowRight className="ml-2 inline size-4" /></button>
           </div>
           <p className="mt-4 text-xs text-[#71848b]">Live availability and payment will appear here once the booking engine is connected. This preview uses demonstration data.</p>

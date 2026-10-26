@@ -31,7 +31,7 @@ export const SHOP_CATEGORIES: ShopCategory[] = [
   { id: 'boards-and-kayaks', name: 'SUP Boards and Kayaks', summary: 'Made-to-order boards and kayaks, by enquiry.', types: ['SUP boards', 'Kayaks'], proposedRange: 'Made to order / enquiry', salesMethod: 'made-to-order' },
 ]
 
-export type ProductImage = { src: string; alt: string; variantKey?: string }
+export type ProductImage = { src: string; alt: string; variantKey?: string; illustrative?: boolean }
 
 export type Variant = {
   /** e.g. { size: 'M', colour: 'Navy' } */
@@ -94,7 +94,7 @@ const product = (seed: Seed): Product => ({
 
 export const products: Product[] = [
   product({ slug: 'bond-safari-t-shirt', name: 'Bond Safari T-shirt', category: 'apparel', type: 'T-shirts', hasSizeGuide: true, featured: true, related: ['bond-safari-cap', 'rash-guard'], demo: { price: 599, optionValues: { size: SIZES, colour: ['Navy', 'White'] }, outOfStock: ['XL|White'] } }),
-  product({ slug: 'bond-safari-cap', name: 'Bond Safari Cap', category: 'apparel', type: 'Caps', featured: true, related: ['bond-safari-t-shirt'], demo: { price: 449, optionValues: { colour: ['Navy', 'Sand'] } } }),
+  product({ slug: 'bond-safari-cap', name: 'Bond Safari Cap', category: 'apparel', type: 'Caps', images: [{ src: 'https://images.unsplash.com/photo-1675285456811-aae306c3cf9f?auto=format&fit=crop&w=1400&q=85', alt: 'Plain baseball cap on a table; Bond Safari branding is not shown', illustrative: true }], featured: true, related: ['bond-safari-t-shirt'], demo: { price: 449, optionValues: { colour: ['Navy', 'Sand'] } } }),
   product({ slug: 'rash-guard', name: 'Rash Guard', category: 'waterwear', type: 'Rash guards', hasSizeGuide: true, hygieneRestricted: true, bookingAddOnEligible: true, clickAndCollectEligible: true, featured: true, related: ['dry-bag', 'swimwear'], demo: { price: 1799, optionValues: { size: SIZES, colour: ['Navy', 'Cyan'] }, outOfStock: ['S|Cyan'] } }),
   product({ slug: 'swimwear', name: 'Swimwear', category: 'waterwear', type: 'Swimwear', hasSizeGuide: true, hygieneRestricted: true, related: ['rash-guard'], demo: { price: 1499, optionValues: { size: SIZES } } }),
   product({ slug: 'paddle', name: 'Paddle', category: 'paddling-equipment', type: 'Paddles', related: ['buoyancy-aid', 'dry-bag'], demo: { price: 4500, optionValues: {} } }),

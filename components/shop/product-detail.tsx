@@ -18,7 +18,7 @@ export function ProductGallery({ product }: { product: Product }) {
   if (!images.length) return <div className="overflow-hidden rounded-3xl"><ProductVisual product={product} className="aspect-square w-full" /></div>
   return (
     <div>
-      <button type="button" onClick={() => setZoom(true)} className={`block w-full overflow-hidden rounded-3xl ${focusRing}`} aria-label="View larger image"><img src={images[index].src} alt={images[index].alt} className="aspect-square w-full object-cover" /></button>
+      <button type="button" onClick={() => setZoom(true)} className={`relative block w-full overflow-hidden rounded-3xl ${focusRing}`} aria-label="View larger image"><img src={images[index].src} alt={images[index].alt} className="aspect-square w-full object-cover" />{images[index].illustrative && <span className="absolute bottom-3 right-3 rounded-full bg-[#06263b]/75 px-3 py-1.5 text-[10px] font-semibold text-white/90 backdrop-blur">Illustrative image</span>}</button>
       {images.length > 1 && (
         <div className="mt-3 flex gap-2 overflow-x-auto" role="group" aria-label="Product images">
           {images.map((image, i) => <button key={image.src} type="button" onClick={() => setIndex(i)} aria-pressed={i === index} className={`size-20 shrink-0 overflow-hidden rounded-xl ring-2 ${i === index ? 'ring-[#06263b]' : 'ring-transparent'} ${focusRing}`}><img src={image.src} alt={`${image.alt} thumbnail`} className="size-full object-cover" /></button>)}
