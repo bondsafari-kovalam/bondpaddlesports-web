@@ -1,8 +1,11 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
+import { CartProvider } from '@/components/shop/cart'
+import { SITE_URL } from '@/lib/site'
 import './globals.css'
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: 'Bond Safari Paddle Sports | Find your wild water',
   description: 'Guided paddles, peaceful backwaters and paddlesport learning across Kerala.',
   generator: 'v0.app',
@@ -32,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
-        {children}
+        <CartProvider>{children}</CartProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
