@@ -82,16 +82,12 @@ function isLightBehind(header: HTMLElement) {
 }
 
 function useHeaderScroll(ref: React.RefObject<HTMLElement | null>) {
-  const [hidden, setHidden] = useState(false)
   const [light, setLight] = useState(false)
 
   useEffect(() => {
-    let lastY = window.scrollY
     let frame = 0
     const update = () => {
       frame = 0
-      const y = window.scrollY
-      if (Math.abs(y - lastY) > 6) { setHidden(y > lastY && y > 160); lastY = y }
       if (ref.current) setLight(isLightBehind(ref.current))
     }
     const onScroll = () => { if (!frame) frame = requestAnimationFrame(update) }
@@ -101,7 +97,7 @@ function useHeaderScroll(ref: React.RefObject<HTMLElement | null>) {
     return () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); cancelAnimationFrame(frame) }
   }, [ref])
 
-  return { hidden, light }
+  return { light }
 }
 
 export function SiteHeader({ bookHref = '/#book' }: { bookHref?: string }) {
@@ -109,13 +105,12 @@ export function SiteHeader({ bookHref = '/#book' }: { bookHref?: string }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const ref = useRef<HTMLElement>(null)
   const scroll = useHeaderScroll(ref)
-  // The open mobile menu is a navy panel, so keep the bar dark and pinned while it shows.
+  // The open mobile menu is a navy panel, so keep the bar dark while it shows.
   const light = scroll.light && !menuOpen
-  const hidden = scroll.hidden && !menuOpen
   const linkClass = (href: string) => isActive(pathname, href) ? (light ? 'text-[#0b7f95]' : 'text-[#f5b82e]') : (light ? 'text-[#06263b]/75 hover:text-[#0b7f95]' : 'text-white/80 hover:text-[#f5b82e]')
 
   return (
-    <header ref={ref} className={`fixed inset-x-0 top-0 z-30 border-b backdrop-blur-md transition-[translate,background-color,color,border-color] duration-700 ${hidden ? '-translate-y-full' : ''} ${light ? 'border-[#06263b]/10 bg-white/80 text-[#06263b]' : 'border-white/15 bg-[#06263b]/70 text-white'}`}>
+    <header ref={ref} className={`fixed inset-x-0 top-0 z-30 border-b backdrop-blur-md transition-[background-color,color,border-color] duration-700 ${light ? 'border-[#06263b]/10 bg-white/80 text-[#06263b]' : 'border-white/15 bg-[#06263b]/70 text-white'}`}>
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
         <BrandMark />
         <nav className="hidden items-center gap-5 text-[13px] font-semibold lg:flex xl:gap-7" aria-label="Main">
