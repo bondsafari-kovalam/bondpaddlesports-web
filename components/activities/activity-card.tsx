@@ -1,5 +1,6 @@
 import { ArrowRight, Compass, Droplets, Mountain, Route, Sunrise, Sunset, UsersRound, Waves, type LucideIcon } from 'lucide-react'
 import { IllustrativeLabel, focusRing } from '@/components/locations/primitives'
+import { AmbientVideo } from '@/components/motion/ambient-video'
 import {
   ACTIVITY_STATUS_LABELS,
   activityHref,
@@ -41,7 +42,9 @@ export function ActivityVisual({ activity, className = '', showLabel = true }: {
   if (activity.image) {
     return (
       <div className={`relative overflow-hidden ${className}`}>
-        <img src={activity.image.src} alt={activity.image.alt} loading="lazy" decoding="async" className="size-full object-cover transition duration-700 group-hover:scale-105" />
+        {activity.ambientVideo
+          ? <AmbientVideo src={activity.ambientVideo.src} poster={activity.ambientVideo.poster} focus={activity.ambientVideo.focus} className="size-full transition duration-1000 group-hover:scale-105" />
+          : <img src={activity.image.src} alt={activity.image.alt} loading="lazy" decoding="async" className="size-full object-cover transition duration-700 group-hover:scale-105" />}
         {activity.image.illustrative && <IllustrativeLabel className="absolute bottom-3 right-3" />}
       </div>
     )

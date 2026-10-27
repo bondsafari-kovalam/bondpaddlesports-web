@@ -3,6 +3,7 @@
 import { useRef } from 'react'
 import { ArrowRight } from 'lucide-react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
+import { AmbientVideo } from '@/components/motion/ambient-video'
 import { EXPO, Reveal, RevealLines } from '@/components/motion/reveal'
 
 export function HomeHero() {
@@ -18,7 +19,9 @@ export function HomeHero() {
       {/* Opens from a framed window to full bleed, then drifts slower than the page. */}
       <motion.div className="absolute inset-0" initial={reduce ? false : { clipPath: 'inset(14% 8% 14% 8% round 40px)' }} animate={{ clipPath: 'inset(0% 0% 0% 0% round 0px)' }} transition={{ duration: 1.8, ease: EXPO, delay: 0.15 }}>
         <motion.div className="absolute inset-0" style={reduce ? undefined : { y: imageY }}>
-          <motion.img src="https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?auto=format&fit=crop&w=2200&q=90" alt="Paddler exploring calm tropical water" className="size-full object-cover" initial={reduce ? false : { scale: 1.25 }} animate={{ scale: 1 }} transition={{ duration: 2.4, ease: EXPO, delay: 0.15 }} />
+          <motion.div className="size-full" initial={reduce ? false : { scale: 1.25 }} animate={{ scale: 1 }} transition={{ duration: 2.4, ease: EXPO, delay: 0.15 }}>
+            <AmbientVideo src="/video/canoeing-loop.mp4" poster="/video/canoeing-poster.jpg" className="size-full" eager />
+          </motion.div>
         </motion.div>
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(6,38,59,.88)_0%,rgba(6,38,59,.55)_45%,rgba(6,38,59,.12)_100%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(6,38,59,.88),transparent_55%)]" />

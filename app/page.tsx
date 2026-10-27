@@ -5,15 +5,14 @@ import {
   ArrowRight,
   CalendarDays,
   ChevronDown,
-  Compass,
   Dumbbell,
   Leaf,
-  Mountain,
   Sparkles,
   Star,
   Waves,
 } from 'lucide-react'
 import { DatePicker } from '@/components/booking/date-picker'
+import { HomeExperiences } from '@/components/home/home-experiences'
 import { HomeHero } from '@/components/home/home-hero'
 import { ParallaxImage, Reveal, RevealLines } from '@/components/motion/reveal'
 import { SiteFooter } from '@/components/site/site-footer'
@@ -41,12 +40,6 @@ const locations = [
     image: 'https://images.unsplash.com/photo-1722340081727-baae59878e6c?auto=format&fit=crop&w=1200&q=85',
     status: 'Coming soon',
   },
-]
-
-const experiences = [
-  { icon: Waves, slug: 'kayaking', title: 'Kayaking', text: 'Glide through quiet waters, hidden channels and living landscapes.' },
-  { icon: Mountain, slug: 'canoeing', title: 'Canoeing', text: 'Find your rhythm on the water with a craft built for shared adventure.' },
-  { icon: Compass, slug: 'stand-up-paddleboarding', title: 'Stand-up paddleboarding', text: 'A fresh perspective, a full-body workout and a slower way to explore.' },
 ]
 
 export default function Page() {
@@ -78,7 +71,7 @@ export default function Page() {
         <div className="mt-12 grid gap-5 md:grid-cols-3">{locations.map((location, i) => <Reveal as="article" key={location.name} delay={i * 0.1} className="group overflow-hidden rounded-3xl bg-white shadow-sm"><div className="relative h-72 overflow-hidden"><ParallaxImage src={location.image} alt="Scenic water landscape" className="size-full" imgClassName="transition duration-1000 group-hover:scale-105" /><span className={`absolute left-4 top-4 rounded-full px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider ${location.status === 'Operating now' ? 'bg-[#d9f7ed] text-[#14785a]' : 'bg-white/90 text-[#57717b]'}`}>{location.status}</span></div><div className="p-5"><h3 className="font-display text-xl font-bold">{location.name}</h3><p className="mt-1 text-sm text-[#71848b]">{location.meta}</p><div className="mt-6 flex items-center justify-between"><span className="text-sm font-bold text-[#f0783e]">{location.price}</span><button className="flex items-center gap-1 text-sm font-bold text-[#06263b]">{location.status === 'Operating now' ? 'Book now' : 'Notify me'} <ArrowRight className="size-4" /></button></div></div></Reveal>)}</div>
       </section>
 
-      <section id="activities" className="bg-[#06263b] px-5 py-24 text-white lg:px-8 lg:py-32"><div className="mx-auto max-w-7xl"><div className="max-w-2xl"><p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#8fe8f4]">Choose your rhythm</p><h2 className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>Good days are<br /><span className="text-[#f5b82e]">made on the water.</span></RevealLines></h2></div><div className="mt-14 grid gap-px overflow-hidden rounded-3xl bg-white/15 md:grid-cols-3">{experiences.map(({ icon: Icon, slug, title, text }, i) => <Reveal as="article" key={title} delay={i * 0.1} className="bg-[#0b3850] p-8 transition hover:bg-[#104963]"><Icon className="size-9 text-[#00c8e8]" strokeWidth={1.4} /><h3 className="mt-16 font-display text-2xl font-bold">{title}</h3><p className="mt-3 text-sm leading-6 text-white/65">{text}</p><a href={`/activities/${slug}`} className="mt-7 inline-flex items-center text-sm font-bold text-[#f5b82e]">Explore {title} <ArrowRight className="ml-2 size-4" /></a></Reveal>)}</div></div></section>
+      <HomeExperiences />
 
       <section id="academy" className="mx-auto grid max-w-7xl gap-12 px-5 py-24 lg:grid-cols-[.9fr_1.1fr] lg:items-center lg:px-8 lg:py-32"><Reveal className="relative overflow-hidden rounded-3xl bg-[#0b3850] p-8 text-white sm:p-12"><div className="absolute -right-16 -top-16 size-56 rounded-full border-[24px] border-[#00c8e8]/15" /><p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#8fe8f4]">Bond Safari Academy</p><h2 className="mt-5 font-display text-4xl font-black leading-tight sm:text-5xl"><RevealLines delay={0.2}>From first<br />stroke to<br /><span className="text-[#f5b82e]">future guide.</span></RevealLines></h2><p className="mt-6 max-w-sm text-sm leading-6 text-white/70">Build confidence, learn safely and discover a pathway into paddlesport leadership.</p><a href="/academy" className="mt-8 inline-flex items-center rounded-full bg-white px-5 py-3 text-sm font-bold text-[#06263b]">Explore the Academy <ArrowRight className="ml-2 size-4" /></a></Reveal><div><p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#f0783e]">Learn with purpose</p><h2 className="mt-3 font-display text-4xl font-black tracking-tight sm:text-5xl"><RevealLines>Try. Learn.<br />Qualify. Lead.</RevealLines></h2><p className="mt-6 max-w-lg text-base leading-7 text-[#57717b]">A clear qualification pathway for curious beginners, aspiring guides and professional paddlesport learners.</p><div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3">{['Try', 'Learn', 'Qualify', 'Lead', 'Coach', 'Tutor'].map((step, i) => <Reveal key={step} delay={i * 0.06} className="rounded-2xl border border-[#dfe6e5] bg-white p-4"><span className="text-xs font-bold text-[#00a9c3]">0{i + 1}</span><p className="mt-6 font-display text-lg font-bold">{step}</p></Reveal>)}</div><p className="mt-6 text-xs text-[#71848b]">Paddle UK courses from 2027, subject to approval.</p></div></section>
 
