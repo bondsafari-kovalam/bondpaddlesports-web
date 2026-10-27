@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Search, SlidersHorizontal, X } from 'lucide-react'
 import { focusRing } from '@/components/locations/primitives'
 import {
@@ -60,14 +60,14 @@ export function LocationSearch({ value, onChange, id = 'location-search', tone =
   return (
     <div className="relative">
       <label htmlFor={id} className="sr-only">Search by location name</label>
-      <Search className={`pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 ${tone === 'dark' ? 'text-white/60' : 'text-[#57717b]'}`} aria-hidden />
+      <Search className={`pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 ${tone === 'dark' ? 'text-white/60' : 'text-slate'}`} aria-hidden />
       <input
         id={id}
         type="search"
         value={value}
         onChange={(event) => onChange(event.target.value)}
         placeholder="Search locations, e.g. Kovalam"
-        className={`w-full rounded-2xl py-4 pl-11 pr-4 text-sm font-semibold outline-none transition focus:ring-2 focus:ring-[#00a9c3] ${tone === 'dark' ? 'border border-white/25 bg-white/10 text-white placeholder:text-white/55 backdrop-blur-md' : 'border border-[#dfe6e5] bg-[#f8faf8] text-[#06263b] placeholder:text-[#57717b]'}`}
+        className={`h-11 w-full rounded-full pl-11 pr-4 text-sm font-medium outline-none transition focus:ring-2 focus:ring-teal ${tone === 'dark' ? 'border border-white/25 bg-white/10 text-white placeholder:text-white/55 backdrop-blur-md' : 'border border-line bg-paper-bright text-ink placeholder:text-slate'}`}
       />
     </div>
   )
@@ -80,12 +80,12 @@ function FacetSelects({ locations, filters, setFilters }: { locations: Location[
         const options = facetOptions(locations, filters, key)
         const unavailable = options.every((option) => option.count === 0 && option.value !== filters[key])
         return (
-          <label key={key} className="rounded-2xl border border-[#dfe6e5] bg-[#f8faf8] px-4 py-3 text-xs font-bold uppercase tracking-wider text-[#57717b] focus-within:ring-2 focus-within:ring-[#00a9c3]">
+          <label key={key} className="rounded-2xl border border-line bg-paper-bright px-4 py-3 text-xs font-bold uppercase tracking-wider text-slate focus-within:ring-2 focus-within:ring-teal">
             {facetLabels[key]}
             <select
               value={filters[key]}
               onChange={(event) => setFilters({ ...filters, [key]: event.target.value })}
-              className="mt-2 block w-full bg-transparent text-sm font-semibold normal-case tracking-normal text-[#06263b] outline-none"
+              className="mt-2 block w-full bg-transparent text-sm font-semibold normal-case tracking-normal text-ink outline-none"
             >
               <option value="">{unavailable && key === 'activity' ? 'Being confirmed' : `Any ${facetLabels[key].toLowerCase()}`}</option>
               {options.map((option) => <option key={option.value} value={option.value} disabled={option.count === 0 && option.value !== filters[key]}>{option.label} ({option.count})</option>)}
@@ -97,45 +97,35 @@ function FacetSelects({ locations, filters, setFilters }: { locations: Location[
   )
 }
 
-export function LocationFilters({ locations, filters, setFilters, drawerOpen, setDrawerOpen }: {
-  locations: Location[]
-  filters: Filters
-  setFilters: (filters: Filters) => void
-  drawerOpen: boolean
-  setDrawerOpen: (open: boolean) => void
-}) {
-  const drawerRef = useRef<HTMLDialogElement>(null)
+/** "Filters" button plus the facet dialog: a bottom sheet on phones, a centred panel on larger screens. */
+export function LocationFilters({ locations, filters, setFilters }: { locations: Location[]; filters: Filters; setFilters: (filters: Filters) => void }) {
+  const [open, setOpen] = useState(false)
+  const dialogRef = useRef<HTMLDialogElement>(null)
   const activeCount = (Object.keys(facetLabels) as FacetKey[]).filter((key) => filters[key]).length
   const resultCount = locations.filter((location) => matchesFilters(location, filters)).length
 
   useEffect(() => {
-    if (drawerOpen) drawerRef.current?.showModal()
-    else drawerRef.current?.close()
-  }, [drawerOpen])
+    if (open) dialogRef.current?.showModal()
+    else dialogRef.current?.close()
+  }, [open])
 
   return (
     <>
-      <div className="grid gap-3 lg:grid-cols-[1.4fr_repeat(4,1fr)]">
-        <div className="flex gap-2 lg:contents">
-          <div className="flex-1 [&_input]:h-full lg:[&_input]:py-[22px]"><LocationSearch value={filters.query} onChange={(query) => setFilters({ ...filters, query })} /></div>
-          <button type="button" onClick={() => setDrawerOpen(true)} className={`flex shrink-0 items-center gap-2 rounded-2xl border border-[#dfe6e5] bg-[#06263b] px-4 text-sm font-bold text-white lg:hidden ${focusRing}`} aria-haspopup="dialog">
-            <SlidersHorizontal className="size-4" aria-hidden /> Filters{activeCount > 0 && <span className="rounded-full bg-[#f5b82e] px-1.5 text-xs text-[#06263b]">{activeCount}</span>}
-          </button>
-        </div>
-        <div className="hidden lg:contents"><FacetSelects locations={locations} filters={filters} setFilters={setFilters} /></div>
-      </div>
+      <button type="button" onClick={() => setOpen(true)} className={`inline-flex h-11 shrink-0 items-center gap-2 rounded-full border border-line bg-white px-4 text-sm font-semibold text-ink transition hover:border-ink ${focusRing}`} aria-haspopup="dialog">
+        <SlidersHorizontal className="size-4" aria-hidden /> Filters{activeCount > 0 && <span className="rounded-full bg-ink px-1.5 text-xs text-white">{activeCount}</span>}
+      </button>
 
-      <dialog ref={drawerRef} onClose={() => setDrawerOpen(false)} aria-label="Filter locations" className="mb-0 mt-auto w-full max-w-none rounded-t-3xl bg-white p-0 text-[#06263b] backdrop:bg-[#06263b]/60 lg:hidden">
-        <div className="max-h-[85vh] overflow-y-auto p-5">
-          <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-[#dfe6e5]" aria-hidden />
-          <div className="mb-4 flex items-center justify-between">
+      <dialog ref={dialogRef} onClose={() => setOpen(false)} onClick={(event) => { if (event.target === dialogRef.current) setOpen(false) }} aria-label="Filter locations" className="mb-0 mt-auto w-full max-w-none rounded-t-3xl bg-white p-0 text-ink backdrop:bg-ink/60 backdrop:backdrop-blur-sm sm:m-auto sm:max-w-md sm:rounded-3xl">
+        <div className="max-h-[85vh] overflow-y-auto p-6">
+          <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-line sm:hidden" aria-hidden />
+          <div className="mb-5 flex items-center justify-between">
             <h2 className="font-display text-xl font-bold">Filter locations</h2>
-            <button type="button" onClick={() => setDrawerOpen(false)} className={`flex size-9 items-center justify-center rounded-full border border-[#dfe6e5] ${focusRing}`} aria-label="Close filters"><X className="size-4" /></button>
+            <button type="button" onClick={() => setOpen(false)} className={`flex size-9 items-center justify-center rounded-full border border-line ${focusRing}`} aria-label="Close filters"><X className="size-4" /></button>
           </div>
           <div className="grid gap-3"><FacetSelects locations={locations} filters={filters} setFilters={setFilters} /></div>
-          <div className="mt-5 grid grid-cols-2 gap-2">
-            <button type="button" onClick={() => setFilters({ ...emptyFilters, query: filters.query })} className={`rounded-2xl border border-[#dfe6e5] py-4 text-sm font-bold ${focusRing}`}>Clear filters</button>
-            <button type="button" onClick={() => setDrawerOpen(false)} className={`rounded-2xl bg-[#06263b] py-4 text-sm font-extrabold text-white ${focusRing}`}>Show {resultCount} {resultCount === 1 ? 'location' : 'locations'}</button>
+          <div className="mt-6 grid grid-cols-2 gap-2">
+            <button type="button" onClick={() => setFilters({ ...emptyFilters, query: filters.query })} className={`rounded-full border border-line py-3.5 text-sm font-semibold ${focusRing}`}>Clear filters</button>
+            <button type="button" onClick={() => setOpen(false)} className={`rounded-full bg-ink py-3.5 text-sm font-semibold text-white ${focusRing}`}>Show {resultCount} {resultCount === 1 ? 'location' : 'locations'}</button>
           </div>
         </div>
       </dialog>
@@ -156,11 +146,11 @@ export function ActiveFilterChips({ filters, setFilters }: { filters: Filters; s
   return (
     <div className="flex flex-wrap items-center gap-2">
       {chips.map((chip) => (
-        <button key={chip.key} type="button" onClick={() => setFilters({ ...filters, [chip.key]: '' })} className={`inline-flex items-center gap-1.5 rounded-full bg-[#06263b] px-3 py-1.5 text-xs font-bold text-white ${focusRing}`} aria-label={`Remove filter ${chip.label}`}>
+        <button key={chip.key} type="button" onClick={() => setFilters({ ...filters, [chip.key]: '' })} className={`inline-flex items-center gap-1.5 rounded-full bg-ink px-3 py-1.5 text-xs font-bold text-white ${focusRing}`} aria-label={`Remove filter ${chip.label}`}>
           {chip.label} <X className="size-3" aria-hidden />
         </button>
       ))}
-      <button type="button" onClick={() => setFilters(emptyFilters)} className={`rounded px-2 text-xs font-bold text-[#0b7f95] underline-offset-4 hover:underline ${focusRing}`}>Clear all</button>
+      <button type="button" onClick={() => setFilters(emptyFilters)} className={`rounded px-2 text-xs font-bold text-teal underline-offset-4 hover:underline ${focusRing}`}>Clear all</button>
     </div>
   )
 }

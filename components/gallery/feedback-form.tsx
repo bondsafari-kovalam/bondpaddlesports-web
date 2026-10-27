@@ -46,20 +46,20 @@ export function FeedbackForm() {
           </div>
           <SelectField label="Activity or location" name="experience" options={experienceOptions} optional />
           <fieldset>
-            <legend className="text-xs font-bold uppercase tracking-wider text-[#57717b]">Rating <span className="font-semibold normal-case tracking-normal">(optional)</span></legend>
+            <legend className="text-xs font-bold uppercase tracking-wider text-slate">Rating <span className="font-semibold normal-case tracking-normal">(optional)</span></legend>
             <div className="mt-2 flex gap-1">
               {[1, 2, 3, 4, 5].map((value) => (
-                <label key={value} className="flex size-11 cursor-pointer items-center justify-center rounded-xl has-focus-visible:ring-2 has-focus-visible:ring-[#00a9c3]">
+                <label key={value} className="flex size-11 cursor-pointer items-center justify-center rounded-xl has-focus-visible:ring-2 has-focus-visible:ring-teal">
                   <input type="radio" name="rating" value={value} checked={rating === value} onChange={() => setRating(value)} className="sr-only" />
-                  <Star className={`size-6 ${value <= rating ? 'fill-[#f5b82e] text-[#f5b82e]' : 'text-[#c7d2d0]'}`} aria-hidden />
+                  <Star className={`size-6 ${value <= rating ? 'fill-sand text-sand' : 'text-line'}`} aria-hidden />
                   <span className="sr-only">{value} star{value > 1 ? 's' : ''}</span>
                 </label>
               ))}
             </div>
           </fieldset>
           <TextAreaField label="Your feedback" name="message" error={errors.message} />
-          <p className="text-xs leading-5 text-[#57717b]">Your feedback goes to the Bond Safari team to help us improve. It isn’t published automatically; we’d ask your permission before sharing any part of it publicly.</p>
-          <CheckboxField name="consent" error={errors.consent}>I agree that Bond Safari may store and use this feedback to review and improve its experiences. <span className="text-[#57717b]">Required.</span></CheckboxField>
+          <p className="text-xs leading-5 text-slate">Your feedback goes to the Bond Safari team to help us improve. It isn’t published automatically; we’d ask your permission before sharing any part of it publicly.</p>
+          <CheckboxField name="consent" error={errors.consent}>I agree that Bond Safari may store and use this feedback to review and improve its experiences. <span className="text-slate">Required.</span></CheckboxField>
         </>
       )}
     </ServiceForm>

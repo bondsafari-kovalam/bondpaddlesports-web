@@ -18,7 +18,7 @@ export default function CalendarPage() {
       <AcademyHero
         image={HERO_IMAGES.academyCalendar}
         eyebrow="Course calendar"
-        title={<>Plan your <span className="text-[#f5b82e]">next course.</span></>}
+        title={<>Plan your <span className="text-sand">next course.</span></>}
         description="Browse Academy course dates by month, category and location. Only confirmed dates appear here."
         breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Academy', href: '/academy' }, { label: 'Calendar' }]}
       />

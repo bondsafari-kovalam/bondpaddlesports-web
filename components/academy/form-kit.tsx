@@ -5,8 +5,8 @@ import { AlertCircle, CheckCircle2, Info, Loader2 } from 'lucide-react'
 import { focusRing } from '@/components/locations/primitives'
 import type { ServiceResult } from '@/lib/academy-service'
 
-export const inputClass = 'mt-2 block min-h-12 w-full rounded-xl border border-[#dfe6e5] bg-[#f8faf8] px-4 py-3 text-sm font-semibold normal-case tracking-normal text-[#06263b] outline-none transition focus:border-[#00a9c3] focus:ring-2 focus:ring-[#00a9c3]/30 aria-[invalid=true]:border-[#b42318]'
-export const primaryButton = `inline-flex min-h-12 items-center justify-center rounded-2xl bg-[#06263b] px-6 text-sm font-extrabold uppercase tracking-[0.1em] text-white transition hover:bg-[#0b3850] disabled:opacity-60 ${focusRing}`
+export const inputClass = 'mt-2 block min-h-12 w-full rounded-xl border border-line bg-paper-bright px-4 py-3 text-sm font-semibold normal-case tracking-normal text-ink outline-none transition focus:border-teal focus:ring-2 focus:ring-teal/30 aria-[invalid=true]:border-danger'
+export const primaryButton = `inline-flex min-h-12 items-center justify-center rounded-2xl bg-ink px-6 text-sm font-extrabold uppercase tracking-[0.1em] text-white transition hover:bg-ink-soft disabled:opacity-60 ${focusRing}`
 
 type FieldProps = { label: string; error?: string; hint?: string; optional?: boolean; children: (props: { id: string; 'aria-invalid': boolean; 'aria-describedby'?: string }) => ReactNode }
 
@@ -15,10 +15,10 @@ export function Field({ label, error, hint, optional, children }: FieldProps) {
   const describedBy = [hint && `${id}-hint`, error && `${id}-error`].filter(Boolean).join(' ') || undefined
   return (
     <div>
-      <label htmlFor={id} className="text-xs font-bold uppercase tracking-wider text-[#57717b]">{label}{optional && <span className="ml-1 font-semibold normal-case tracking-normal">(optional)</span>}</label>
+      <label htmlFor={id} className="text-xs font-bold uppercase tracking-wider text-slate">{label}{optional && <span className="ml-1 font-semibold normal-case tracking-normal">(optional)</span>}</label>
       {children({ id, 'aria-invalid': !!error, 'aria-describedby': describedBy })}
-      {hint && <p id={`${id}-hint`} className="mt-1.5 text-xs text-[#57717b]">{hint}</p>}
-      {error && <p id={`${id}-error`} className="mt-1.5 flex items-center gap-1 text-xs font-semibold text-[#b42318]"><AlertCircle className="size-3.5" aria-hidden />{error}</p>}
+      {hint && <p id={`${id}-hint`} className="mt-1.5 text-xs text-slate">{hint}</p>}
+      {error && <p id={`${id}-error`} className="mt-1.5 flex items-center gap-1 text-xs font-semibold text-danger"><AlertCircle className="size-3.5" aria-hidden />{error}</p>}
     </div>
   )
 }
@@ -43,17 +43,17 @@ export function CheckboxField({ name, children, error }: { name: string; childre
   const id = useId()
   return (
     <div>
-      <label className="flex min-h-11 gap-3 text-sm leading-5 text-[#06263b]">
-        <input type="checkbox" name={name} className="mt-0.5 size-5 shrink-0 accent-[#06263b]" aria-invalid={!!error} aria-describedby={error ? id : undefined} />
+      <label className="flex min-h-11 gap-3 text-sm leading-5 text-ink">
+        <input type="checkbox" name={name} className="mt-0.5 size-5 shrink-0 accent-ink" aria-invalid={!!error} aria-describedby={error ? id : undefined} />
         <span>{children}</span>
       </label>
-      {error && <p id={id} className="ml-8 flex items-center gap-1 text-xs font-semibold text-[#b42318]"><AlertCircle className="size-3.5" aria-hidden />{error}</p>}
+      {error && <p id={id} className="ml-8 flex items-center gap-1 text-xs font-semibold text-danger"><AlertCircle className="size-3.5" aria-hidden />{error}</p>}
     </div>
   )
 }
 
 export function DemoBanner({ children }: { children: ReactNode }) {
-  return <p className="flex gap-2 rounded-xl bg-[#fff1cf] p-3 text-xs leading-5 text-[#7a4f00]" role="note"><Info className="mt-0.5 size-4 shrink-0" aria-hidden /><span>{children}</span></p>
+  return <p className="flex gap-2 rounded-xl bg-sand-soft p-3 text-xs leading-5 text-sand-ink" role="note"><Info className="mt-0.5 size-4 shrink-0" aria-hidden /><span>{children}</span></p>
 }
 
 export const isEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
@@ -104,7 +104,7 @@ export function ServiceForm({ validate, submit, children, submitLabel, savedMess
     } else setState(result.reason === 'not-connected' ? 'not-connected' : 'error')
   }
 
-  if (state === 'saved') return <p role="status" className="flex gap-3 rounded-2xl bg-[#d9f7ed] p-5 text-sm text-[#14785a]"><CheckCircle2 className="size-5 shrink-0" aria-hidden />{savedMessage} Reference: {reference}</p>
+  if (state === 'saved') return <p role="status" className="flex gap-3 rounded-2xl bg-success-soft p-5 text-sm text-success"><CheckCircle2 className="size-5 shrink-0" aria-hidden />{savedMessage} Reference: {reference}</p>
 
   return (
     <form ref={formRef} onSubmit={handleSubmit} noValidate className="space-y-4">
@@ -113,7 +113,7 @@ export function ServiceForm({ validate, submit, children, submitLabel, savedMess
         {state === 'sending' && <Loader2 className="mr-2 size-4 animate-spin" aria-hidden />}{submitLabel}
       </button>
       {state === 'not-connected' && <DemoBanner><strong>Demo preview:</strong> your details look good, but this form isn’t connected yet, so nothing was sent or saved.</DemoBanner>}
-      {state === 'error' && <p role="alert" className="text-sm font-semibold text-[#b42318]">Something went wrong. Please try again.</p>}
+      {state === 'error' && <p role="alert" className="text-sm font-semibold text-danger">Something went wrong. Please try again.</p>}
     </form>
   )
 }

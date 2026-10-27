@@ -107,16 +107,16 @@ export function DemoShopBanner() {
   const { demo, setDemo } = useCart()
   if (!demo) return null
   return (
-    <div className="sticky top-0 z-40 bg-[#f5b82e] text-[#06263b]" role="status">
+    <div className="sticky top-0 z-40 bg-sand text-ink" role="status">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-5 py-2.5 text-xs font-bold lg:px-8">
         <span className="flex items-center gap-2"><FlaskConical className="size-4 shrink-0" aria-hidden />Demo shop: example prices, sizes and stock. Nothing can be bought.</span>
-        <button type="button" onClick={() => setDemo(false)} className={`inline-flex min-h-9 shrink-0 items-center gap-1 rounded-full bg-[#06263b] px-3 text-white ${focusRing}`}><X className="size-3.5" aria-hidden />Exit demo</button>
+        <button type="button" onClick={() => setDemo(false)} className={`inline-flex min-h-9 shrink-0 items-center gap-1 rounded-full bg-ink px-3 text-white ${focusRing}`}><X className="size-3.5" aria-hidden />Exit demo</button>
       </div>
     </div>
   )
 }
 
-export function DemoShopToggle({ className = 'border-[#06263b]/20' }: { className?: string }) {
+export function DemoShopToggle({ className = 'border-ink/20' }: { className?: string }) {
   const { demo, setDemo } = useCart()
   if (demo) return null
   return (

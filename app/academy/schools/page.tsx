@@ -28,7 +28,7 @@ export default function SchoolsPage() {
       <AcademyHero
         image={HERO_IMAGES.academySchools}
         eyebrow="Schools & colleges"
-        title={<>Take learning<br /><span className="text-[#f5b82e]">onto the water.</span></>}
+        title={<>Take learning<br /><span className="text-sand">onto the water.</span></>}
         description="Structured paddling experiences for schools, colleges and organised groups, planned around your learners."
         actions={<a href="#enquiry" className={goldButton}>Make a school enquiry <ArrowRight className="ml-2 size-4" aria-hidden /></a>}
         breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Academy', href: '/academy' }, { label: 'Schools' }]}
@@ -37,19 +37,19 @@ export default function SchoolsPage() {
       <section className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-24" aria-labelledby="programme">
         <SectionHeading id="programme" eyebrow="The programme" title="Built for schools." />
         <RevealGroup className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{blocks.map(({ icon: Icon, title, text }) => (
-            <article key={title} className="rounded-3xl bg-white p-6 ring-1 ring-[#06263b]/5">
-              <Icon className="size-8 text-[#00a9c3]" strokeWidth={1.4} aria-hidden />
+            <article key={title} className="rounded-3xl bg-white p-6 ring-1 ring-ink/5">
+              <Icon className="size-8 text-teal" strokeWidth={1.4} aria-hidden />
               <h3 className="mt-6 font-display text-xl font-bold">{title}</h3>
-              <p className="mt-2 text-sm leading-6 text-[#57717b]">{text ?? <Pending>Approved content from the Academy to be added.</Pending>}</p>
+              <p className="mt-2 text-sm leading-6 text-slate">{text ?? <Pending>Approved content from the Academy to be added.</Pending>}</p>
             </article>
           ))}
         </RevealGroup>
         <div className="mt-6"><DevNote title="Schools">Add the approved sample term plan, learning objectives and the client’s safety and safeguarding information. Don’t publish prices, safeguarding claims or outcomes until supplied.</DevNote></div>
       </section>
 
-      <section className="bg-[#eef2ed] px-5 py-20 lg:px-8 lg:py-24" aria-labelledby="where">
+      <section className="bg-mist px-5 py-20 lg:px-8 lg:py-24" aria-labelledby="where">
         <div className="mx-auto max-w-7xl">
-          <SectionHeading id="where" eyebrow="Where" title={<span className="flex items-center gap-3"><School className="size-9 text-[#00a9c3]" aria-hidden />Planned campuses</span>} intro="Muziris–Kochi is planned with a schools focus from 2028." />
+          <SectionHeading id="where" eyebrow="Where" title={<span className="flex items-center gap-3"><School className="size-9 text-teal" aria-hidden />Planned campuses</span>} intro="Muziris–Kochi is planned with a schools focus from 2028." />
           <div className="mt-10"><CampusCards /></div>
         </div>
       </section>

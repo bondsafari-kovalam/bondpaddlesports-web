@@ -6,8 +6,8 @@ import {
   GalleryHero,
   GalleryLocations,
   GalleryMobileBar,
+  GalleryNav,
   GallerySection,
-  ResponsiblePhotography,
   ReviewsSection,
 } from '@/components/gallery/gallery-sections'
 import { NotifyMeProvider } from '@/components/locations/notify-me'
@@ -26,15 +26,15 @@ export const metadata: Metadata = {
 export default function GalleryReviewsPage() {
   return (
     <NotifyMeProvider>
-      <main className="min-h-screen overflow-hidden bg-[#f6f3ec] text-[#06263b]">
+      <main className="min-h-screen overflow-x-clip bg-paper text-ink">
         <SiteHeader />
         <GalleryHero />
+        <GalleryNav />
         <GallerySection />
-        <FeaturedExperiences />
         <ReviewsSection />
-        <GalleryLocations />
-        <ResponsiblePhotography />
         <FeedbackSection />
+        <FeaturedExperiences />
+        <GalleryLocations />
         <GalleryFinalCTA />
         <SiteFooter />
         <GalleryMobileBar />

@@ -25,7 +25,7 @@ export default async function CollectionPage({ params }: Props) {
   return (
     <ShopShell>
       <PageHero compact eyebrow="Shop" title={category.name} description={category.summary}>
-        <nav aria-label="Breadcrumb" className="mt-6 text-xs font-semibold text-white/70"><a href="/" className="hover:text-[#f5b82e]">Home</a> › <a href="/shop" className="hover:text-[#f5b82e]">Shop</a> › <span aria-current="page" className="text-white">{category.name}</span></nav>
+        <nav aria-label="Breadcrumb" className="mt-6 text-xs font-semibold text-white/70"><a href="/" className="hover:text-sand">Home</a> › <a href="/shop" className="hover:text-sand">Shop</a> › <span aria-current="page" className="text-white">{category.name}</span></nav>
         <p className="mt-4 text-sm text-white/70">Proposed range: {category.proposedRange} <span className="text-white/50">(category guide from the client brief, not individual prices)</span></p>
       </PageHero>
       <div className="mx-auto max-w-7xl px-5 py-12 lg:px-8 lg:py-16"><ShopCatalogue fixedCategory={category.id} heading={false} /></div>

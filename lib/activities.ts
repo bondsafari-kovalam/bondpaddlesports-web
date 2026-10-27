@@ -82,6 +82,9 @@ const muzirisDemo: Offering[] = [
   { locationSlug: 'muziris-north-paravur', source: 'demo', meetingPoint: 'Thattukadavu Jetty' },
 ]
 
+// Confirmed by Bond: kayaking and canoeing are running at Kovalam. Price and duration still to be supplied.
+const kovalamConfirmed: Offering = { locationSlug: 'kovalam', source: 'confirmed' }
+
 export const activities: Activity[] = [
   {
     slug: 'kayaking',
@@ -95,7 +98,7 @@ export const activities: Activity[] = [
       illustrative: true,
     },
     ambientVideo: { src: '/video/kayaking-loop.mp4', poster: '/video/kayaking-poster.jpg', focus: '72% 50%' },
-    offerings: muzirisDemo,
+    offerings: [...muzirisDemo, kovalamConfirmed],
     related: ['canoeing', 'guided-trails'],
     nextSteps: ['academy', 'longer-experience', 'membership'],
     faqs: defaultFaqs('Kayaking'),
@@ -113,7 +116,7 @@ export const activities: Activity[] = [
       illustrative: true,
     },
     ambientVideo: { src: '/video/canoeing-loop.mp4', poster: '/video/canoeing-poster.jpg' },
-    offerings: muzirisDemo,
+    offerings: [...muzirisDemo, kovalamConfirmed],
     related: ['kayaking', 'private-sessions'],
     nextSteps: ['academy', 'membership'],
     faqs: defaultFaqs('Canoeing'),

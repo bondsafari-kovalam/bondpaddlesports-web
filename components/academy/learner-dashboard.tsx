@@ -24,8 +24,8 @@ const DEMO_ENROLMENTS: Enrolment[] = [
 
 function Card({ icon: Icon, title, children }: { icon: typeof Award; title: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl bg-[#f8faf8] p-4">
-      <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#57717b]"><Icon className="size-4 text-[#00a9c3]" aria-hidden />{title}</p>
+    <div className="rounded-2xl bg-paper-bright p-4">
+      <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate"><Icon className="size-4 text-teal" aria-hidden />{title}</p>
       <div className="mt-2 text-sm">{children}</div>
     </div>
   )
@@ -36,15 +36,15 @@ function EnrolmentCard({ enrolment }: { enrolment: Enrolment }) {
   const campus = CAMPUSES.find((item) => item.id === enrolment.session?.campus)
   const missing = enrolment.requiredDocuments.filter((kind) => !enrolment.documents.some((doc) => doc.kind === kind))
   return (
-    <article className="rounded-3xl bg-white p-6 ring-1 ring-[#06263b]/5">
+    <article className="rounded-3xl bg-white p-6 ring-1 ring-ink/5">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="text-xs font-semibold text-[#57717b]">Ref {enrolment.reference}</p>
-          <h3 className="mt-1 font-display text-2xl font-bold"><a href={courseHref(course)} className="hover:text-[#0b7f95]">{course.name}</a></h3>
+          <p className="text-xs font-semibold text-slate">Ref {enrolment.reference}</p>
+          <h3 className="mt-1 font-display text-2xl font-bold"><a href={courseHref(course)} className="hover:text-teal">{course.name}</a></h3>
         </div>
         <EnrolmentStatusBadge status={enrolment.status} />
       </div>
-      <p className="mt-3 text-sm text-[#3d5862]">{ENROLMENT_STATUS[enrolment.status].guidance}</p>
+      <p className="mt-3 text-sm text-slate-strong">{ENROLMENT_STATUS[enrolment.status].guidance}</p>
       <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         <Card icon={CalendarDays} title="Date">{enrolment.session?.startDate ? new Date(enrolment.session.startDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : 'Demo date'}</Card>
         <Card icon={MapPin} title="Location">{campus?.name ?? '—'}</Card>
@@ -53,7 +53,7 @@ function EnrolmentCard({ enrolment }: { enrolment: Enrolment }) {
         <Card icon={Upload} title="Still needed">{missing.length ? missing.join(', ') : 'Nothing outstanding'}</Card>
         <Card icon={Award} title="Certificate">{enrolment.certificateNumber ?? 'Issued after successful completion'}</Card>
       </div>
-      <p className="mt-4 flex items-center gap-2 text-xs text-[#57717b]"><Bell className="size-4" aria-hidden />Joining instructions: {enrolment.joiningInstructions ?? 'sent once approved'}</p>
+      <p className="mt-4 flex items-center gap-2 text-xs text-slate"><Bell className="size-4" aria-hidden />Joining instructions: {enrolment.joiningInstructions ?? 'sent once approved'}</p>
     </article>
   )
 }
@@ -76,17 +76,17 @@ export function LearnerDashboard() {
     })
   }, [])
 
-  if (state === 'loading') return <div className="flex min-h-64 items-center justify-center" aria-busy="true"><Loader2 className="size-8 animate-spin text-[#00a9c3]" aria-label="Loading your courses" /></div>
+  if (state === 'loading') return <div className="flex min-h-64 items-center justify-center" aria-busy="true"><Loader2 className="size-8 animate-spin text-teal" aria-label="Loading your courses" /></div>
 
   if (state === 'signed-out' && !demo) {
     return (
-      <div className="rounded-3xl bg-white p-8 text-center shadow-[0_20px_60px_rgba(6,38,59,.10)]">
-        <LogIn className="mx-auto size-10 text-[#00a9c3]" strokeWidth={1.4} aria-hidden />
+      <div className="rounded-3xl bg-white p-8 text-center shadow-[0_20px_60px_color-mix(in_srgb,var(--color-ink)_10%,transparent)]">
+        <LogIn className="mx-auto size-10 text-teal" strokeWidth={1.4} aria-hidden />
         <h2 className="mt-4 font-display text-2xl font-bold">Sign in to see your courses</h2>
-        <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-[#57717b]">Your Academy enrolments, documents, payments and certificates live in your Bond account. Sign-in will be available once Bond accounts are connected to this site.</p>
+        <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate">Your Academy enrolments, documents, payments and certificates live in your Bond account. Sign-in will be available once Bond accounts are connected to this site.</p>
         <button type="button" disabled className={`mt-6 ${primaryButton}`}>Sign in (coming soon)</button>
-        <div className="mt-8 border-t border-[#eef2ed] pt-6">
-          <button type="button" onClick={() => setDemo(true)} className={`inline-flex min-h-11 items-center rounded-full border border-[#06263b]/20 px-5 text-sm font-bold ${focusRing}`}>Preview the dashboard (demo)</button>
+        <div className="mt-8 border-t border-mist pt-6">
+          <button type="button" onClick={() => setDemo(true)} className={`inline-flex min-h-11 items-center rounded-full border border-ink/20 px-5 text-sm font-bold ${focusRing}`}>Preview the dashboard (demo)</button>
         </div>
       </div>
     )
@@ -96,8 +96,8 @@ export function LearnerDashboard() {
   return (
     <div className="space-y-6">
       {demo && <DemoBanner><strong>Demo preview.</strong> This is sample data showing how the dashboard will look. It is not a real learner or enrolment.</DemoBanner>}
-      <section aria-labelledby="upcoming"><h2 id="upcoming" className="font-display text-2xl font-bold">Upcoming courses</h2><div className="mt-4 space-y-4">{list.length ? list.map((enrolment) => <EnrolmentCard key={enrolment.reference} enrolment={enrolment} />) : <p className="text-sm text-[#57717b]">No upcoming courses. <a href="/academy/courses" className="font-bold text-[#0b7f95]">Browse courses</a></p>}</div></section>
-      <section aria-labelledby="past"><h2 id="past" className="font-display text-2xl font-bold">Past courses & certificates</h2><p className="mt-3 text-sm text-[#57717b]">Completed courses and issued certificates will appear here.</p></section>
+      <section aria-labelledby="upcoming"><h2 id="upcoming" className="font-display text-2xl font-bold">Upcoming courses</h2><div className="mt-4 space-y-4">{list.length ? list.map((enrolment) => <EnrolmentCard key={enrolment.reference} enrolment={enrolment} />) : <p className="text-sm text-slate">No upcoming courses. <a href="/academy/courses" className="font-bold text-teal">Browse courses</a></p>}</div></section>
+      <section aria-labelledby="past"><h2 id="past" className="font-display text-2xl font-bold">Past courses & certificates</h2><p className="mt-3 text-sm text-slate">Completed courses and issued certificates will appear here.</p></section>
     </div>
   )
 }

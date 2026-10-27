@@ -18,13 +18,13 @@ export function ProductGallery({ product }: { product: Product }) {
   if (!images.length) return <div className="overflow-hidden rounded-3xl"><ProductVisual product={product} className="aspect-square w-full" /></div>
   return (
     <div>
-      <button type="button" onClick={() => setZoom(true)} className={`relative block w-full overflow-hidden rounded-3xl ${focusRing}`} aria-label="View larger image"><img src={images[index].src} alt={images[index].alt} className="aspect-square w-full object-cover" />{images[index].illustrative && <span className="absolute bottom-3 right-3 rounded-full bg-[#06263b]/75 px-3 py-1.5 text-[10px] font-semibold text-white/90 backdrop-blur">Illustrative image</span>}</button>
+      <button type="button" onClick={() => setZoom(true)} className={`relative block w-full overflow-hidden rounded-3xl ${focusRing}`} aria-label="View larger image"><img src={images[index].src} alt={images[index].alt} className="aspect-square w-full object-cover" />{images[index].illustrative && <span className="absolute bottom-3 right-3 rounded-full bg-ink/75 px-3 py-1.5 text-[10px] font-semibold text-white/90 backdrop-blur">Illustrative image</span>}</button>
       {images.length > 1 && (
         <div className="mt-3 flex gap-2 overflow-x-auto" role="group" aria-label="Product images">
-          {images.map((image, i) => <button key={image.src} type="button" onClick={() => setIndex(i)} aria-pressed={i === index} className={`size-20 shrink-0 overflow-hidden rounded-xl ring-2 ${i === index ? 'ring-[#06263b]' : 'ring-transparent'} ${focusRing}`}><img src={image.src} alt={`${image.alt} thumbnail`} className="size-full object-cover" /></button>)}
+          {images.map((image, i) => <button key={image.src} type="button" onClick={() => setIndex(i)} aria-pressed={i === index} className={`size-20 shrink-0 overflow-hidden rounded-xl ring-2 ${i === index ? 'ring-ink' : 'ring-transparent'} ${focusRing}`}><img src={image.src} alt={`${image.alt} thumbnail`} className="size-full object-cover" /></button>)}
         </div>
       )}
-      <dialog ref={ref} onClose={() => setZoom(false)} className="m-auto max-h-[90vh] max-w-4xl rounded-3xl bg-white p-2 backdrop:bg-[#06263b]/80" aria-label={images[index].alt}>
+      <dialog ref={ref} onClose={() => setZoom(false)} className="m-auto max-h-[90vh] max-w-4xl rounded-3xl bg-white p-2 backdrop:bg-ink/80" aria-label={images[index].alt}>
         <button type="button" onClick={() => setZoom(false)} className={`absolute right-4 top-4 flex size-11 items-center justify-center rounded-full bg-white ${focusRing}`} aria-label="Close"><X className="size-5" /></button>
         <img src={images[index].src} alt={images[index].alt} className="max-h-[85vh] rounded-2xl object-contain" />
       </dialog>
@@ -39,7 +39,7 @@ export function ProductVariantSelector({ optionNames, variants, selected, onChan
         const values = [...new Set(variants.map((v) => v.options[name]))]
         return (
           <fieldset key={name}>
-            <legend className="text-xs font-bold uppercase tracking-wider text-[#57717b]">{name}{selected[name] && <span className="ml-2 normal-case tracking-normal text-[#06263b]">{selected[name]}</span>}</legend>
+            <legend className="text-xs font-bold uppercase tracking-wider text-slate">{name}{selected[name] && <span className="ml-2 normal-case tracking-normal text-ink">{selected[name]}</span>}</legend>
             <div className="mt-2 flex flex-wrap gap-2">
               {values.map((value) => {
                 const candidate = { ...selected, [name]: value }
@@ -48,7 +48,7 @@ export function ProductVariantSelector({ optionNames, variants, selected, onChan
                 const unavailable = matching.length > 0 && matching.every((v) => v.inStock === false)
                 const checked = selected[name] === value
                 return (
-                  <label key={value} className={`relative flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-xl border px-4 text-sm font-bold transition has-focus-visible:ring-2 has-focus-visible:ring-[#00a9c3] ${checked ? 'border-[#06263b] bg-[#06263b] text-white' : 'border-[#dfe6e5] bg-white'} ${unavailable ? 'cursor-not-allowed text-[#57717b] line-through opacity-60' : ''}`}>
+                  <label key={value} className={`relative flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-xl border px-4 text-sm font-bold transition has-focus-visible:ring-2 has-focus-visible:ring-teal ${checked ? 'border-ink bg-ink text-white' : 'border-line bg-white'} ${unavailable ? 'cursor-not-allowed text-slate line-through opacity-60' : ''}`}>
                     <input type="radio" name={name} value={value} checked={checked} disabled={unavailable} onChange={() => onChange(candidate)} className="sr-only" />
                     {value}{unavailable && <span className="sr-only"> (unavailable)</span>}
                   </label>
@@ -69,11 +69,11 @@ export function ProductSizeGuide({ product }: { product: Product }) {
   if (!product.hasSizeGuide) return null
   return (
     <>
-      <button type="button" onClick={() => setOpen(true)} className={`inline-flex min-h-11 items-center gap-2 text-sm font-bold text-[#0b7f95] ${focusRing}`}><Ruler className="size-4" aria-hidden />Size guide</button>
-      <dialog ref={ref} onClose={() => setOpen(false)} aria-labelledby="size-guide-title" className="m-auto w-[calc(100%-2rem)] max-w-lg rounded-3xl bg-white p-6 text-[#06263b] backdrop:bg-[#06263b]/60">
-        <div className="flex items-center justify-between"><h2 id="size-guide-title" className="font-display text-2xl font-bold">Size guide</h2><button type="button" onClick={() => setOpen(false)} className={`flex size-11 items-center justify-center rounded-full border border-[#dfe6e5] ${focusRing}`} aria-label="Close size guide"><X className="size-4" /></button></div>
+      <button type="button" onClick={() => setOpen(true)} className={`inline-flex min-h-11 items-center gap-2 text-sm font-bold text-teal ${focusRing}`}><Ruler className="size-4" aria-hidden />Size guide</button>
+      <dialog ref={ref} onClose={() => setOpen(false)} aria-labelledby="size-guide-title" className="m-auto w-[calc(100%-2rem)] max-w-lg rounded-3xl bg-white p-6 text-ink backdrop:bg-ink/60">
+        <div className="flex items-center justify-between"><h2 id="size-guide-title" className="font-display text-2xl font-bold">Size guide</h2><button type="button" onClick={() => setOpen(false)} className={`flex size-11 items-center justify-center rounded-full border border-line ${focusRing}`} aria-label="Close size guide"><X className="size-4" /></button></div>
         {product.sizeGuide ? (
-          <table className="mt-5 w-full text-left text-sm"><thead><tr>{product.sizeGuide.headers.map((h) => <th key={h} scope="col" className="border-b border-[#dfe6e5] py-2">{h}</th>)}</tr></thead><tbody>{product.sizeGuide.rows.map((row) => <tr key={row[0]}>{row.map((cell, i) => i === 0 ? <th key={i} scope="row" className="py-2">{cell}</th> : <td key={i} className="py-2">{cell}</td>)}</tr>)}</tbody></table>
+          <table className="mt-5 w-full text-left text-sm"><thead><tr>{product.sizeGuide.headers.map((h) => <th key={h} scope="col" className="border-b border-line py-2">{h}</th>)}</tr></thead><tbody>{product.sizeGuide.rows.map((row) => <tr key={row[0]}>{row.map((cell, i) => i === 0 ? <th key={i} scope="row" className="py-2">{cell}</th> : <td key={i} className="py-2">{cell}</td>)}</tr>)}</tbody></table>
         ) : <p className="mt-5"><Pending>Measurements will be added from the supplier’s approved size chart.</Pending></p>}
       </dialog>
     </>
@@ -88,13 +88,13 @@ export function DeliveryOptions({ product, value, onChange }: { product: Product
   ]
   return (
     <fieldset>
-      <legend className="text-xs font-bold uppercase tracking-wider text-[#57717b]">Delivery or collection</legend>
+      <legend className="text-xs font-bold uppercase tracking-wider text-slate">Delivery or collection</legend>
       <div className="mt-2 grid gap-2">
         {options.map(({ id, icon: Icon, label, note, disabled }) => (
-          <label key={id} className={`flex min-h-14 gap-3 rounded-2xl border p-3 has-focus-visible:ring-2 has-focus-visible:ring-[#00a9c3] ${disabled ? 'opacity-60' : 'cursor-pointer'} ${value === id && !disabled ? 'border-[#06263b] bg-[#f8faf8]' : 'border-[#dfe6e5]'}`}>
+          <label key={id} className={`flex min-h-14 gap-3 rounded-2xl border p-3 has-focus-visible:ring-2 has-focus-visible:ring-teal ${disabled ? 'opacity-60' : 'cursor-pointer'} ${value === id && !disabled ? 'border-ink bg-paper-bright' : 'border-line'}`}>
             <input type="radio" name="fulfilment" checked={value === id && !disabled} disabled={disabled} onChange={() => onChange(id)} className="sr-only" />
-            <Icon className="mt-0.5 size-5 shrink-0 text-[#00a9c3]" aria-hidden />
-            <span><span className="block text-sm font-bold">{label}</span><span className="text-xs text-[#57717b]">{note}</span></span>
+            <Icon className="mt-0.5 size-5 shrink-0 text-teal" aria-hidden />
+            <span><span className="block text-sm font-bold">{label}</span><span className="text-xs text-slate">{note}</span></span>
           </label>
         ))}
       </div>
@@ -107,20 +107,20 @@ export function AddToBookingButton({ product }: { product: Product }) {
   if (!product.bookingAddOnEligible) return null
   return (
     <div>
-      <button type="button" onClick={async () => { setState('checking'); const r = await getActiveBooking(); setState(r.ok ? (r.data ? 'idle' : 'none') : 'not-connected') }} className={`inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl border border-[#06263b]/20 px-5 text-sm font-bold ${focusRing}`}>
+      <button type="button" onClick={async () => { setState('checking'); const r = await getActiveBooking(); setState(r.ok ? (r.data ? 'idle' : 'none') : 'not-connected') }} className={`inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl border border-ink/20 px-5 text-sm font-bold ${focusRing}`}>
         <CalendarCheck className="size-4" aria-hidden />{state === 'checking' ? 'Checking your bookings…' : 'Add to my booking'}
       </button>
-      {state === 'not-connected' && <p className="mt-2 text-xs leading-5 text-[#3d5862]" role="status">Adding gear to a paddle booking isn’t connected yet. <a href="/locations" className="font-bold text-[#0b7f95]">Choose a paddle</a> and buy separately for now; collection at the jetty will be offered once configured.</p>}
-      {state === 'none' && <p className="mt-2 text-xs text-[#3d5862]" role="status">You don’t have an active booking. <a href="/locations" className="font-bold text-[#0b7f95]">Book a paddle</a> first.</p>}
+      {state === 'not-connected' && <p className="mt-2 text-xs leading-5 text-slate-strong" role="status">Adding gear to a paddle booking isn’t connected yet. <a href="/locations" className="font-bold text-teal">Choose a paddle</a> and buy separately for now; collection at the jetty will be offered once configured.</p>}
+      {state === 'none' && <p className="mt-2 text-xs text-slate-strong" role="status">You don’t have an active booking. <a href="/locations" className="font-bold text-teal">Book a paddle</a> first.</p>}
     </div>
   )
 }
 
 function MadeToOrderEnquiry({ product }: { product: Product }) {
   return (
-    <div className="rounded-3xl bg-[#f8faf8] p-5 ring-1 ring-[#dfe6e5]">
-      <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#c95a22]">Made to order · enquiry required</p>
-      <p className="mt-2 text-sm text-[#3d5862]">Tell us what you need and we’ll come back with options. A deposit-based order becomes available once approved pricing, terms and payment are in place.</p>
+    <div className="rounded-3xl bg-paper-bright p-5 ring-1 ring-line">
+      <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-teal-strong">Made to order · enquiry required</p>
+      <p className="mt-2 text-sm text-slate-strong">Tell us what you need and we’ll come back with options. A deposit-based order becomes available once approved pricing, terms and payment are in place.</p>
       <div className="mt-5">
         <ServiceForm
           submitLabel="Send enquiry"
@@ -137,7 +137,7 @@ function MadeToOrderEnquiry({ product }: { product: Product }) {
                 <SelectField label="Quantity" name="quantity" options={['1', '2–5', '6+']} optional />
               </div>
               <TextAreaField label="What are you looking for?" name="message" optional />
-              <CheckboxField name="consent" error={errors.consent}>Reply to me about this enquiry. <span className="text-[#57717b]">Required.</span></CheckboxField>
+              <CheckboxField name="consent" error={errors.consent}>Reply to me about this enquiry. <span className="text-slate">Required.</span></CheckboxField>
             </>
           )}
         </ServiceForm>
@@ -166,23 +166,23 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
     <div className="space-y-6">
       <div>
         <ProductPrice product={product} variant={variant} className="text-3xl" />
-        {product.sku && <p className="mt-1 text-xs text-[#57717b]">SKU {variant?.sku ?? product.sku}</p>}
+        {product.sku && <p className="mt-1 text-xs text-slate">SKU {variant?.sku ?? product.sku}</p>}
         <div className="mt-2"><ProductStockStatus product={product} variant={variant} /></div>
       </div>
 
       {method === 'made-to-order' && <MadeToOrderEnquiry product={product} />}
 
       {method === 'bundled-with-course' && (
-        <div className="rounded-2xl bg-[#eef2ed] p-5 text-sm leading-6">
+        <div className="rounded-2xl bg-mist p-5 text-sm leading-6">
           Starter kits are offered during Academy course enrolment. Contents, compatible courses and bundle price will be published once approved.
-          <a href="/academy/courses" className={`mt-4 flex min-h-12 items-center justify-center rounded-2xl bg-[#06263b] text-sm font-bold text-white ${focusRing}`}>Browse Academy courses</a>
+          <a href="/academy/courses" className={`mt-4 flex min-h-12 items-center justify-center rounded-2xl bg-ink text-sm font-bold text-white ${focusRing}`}>Browse Academy courses</a>
         </div>
       )}
 
       {method === 'standard' && (
         <>
           {!hasPrice && (
-            <div className="rounded-2xl bg-[#eef2ed] p-5 text-sm leading-6 text-[#3d5862]">
+            <div className="rounded-2xl bg-mist p-5 text-sm leading-6 text-slate-strong">
               This product will be available to buy once its price, options and stock are confirmed. The client brief proposes {getCategory(product.category)?.proposedRange} for {getCategory(product.category)?.name.toLowerCase()} as a category guide, not this product’s price.
               <div className="mt-4"><DemoShopToggle /></div>
             </div>
@@ -191,8 +191,8 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
           <ProductSizeGuide product={product} />
           {hasPrice && (
             <div className="flex items-center gap-3">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#57717b]" id="qty-label">Quantity</span>
-              <div className="flex items-center rounded-full border border-[#dfe6e5] bg-white" role="group" aria-labelledby="qty-label">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate" id="qty-label">Quantity</span>
+              <div className="flex items-center rounded-full border border-line bg-white" role="group" aria-labelledby="qty-label">
                 <button type="button" onClick={() => setQuantity(Math.max(1, quantity - 1))} disabled={quantity <= 1} className={`flex size-11 items-center justify-center rounded-full disabled:opacity-40 ${focusRing}`} aria-label="Decrease quantity"><Minus className="size-4" /></button>
                 <span className="w-8 text-center font-bold" aria-live="polite">{quantity}</span>
                 <button type="button" onClick={() => setQuantity(Math.min(MAX_QUANTITY, quantity + 1))} disabled={quantity >= MAX_QUANTITY} className={`flex size-11 items-center justify-center rounded-full disabled:opacity-40 ${focusRing}`} aria-label="Increase quantity"><Plus className="size-4" /></button>
@@ -200,13 +200,13 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
             </div>
           )}
           <DeliveryOptions product={product} value={fulfilment} onChange={setFulfilment} />
-          {product.hygieneRestricted && <p className="flex gap-2 rounded-xl bg-[#fff1cf] p-3 text-xs font-semibold leading-5 text-[#7a4f00]"><AlertTriangle className="size-4 shrink-0" aria-hidden />{HYGIENE_POLICY}</p>}
+          {product.hygieneRestricted && <p className="flex gap-2 rounded-xl bg-sand-soft p-3 text-xs font-semibold leading-5 text-sand-ink"><AlertTriangle className="size-4 shrink-0" aria-hidden />{HYGIENE_POLICY}</p>}
           {hasPrice && (
             <div className="space-y-2">
-              <button type="button" disabled={!canAdd} onClick={() => { add({ slug: product.slug, options: selected, quantity }); setAdded(true) }} className={`flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-[#f5b82e] px-5 text-sm font-extrabold uppercase tracking-[0.1em] text-[#06263b] transition hover:bg-[#06263b] hover:text-white disabled:cursor-not-allowed disabled:opacity-50 ${focusRing}`}>
+              <button type="button" disabled={!canAdd} onClick={() => { add({ slug: product.slug, options: selected, quantity }); setAdded(true) }} className={`flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-sand px-5 text-sm font-extrabold uppercase tracking-[0.1em] text-ink transition hover:bg-ink hover:text-white disabled:cursor-not-allowed disabled:opacity-50 ${focusRing}`}>
                 {added ? <><Check className="size-4" aria-hidden />Added to cart</> : <><ShoppingBag className="size-4" aria-hidden />{complete ? 'Add to cart' : `Choose ${optionNames.filter((n) => !selected[n]).join(' and ')}`}</>}
               </button>
-              {added && <a href="/cart" className={`flex min-h-11 items-center justify-center text-sm font-bold text-[#0b7f95] ${focusRing}`}>View cart</a>}
+              {added && <a href="/cart" className={`flex min-h-11 items-center justify-center text-sm font-bold text-teal ${focusRing}`}>View cart</a>}
             </div>
           )}
           <AddToBookingButton product={product} />
@@ -225,14 +225,14 @@ export function ProductSpecifications({ product }: { product: Product }) {
     ...(product.type === 'Buoyancy aids' ? [['Certification', product.certificationStandard ? `Certified to ${product.certificationStandard}` : 'Certification standard to be confirmed. This product is not shown as certified until the standard is verified.'] as [string, React.ReactNode]] : []),
     ['Materials', product.materials],
     ['Care instructions', product.care],
-    ['Shipping & returns', <>{product.hygieneRestricted && <strong className="block">{HYGIENE_POLICY}</strong>}<a href="/shop/help#returns" className="font-bold text-[#0b7f95]">Shipping and returns policy</a></>],
+    ['Shipping & returns', <>{product.hygieneRestricted && <strong className="block">{HYGIENE_POLICY}</strong>}<a href="/shop/help#returns" className="font-bold text-teal">Shipping and returns policy</a></>],
   ]
   return (
-    <div className="divide-y divide-[#dfe6e5] overflow-hidden rounded-3xl bg-white ring-1 ring-[#06263b]/5">
+    <div className="divide-y divide-line overflow-hidden rounded-3xl bg-white ring-1 ring-ink/5">
       {sections.map(([title, body], i) => (
         <details key={title} className="group" open={i === 0}>
-          <summary className={`flex min-h-14 cursor-pointer list-none items-center justify-between px-6 py-4 font-display font-bold hover:bg-[#f8faf8] [&::-webkit-details-marker]:hidden ${focusRing}`}>{title}<ChevronDown className="size-5 text-[#00a9c3] transition group-open:rotate-180" aria-hidden /></summary>
-          <div className="px-6 pb-5 text-sm leading-6 text-[#3d5862]">{body ?? <Pending>Verified details to be added.</Pending>}</div>
+          <summary className={`flex min-h-14 cursor-pointer list-none items-center justify-between px-6 py-4 font-display font-bold hover:bg-paper-bright [&::-webkit-details-marker]:hidden ${focusRing}`}>{title}<ChevronDown className="size-5 text-teal transition group-open:rotate-180" aria-hidden /></summary>
+          <div className="px-6 pb-5 text-sm leading-6 text-slate-strong">{body ?? <Pending>Verified details to be added.</Pending>}</div>
         </details>
       ))}
     </div>

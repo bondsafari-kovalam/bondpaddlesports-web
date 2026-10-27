@@ -55,7 +55,7 @@ export default async function CoursePage({ params }: Props) {
         <aside className="lg:sticky lg:top-6 lg:self-start" aria-label="Enrolment"><CourseBookingPanel course={course} /></aside>
       </div>
       {related.length > 0 && (
-        <section className="bg-[#eef2ed] px-5 py-20 lg:px-8" aria-labelledby="related">
+        <section className="bg-mist px-5 py-20 lg:px-8" aria-labelledby="related">
           <div className="mx-auto max-w-7xl">
             <h2 id="related" className="font-display text-3xl font-black"><RevealLines>More in this category</RevealLines></h2>
             <RevealGroup className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{related.map((other) => <CourseCard key={other.slug} course={other} />)}</RevealGroup>

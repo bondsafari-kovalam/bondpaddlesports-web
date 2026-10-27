@@ -85,7 +85,7 @@ export default async function LocationPage({ params }: Props) {
 
   return (
     <NotifyMeProvider>
-      <main className="min-h-screen overflow-hidden bg-[#f6f3ec] text-[#06263b]">
+      <main className="min-h-screen overflow-hidden bg-paper text-ink">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData(location)) }} />
         <SiteHeader bookHref={location.status === 'operating' ? '#book' : '/#book'} />
         <LocationDetailHero location={location} />
@@ -107,11 +107,11 @@ export default async function LocationPage({ params }: Props) {
           <LocationRelatedExperiences location={location} />
         </div>
 
-        <section className="bg-[#eef2ed] px-5 py-20 lg:px-8" aria-labelledby="more-locations">
+        <section className="bg-mist px-5 py-20 lg:px-8" aria-labelledby="more-locations">
           <div className="mx-auto max-w-7xl">
             <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-              <div><p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#c95a22]">Keep exploring</p><h2 id="more-locations" className="mt-3 font-display text-3xl font-black sm:text-4xl"><RevealLines>More places to paddle</RevealLines></h2></div>
-              <a href="/locations" className="text-sm font-bold text-[#0b7f95]">All locations →</a>
+              <div><p className="text-xs font-extrabold uppercase tracking-[0.2em] text-teal-strong">Keep exploring</p><h2 id="more-locations" className="mt-3 font-display text-3xl font-black sm:text-4xl"><RevealLines>More places to paddle</RevealLines></h2></div>
+              <a href="/locations" className="text-sm font-bold text-teal">All locations →</a>
             </div>
             <RevealGroup className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{others.map((other) => <LocationCard key={other.slug} location={other} />)}</RevealGroup>
           </div>

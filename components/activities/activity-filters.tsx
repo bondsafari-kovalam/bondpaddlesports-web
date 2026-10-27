@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Search, SlidersHorizontal, X } from 'lucide-react'
 import { focusRing } from '@/components/locations/primitives'
 import {
@@ -86,10 +86,10 @@ export function startingPriceSort(a: Activity, b: Activity) {
 
 export function ActivitySearch({ value, onChange }: { value: string; onChange: (value: string) => void }) {
   return (
-    <div className="relative h-full">
+    <div className="relative">
       <label htmlFor="activity-search" className="sr-only">Search activities by name</label>
-      <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-[#57717b]" aria-hidden />
-      <input id="activity-search" type="search" value={value} onChange={(event) => onChange(event.target.value)} placeholder="Search activities, e.g. SUP" className="h-full min-h-12 w-full rounded-2xl border border-[#dfe6e5] bg-[#f8faf8] py-4 pl-11 pr-4 text-sm font-semibold text-[#06263b] outline-none placeholder:text-[#57717b] focus:ring-2 focus:ring-[#00a9c3]" />
+      <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-slate" aria-hidden />
+      <input id="activity-search" type="search" value={value} onChange={(event) => onChange(event.target.value)} placeholder="Search activities, e.g. SUP" className="h-11 w-full rounded-full border border-line bg-paper-bright pl-11 pr-4 text-sm font-medium text-ink outline-none placeholder:text-slate focus:ring-2 focus:ring-teal" />
     </div>
   )
 }
@@ -101,9 +101,9 @@ function FacetSelects({ activities, filters, setFilters }: { activities: Activit
       {(Object.keys(facetLabels) as FacetKey[]).filter((key) => values[key].length > 0).map((key) => {
         const pool = activities.filter((activity) => matchesActivityFilters(activity, filters, key))
         return (
-          <label key={key} className="rounded-2xl border border-[#dfe6e5] bg-[#f8faf8] px-4 py-3 text-xs font-bold uppercase tracking-wider text-[#57717b] focus-within:ring-2 focus-within:ring-[#00a9c3]">
+          <label key={key} className="rounded-2xl border border-line bg-paper-bright px-4 py-3 text-xs font-bold uppercase tracking-wider text-slate focus-within:ring-2 focus-within:ring-teal">
             {facetLabels[key]}
-            <select value={filters[key]} onChange={(event) => setFilters({ ...filters, [key]: event.target.value })} className="mt-2 block min-h-6 w-full bg-transparent text-sm font-semibold normal-case tracking-normal text-[#06263b] outline-none">
+            <select value={filters[key]} onChange={(event) => setFilters({ ...filters, [key]: event.target.value })} className="mt-2 block min-h-6 w-full bg-transparent text-sm font-semibold normal-case tracking-normal text-ink outline-none">
               <option value="">Any</option>
               {values[key].map((option) => {
                 const count = pool.filter((activity) => facetMatchers[key](activity, option.value)).length
@@ -117,46 +117,39 @@ function FacetSelects({ activities, filters, setFilters }: { activities: Activit
   )
 }
 
-export function ActivityFilters({ activities, filters, setFilters, resultCount, drawerOpen, setDrawerOpen }: {
+/** "Filters" button plus the facet dialog: a bottom sheet on phones, a centred panel on larger screens. */
+export function ActivityFilters({ activities, filters, setFilters, resultCount }: {
   activities: Activity[]
   filters: ActivityFilterState
   setFilters: (filters: ActivityFilterState) => void
   resultCount: number
-  drawerOpen: boolean
-  setDrawerOpen: (open: boolean) => void
 }) {
-  const drawerRef = useRef<HTMLDialogElement>(null)
+  const [open, setOpen] = useState(false)
+  const dialogRef = useRef<HTMLDialogElement>(null)
   const activeCount = (Object.keys(facetLabels) as FacetKey[]).filter((key) => filters[key]).length
 
   useEffect(() => {
-    if (drawerOpen) drawerRef.current?.showModal()
-    else drawerRef.current?.close()
-  }, [drawerOpen])
+    if (open) dialogRef.current?.showModal()
+    else dialogRef.current?.close()
+  }, [open])
 
   return (
     <>
-      <div className="flex gap-2 lg:hidden">
-        <div className="flex-1"><ActivitySearch value={filters.query} onChange={(query) => setFilters({ ...filters, query })} /></div>
-        <button type="button" onClick={() => setDrawerOpen(true)} className={`flex min-h-12 shrink-0 items-center gap-2 rounded-2xl bg-[#06263b] px-4 text-sm font-bold text-white ${focusRing}`} aria-haspopup="dialog">
-          <SlidersHorizontal className="size-4" aria-hidden /> Filters{activeCount > 0 && <span className="rounded-full bg-[#f5b82e] px-1.5 text-xs text-[#06263b]">{activeCount}</span>}
-        </button>
-      </div>
-      <div className="hidden gap-3 lg:grid lg:grid-cols-[1.5fr_repeat(5,1fr)]">
-        <ActivitySearch value={filters.query} onChange={(query) => setFilters({ ...filters, query })} />
-        <FacetSelects activities={activities} filters={filters} setFilters={setFilters} />
-      </div>
+      <button type="button" onClick={() => setOpen(true)} className={`inline-flex h-11 shrink-0 items-center gap-2 rounded-full border border-line bg-white px-4 text-sm font-semibold text-ink transition hover:border-ink ${focusRing}`} aria-haspopup="dialog">
+        <SlidersHorizontal className="size-4" aria-hidden /> Filters{activeCount > 0 && <span className="rounded-full bg-ink px-1.5 text-xs text-white">{activeCount}</span>}
+      </button>
 
-      <dialog ref={drawerRef} onClose={() => setDrawerOpen(false)} aria-label="Filter activities" className="mb-0 mt-auto w-full max-w-none rounded-t-3xl bg-white p-0 text-[#06263b] backdrop:bg-[#06263b]/60 lg:hidden">
-        <div className="max-h-[85vh] overflow-y-auto p-5">
-          <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-[#dfe6e5]" aria-hidden />
-          <div className="mb-4 flex items-center justify-between">
+      <dialog ref={dialogRef} onClose={() => setOpen(false)} onClick={(event) => { if (event.target === dialogRef.current) setOpen(false) }} aria-label="Filter activities" className="mb-0 mt-auto w-full max-w-none rounded-t-3xl bg-white p-0 text-ink backdrop:bg-ink/60 backdrop:backdrop-blur-sm sm:m-auto sm:max-w-lg sm:rounded-3xl">
+        <div className="max-h-[85vh] overflow-y-auto p-6">
+          <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-line sm:hidden" aria-hidden />
+          <div className="mb-5 flex items-center justify-between">
             <h2 className="font-display text-xl font-bold">Filter activities</h2>
-            <button type="button" onClick={() => setDrawerOpen(false)} className={`flex size-11 items-center justify-center rounded-full border border-[#dfe6e5] ${focusRing}`} aria-label="Close filters"><X className="size-4" /></button>
+            <button type="button" onClick={() => setOpen(false)} className={`flex size-11 items-center justify-center rounded-full border border-line ${focusRing}`} aria-label="Close filters"><X className="size-4" /></button>
           </div>
-          <div className="grid gap-3"><FacetSelects activities={activities} filters={filters} setFilters={setFilters} /></div>
-          <div className="mt-5 grid grid-cols-2 gap-2">
-            <button type="button" onClick={() => setFilters({ ...emptyActivityFilters, query: filters.query })} className={`min-h-12 rounded-2xl border border-[#dfe6e5] text-sm font-bold ${focusRing}`}>Clear filters</button>
-            <button type="button" onClick={() => setDrawerOpen(false)} className={`min-h-12 rounded-2xl bg-[#06263b] text-sm font-extrabold text-white ${focusRing}`}>Show {resultCount} {resultCount === 1 ? 'activity' : 'activities'}</button>
+          <div className="grid gap-3 sm:grid-cols-2"><FacetSelects activities={activities} filters={filters} setFilters={setFilters} /></div>
+          <div className="mt-6 grid grid-cols-2 gap-2">
+            <button type="button" onClick={() => setFilters({ ...emptyActivityFilters, query: filters.query })} className={`min-h-12 rounded-full border border-line text-sm font-semibold ${focusRing}`}>Clear filters</button>
+            <button type="button" onClick={() => setOpen(false)} className={`min-h-12 rounded-full bg-ink text-sm font-semibold text-white ${focusRing}`}>Show {resultCount} {resultCount === 1 ? 'activity' : 'activities'}</button>
           </div>
         </div>
       </dialog>
@@ -177,11 +170,11 @@ export function ActiveActivityChips({ filters, setFilters }: { filters: Activity
   return (
     <div className="flex flex-wrap items-center gap-2">
       {active.map((key) => (
-        <button key={key} type="button" onClick={() => setFilters({ ...filters, [key]: '' })} className={`inline-flex min-h-9 items-center gap-1.5 rounded-full bg-[#06263b] px-3 text-xs font-bold text-white ${focusRing}`} aria-label={`Remove filter ${labelFor(key, filters[key])}`}>
+        <button key={key} type="button" onClick={() => setFilters({ ...filters, [key]: '' })} className={`inline-flex min-h-9 items-center gap-1.5 rounded-full bg-ink px-3 text-xs font-bold text-white ${focusRing}`} aria-label={`Remove filter ${labelFor(key, filters[key])}`}>
           {labelFor(key, filters[key])} <X className="size-3" aria-hidden />
         </button>
       ))}
-      <button type="button" onClick={() => setFilters(emptyActivityFilters)} className={`min-h-9 rounded px-2 text-xs font-bold text-[#0b7f95] underline-offset-4 hover:underline ${focusRing}`}>Clear all</button>
+      <button type="button" onClick={() => setFilters(emptyActivityFilters)} className={`min-h-9 rounded px-2 text-xs font-bold text-teal underline-offset-4 hover:underline ${focusRing}`}>Clear all</button>
     </div>
   )
 }

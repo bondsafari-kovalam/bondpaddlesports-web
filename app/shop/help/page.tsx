@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 const sections: { id: string; title: string; body?: ReactNode; complete?: boolean }[] = [
   { id: 'shipping', title: 'Shipping & delivery' },
-  { id: 'returns', title: 'Returns & exchanges', body: <p className="flex gap-2 font-semibold text-[#7a4f00]"><AlertTriangle className="size-4 shrink-0" aria-hidden />{HYGIENE_POLICY}</p> },
+  { id: 'returns', title: 'Returns & exchanges', body: <p className="flex gap-2 font-semibold text-sand-ink"><AlertTriangle className="size-4 shrink-0" aria-hidden />{HYGIENE_POLICY}</p> },
   { id: 'care', title: 'Product care' },
   { id: 'sizes', title: 'Size guides' },
   { id: 'tracking', title: 'Order tracking' },
@@ -28,9 +28,9 @@ export default function ShopHelpPage() {
       <PageHero compact eyebrow="Shop help" title="Help & policies" description="Approved policy wording will appear here as it’s supplied. We won’t publish delivery guarantees or refund terms until they’re confirmed." />
       <div className="mx-auto max-w-4xl space-y-4 px-5 py-14">
         {sections.map(({ id, title, body, complete }) => (
-          <section key={id} id={id} className="scroll-mt-6 rounded-3xl bg-white p-6 ring-1 ring-[#06263b]/5" aria-labelledby={`${id}-title`}>
+          <section key={id} id={id} className="scroll-mt-6 rounded-3xl bg-white p-6 ring-1 ring-ink/5" aria-labelledby={`${id}-title`}>
             <h2 id={`${id}-title`} className="font-display text-2xl font-bold">{title}</h2>
-            <div className="mt-3 space-y-3 text-sm leading-6 text-[#3d5862]">{body}{!complete && <p><Pending>Approved policy wording to be added.</Pending></p>}</div>
+            <div className="mt-3 space-y-3 text-sm leading-6 text-slate-strong">{body}{!complete && <p><Pending>Approved policy wording to be added.</Pending></p>}</div>
           </section>
         ))}
       </div>

@@ -28,3 +28,14 @@ export const CONTACT: { phone?: string; email?: string; whatsapp?: string } = {
   email: undefined,
   whatsapp: undefined,
 }
+
+/**
+ * Official Bond Safari social profiles, as full URLs (e.g. 'https://www.instagram.com/<handle>/').
+ * Leave undefined until Bond confirms the account; the footer shows those icons as not yet linked.
+ */
+export const SOCIAL: { instagram?: string; facebook?: string; youtube?: string; linkedin?: string } = {
+  instagram: undefined,
+  facebook: undefined,
+  youtube: undefined,
+  linkedin: undefined,
+}

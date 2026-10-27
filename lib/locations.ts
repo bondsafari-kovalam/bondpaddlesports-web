@@ -162,13 +162,13 @@ export const locations: Location[] = [
   {
     slug: 'kovalam',
     name: 'Kovalam',
-    status: 'opening-soon',
+    status: 'operating',
     region: 'South Kerala',
     context: 'Kovalam coast, Kerala',
     waterTypes: ['Sea'],
-    summary: 'Sea and coastal paddling, planned to open in January 2027, subject to confirmation.',
-    plannedOpening: 'January 2027, subject to confirmation',
-    activities: [],
+    summary: 'Sea and coastal paddling on the Kovalam coast. Kayaking and canoeing are running now.',
+    // Opening date and session prices not supplied yet; add operatingSince and startingPrice when confirmed.
+    activities: [{ id: 'kayaking' }, { id: 'canoeing' }],
     image: {
       src: 'https://images.unsplash.com/photo-1722340081727-baae59878e6c?auto=format&fit=crop&w=1600&q=85',
       alt: 'Illustrative image of a sea kayaker paddling on open ocean',

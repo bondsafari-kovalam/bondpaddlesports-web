@@ -2,16 +2,15 @@ import type { Metadata } from 'next'
 import {
   AboutAcademy,
   AboutFinalCTA,
-  AboutGallery,
   AboutHero,
   AboutMembership,
   AboutMobileBar,
+  AboutNav,
   OurExperiences,
   OurLocations,
   OurPeople,
   OurPurpose,
   OurStory,
-  ResponsibleTourism,
   SafetyApproach,
 } from '@/components/about/about-sections'
 import { NotifyMeProvider } from '@/components/locations/notify-me'
@@ -30,19 +29,18 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <NotifyMeProvider>
-      <main className="min-h-screen overflow-hidden bg-[#f6f3ec] text-[#06263b]">
+      <main className="min-h-screen overflow-x-clip bg-paper text-ink">
         <SiteHeader />
         <AboutHero />
+        <AboutNav />
         <OurStory />
         <OurPurpose />
         <OurExperiences />
         <OurLocations />
         <AboutAcademy />
         <SafetyApproach />
-        <ResponsibleTourism />
         <OurPeople />
         <AboutMembership />
-        <AboutGallery />
         <AboutFinalCTA />
         <SiteFooter />
         <AboutMobileBar />
