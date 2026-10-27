@@ -11,6 +11,7 @@ import { Reveal, RevealGroup, RevealLines } from '@/components/motion/reveal'
 import { activities, activitiesAt, activityHref, formatDuration, type Activity } from '@/lib/activities'
 import { locationHref, locations } from '@/lib/locations'
 import { ROUTES } from '@/lib/site'
+import { FILMS } from '@/lib/media'
 
 const featured = activities.filter((activity) => activity.featured)
 const shortName = (activity: Activity) => (activity.slug === 'stand-up-paddleboarding' ? 'SUP' : activity.name)
@@ -18,7 +19,7 @@ const shortName = (activity: Activity) => (activity.slug === 'stand-up-paddleboa
 export function ActivitiesHero() {
   return (
     <section className="relative flex min-h-[88svh] items-end overflow-hidden bg-ink pb-14 pt-40 text-white lg:pb-20">
-      <HeroFilm src="/video/kayaking-loop.mp4" poster="/video/kayaking-poster.jpg" focus="72% 50%" />
+      <HeroFilm film={FILMS.kayaking} />
 
       <div className="relative mx-auto w-full max-w-7xl px-5 lg:px-8">
         <p className="mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-teal-pale"><span className="h-px w-10 bg-sand" /> Explore our experiences</p>
@@ -39,7 +40,7 @@ function ShowcaseCard({ activity, index }: { activity: Activity; index: number }
   return (
     <a href={href} className={`group relative block h-[70svh] max-h-[680px] min-h-[420px] w-[85vw] shrink-0 snap-center overflow-hidden rounded-3xl text-white sm:w-[70vw] lg:w-[min(62vw,980px)] ${focusRing}`}>
       {activity.ambientVideo
-        ? <AmbientVideo src={activity.ambientVideo.src} poster={activity.ambientVideo.poster} focus={activity.ambientVideo.focus} className="absolute inset-0 size-full transition duration-[1600ms] group-hover:scale-105" />
+        ? <AmbientVideo film={activity.ambientVideo} sizes="(min-width: 1024px) 62vw, 85vw" className="absolute inset-0 size-full transition duration-[1600ms] group-hover:scale-105" />
         : <ActivityVisual activity={activity} showLabel={false} className="absolute! inset-0" />}
       <div className="absolute inset-0 bg-[linear-gradient(0deg,color-mix(in_srgb,var(--color-ink)_90%,transparent)_0%,color-mix(in_srgb,var(--color-ink)_20%,transparent)_50%,transparent_75%)]" />
       {activity.image?.illustrative && <IllustrativeLabel className="absolute right-4 top-4" />}

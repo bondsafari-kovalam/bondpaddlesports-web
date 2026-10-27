@@ -21,7 +21,7 @@ export function HomeExperiences() {
       <Reveal className="mt-14 flex flex-col gap-1 px-1 lg:h-[min(78vh,760px)] lg:min-h-[560px] lg:flex-row">
         {core.map((activity, i) => (
           <a key={activity.slug} href={activityHref(activity)} className={`group relative block aspect-[4/5] overflow-hidden transition-[flex-grow] duration-1000 sm:aspect-video lg:aspect-auto lg:flex-1 lg:hover:flex-[1.8] lg:focus-visible:flex-[1.8] ${focusRing}`}>
-            <AmbientVideo src={activity.ambientVideo!.src} poster={activity.ambientVideo!.poster} focus={activity.ambientVideo!.focus} className="absolute inset-0 size-full transition duration-[1600ms] group-hover:scale-105" />
+            <AmbientVideo film={activity.ambientVideo!} sizes="(min-width: 1024px) 50vw, 100vw" className="absolute inset-0 size-full transition duration-[1600ms] group-hover:scale-105" />
             <div className="absolute inset-0 bg-[linear-gradient(0deg,color-mix(in_srgb,var(--color-ink)_92%,transparent)_0%,color-mix(in_srgb,var(--color-ink)_25%,transparent)_45%,transparent_70%)]" />
             <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8 lg:p-10">
               <span className="text-xs font-semibold tracking-[0.3em] text-white/60">0{i + 1}</span>

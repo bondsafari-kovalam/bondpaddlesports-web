@@ -1,9 +1,16 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
+import { DM_Sans, Space_Grotesk } from 'next/font/google'
 import { MotionProvider } from '@/components/motion/motion-provider'
 import { CartProvider } from '@/components/shop/cart'
+import { ConnectionStatus } from '@/components/site/connection-status'
 import { SITE_URL } from '@/lib/site'
 import './globals.css'
+
+// Self-hosted at build time: no render-blocking request to Google, preloaded, and with metric-matched
+// fallbacks so text doesn't shift when the web font arrives.
+const sans = DM_Sans({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-dm-sans', display: 'swap' })
+const display = Space_Grotesk({ subsets: ['latin'], weight: ['500', '600', '700'], variable: '--font-space-grotesk', display: 'swap' })
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -34,10 +41,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${sans.variable} ${display.variable}`}>
       <body className="antialiased">
         <MotionProvider>
           <CartProvider>{children}</CartProvider>
+          <ConnectionStatus />
         </MotionProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>

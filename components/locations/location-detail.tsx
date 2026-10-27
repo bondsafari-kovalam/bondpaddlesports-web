@@ -6,6 +6,7 @@ import { DevNote, Eyebrow, IllustrativeLabel, LocationStatusBadge, Pending, focu
 import { ACTIVITY_LABELS, formatDate, formatPrice, type Location, type VisitorInfo } from '@/lib/locations'
 import { IS_DEV, ROUTES } from '@/lib/site'
 import { HeroImage, RevealGroup, RevealLines } from '@/components/motion/reveal'
+import { SmartImage } from '@/components/site/smart-image'
 
 export function LocationDetailHero({ location }: { location: Location }) {
   const isOperating = location.status === 'operating'
@@ -80,7 +81,7 @@ export function LocationActivityList({ location }: { location: Location }) {
       {location.activities.length > 0 ? (
         <RevealGroup className="mt-8 grid gap-4 sm:grid-cols-2">{location.activities.map((activity) => (
             <article key={activity.id} className="overflow-hidden rounded-3xl bg-white ring-1 ring-ink/5">
-              <div className="aspect-[16/9]">{activity.image ? <img src={activity.image.src} alt={activity.image.alt} loading="lazy" className="size-full object-cover" /> : <LocationImageFallback label="" />}</div>
+              <div className="relative aspect-[16/9]">{activity.image ? <SmartImage src={activity.image.src} alt={activity.image.alt} fill sizes="(min-width: 640px) 50vw, 100vw" className="object-cover" /> : <LocationImageFallback label="" />}</div>
               <div className="p-6">
                 <h3 className="font-display text-xl font-bold">{ACTIVITY_LABELS[activity.id]}</h3>
                 {activity.description && <p className="mt-2 text-sm leading-6 text-slate">{activity.description}</p>}
@@ -150,7 +151,7 @@ export function LocationGallery({ location }: { location: Location }) {
     <section aria-labelledby="gallery-title">
       <h2 id="gallery-title" className="font-display text-2xl font-bold">Gallery</h2>
       {media.length > 0 ? (
-        <RevealGroup className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-3">{media.map((image) => <img key={image.src} src={image.src} alt={image.alt} loading="lazy" decoding="async" className="aspect-square w-full rounded-2xl object-cover" />)}
+        <RevealGroup className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-3">{media.map((image) => <div key={image.src} className="relative aspect-square overflow-hidden rounded-2xl"><SmartImage src={image.src} alt={image.alt} fill sizes="(min-width: 768px) 33vw, 50vw" className="object-cover" /></div>)}
         </RevealGroup>
       ) : (
         <div className="mt-4">

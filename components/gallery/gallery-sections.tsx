@@ -10,6 +10,7 @@ import { Reveal, RevealGroup, RevealLines } from '@/components/motion/reveal'
 import { HeroBackdrop } from '@/components/site/hero-backdrop'
 import { SectionNav } from '@/components/site/section-nav'
 import { HERO_IMAGES, isBondPhoto } from '@/lib/hero-images'
+import { SmartImage } from '@/components/site/smart-image'
 
 const gold = `inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-sand px-7 text-sm font-semibold text-ink transition hover:bg-white ${focusRing}`
 const ghost = `inline-flex min-h-12 items-center justify-center rounded-full border border-white/40 px-7 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white hover:text-ink ${focusRing}`
@@ -157,8 +158,8 @@ export function FeaturedExperiences() {
         <h2 id="featured-title" className="mt-3 font-display text-4xl font-black tracking-tight sm:text-5xl"><RevealLines>Every paddle has a story.</RevealLines></h2>
         <RevealGroup className="mt-14 grid gap-x-8 gap-y-14 md:grid-cols-3">{cards.map(({ icon: Icon, image, title, text, cta, href }) => (
             <article key={title} className="group flex flex-col">
-              <a href={href} tabIndex={-1} aria-hidden className="relative block overflow-hidden rounded-3xl">
-                <img src={image} alt="" loading="lazy" decoding="async" className="aspect-[4/5] w-full object-cover transition duration-1000 group-hover:scale-105" />
+              <a href={href} tabIndex={-1} aria-hidden className="relative block aspect-[4/5] overflow-hidden rounded-3xl">
+                <SmartImage src={image} alt="" fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover transition duration-1000 group-hover:scale-105" />
                 {!isBondPhoto(image) && <IllustrativeLabel className="absolute bottom-4 right-4" />}
               </a>
               <Icon className="mt-6 size-6 text-teal-strong" strokeWidth={1.5} aria-hidden />

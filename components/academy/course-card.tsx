@@ -3,6 +3,7 @@ import { NotifyMeButton } from '@/components/locations/notify-me'
 import { focusRing } from '@/components/locations/primitives'
 import { cn } from '@/lib/utils'
 import { COURSE_STATUS_LABELS, categoryName, courseHref, formatRupees, type Course, type CourseStatus, type QualificationLevel } from '@/lib/academy'
+import { SmartImage } from '@/components/site/smart-image'
 
 const statusStyles: Record<CourseStatus, string> = {
   'enrolment-open': 'bg-success-soft text-success',
@@ -50,7 +51,7 @@ export function CourseVisual({ course, className = '' }: { course: Course; class
   const visual = categoryVisuals[course.category]
   return (
     <div className={`group relative overflow-hidden bg-ink ${className}`} role="img" aria-label={visual.alt}>
-      <img src={visual.src} alt="" loading="lazy" decoding="async" className="size-full object-cover transition duration-700 group-hover:scale-105" />
+      <SmartImage src={visual.src} alt="" fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition duration-700 group-hover:scale-105" />
       <span className="absolute bottom-3 right-3 rounded-full bg-ink/75 px-3 py-1.5 text-[10px] font-semibold text-white/90 backdrop-blur">Illustrative image</span>
     </div>
   )

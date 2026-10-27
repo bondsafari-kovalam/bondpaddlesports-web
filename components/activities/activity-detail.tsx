@@ -38,6 +38,7 @@ import {
 import { formatPrice, locationHref } from '@/lib/locations'
 import { IS_DEV, ROUTES } from '@/lib/site'
 import { RevealGroup, RevealLines } from '@/components/motion/reveal'
+import { SmartImage } from '@/components/site/smart-image'
 
 /** Missing values: hidden for guests, flagged in development so the team can fill them in. */
 function valueOrPending(value: ReactNode | undefined) {
@@ -72,7 +73,7 @@ export function ActivityDetailHero({ activity }: { activity: Activity }) {
             <a href="#locations" className={`inline-flex min-h-12 items-center rounded-full border border-white/40 px-6 text-sm font-bold text-white transition hover:bg-white/10 ${focusRing}`}>Explore locations</a>
           </div>
         </div>
-        <ActivityVisual activity={activity} className="aspect-[4/3] rounded-3xl lg:aspect-[5/4]" />
+        <ActivityVisual activity={activity} priority className="aspect-[4/3] rounded-3xl lg:aspect-[5/4]" />
       </div>
     </section>
   )
@@ -197,7 +198,7 @@ function ActivityLocationCard({ offering, activity }: { offering: ResolvedOfferi
   return (
     <article className="flex flex-col overflow-hidden rounded-3xl bg-white ring-1 ring-ink/5 sm:flex-row">
       <div className="relative aspect-[16/9] sm:aspect-auto sm:w-48 sm:shrink-0">
-        {location.image ? <img src={location.image.src} alt={location.image.alt} loading="lazy" className="absolute inset-0 size-full object-cover" /> : <div className="absolute inset-0"><LocationImageFallback label="" /></div>}
+        {location.image ? <SmartImage src={location.image.src} alt={location.image.alt} fill sizes="(min-width: 640px) 12rem, 100vw" className="object-cover" /> : <div className="absolute inset-0"><LocationImageFallback label="" /></div>}
         {location.image?.illustrative && <IllustrativeLabel className="absolute bottom-3 right-3" />}
       </div>
       <div className="flex flex-1 flex-col p-5">

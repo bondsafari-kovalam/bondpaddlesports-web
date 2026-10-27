@@ -13,6 +13,7 @@ import { ParallaxImage, Reveal, RevealGroup, RevealLines } from '@/components/mo
 import { HeroBackdrop } from '@/components/site/hero-backdrop'
 import { SectionNav } from '@/components/site/section-nav'
 import { HERO_IMAGES } from '@/lib/hero-images'
+import { SmartImage } from '@/components/site/smart-image'
 
 const gold = 'inline-flex min-h-12 items-center justify-center rounded-full bg-sand px-7 text-sm font-semibold text-ink transition hover:bg-white'
 const ghost = 'inline-flex min-h-12 items-center justify-center rounded-full border border-white/40 px-7 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white hover:text-ink'
@@ -210,7 +211,7 @@ export function GroupLocations() {
             return (
               <li key={location.slug} className="group grid gap-5 border-b border-line py-7 transition-colors hover:bg-paper-bright md:grid-cols-[8rem_minmax(0,1fr)_auto] md:items-center md:gap-8 md:px-4">
                 <div className="relative hidden aspect-[4/3] overflow-hidden rounded-2xl md:block">
-                  {location.image ? <img src={location.image.src} alt="" loading="lazy" decoding="async" className="size-full object-cover transition duration-700 group-hover:scale-105" /> : <div className="size-full bg-ink-soft" />}
+                  {location.image ? <SmartImage src={location.image.src} alt="" fill sizes="8rem" className="object-cover transition duration-700 group-hover:scale-105" /> : <div className="size-full bg-ink-soft" />}
                 </div>
                 <div>
                   <div className="flex flex-wrap items-center gap-3"><h3 className="font-display text-2xl font-bold tracking-tight">{location.name}</h3><LocationStatusBadge status={location.status} /></div>

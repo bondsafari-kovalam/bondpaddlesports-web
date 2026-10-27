@@ -22,6 +22,7 @@ import {
 import { COURSE_CATEGORIES, courseSessions } from '@/lib/academy'
 import { RevealGroup } from '@/components/motion/reveal'
 import { ScrollRevealText } from '@/components/motion/scroll-story'
+import { FILMS } from '@/lib/media'
 
 const description = 'Bond Safari Academy: paddlesport courses in Kerala from first paddle to instructor, leader and coach pathways, the Bond Paddle Guide Programme and school programmes.'
 
@@ -37,7 +38,7 @@ export default function AcademyPage() {
     <AcademyShell>
       <AcademyHero
         eyebrow="Bond Safari Academy"
-        video={{ src: '/video/canoeing-loop.mp4', poster: '/video/canoeing-poster.jpg' }}
+        video={FILMS.canoeing}
         title={<>From your first paddle<br />to your <span className="text-sand">future on the water.</span></>}
         description="Build confidence, develop your paddling skills and explore a pathway from learning the basics to leading experiences on the water."
         actions={<><a href="/academy/courses" className={goldButton}>Explore courses <ArrowRight className="ml-2 size-4" aria-hidden /></a><a href="/academy/qualification-pathway" className={ghostButton}>Discover the pathway</a></>}

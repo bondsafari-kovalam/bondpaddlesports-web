@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
 import { ChevronLeft, ChevronRight, Compass, GraduationCap, ImageOff, LayoutGrid, MapPin, Mountain, Users, Waves, X, type LucideIcon } from 'lucide-react'
 import { focusRing } from '@/components/locations/primitives'
 import { Ripples } from '@/components/membership/membership-sections'
@@ -12,12 +13,12 @@ const categoryLabel = (id: GalleryCategoryId) => GALLERY_CATEGORIES.find((c) => 
 
 /**
  * A photo that shows a shimmering skeleton while it loads, then settles in from a soft blur.
- * Images already in the browser cache are marked loaded straight away so they never flash.
+ * Served through next/image (responsive AVIF/WebP); its onLoad also fires for cached images.
+ * A failed request ends the shimmer and shows the same on-brand fallback as the rest of the site.
  */
 function Photo({ item, large }: { item: GalleryItem & { src: string }; large: boolean }) {
-  const ref = useRef<HTMLImageElement>(null)
-  const [loaded, setLoaded] = useState(false)
-  useEffect(() => { if (ref.current?.complete) setLoaded(true) }, [])
+  const [state, setState] = useState<'loading' | 'loaded' | 'failed'>('loading')
+  const loaded = state !== 'loading'
 
   return (
     <span className={`relative block size-full overflow-hidden ${large ? 'bg-ink-soft' : 'bg-mist'}`}>
@@ -26,18 +27,21 @@ function Photo({ item, large }: { item: GalleryItem & { src: string }; large: bo
           <span className={`absolute inset-0 motion-safe:animate-[gallery-shimmer_1.6s_ease-in-out_infinite] ${large ? 'bg-[linear-gradient(90deg,transparent,rgb(255_255_255/0.08),transparent)]' : 'bg-[linear-gradient(90deg,transparent,color-mix(in_srgb,var(--color-paper-bright)_85%,transparent),transparent)]'}`} />
         </span>
       )}
-      <img
-        ref={ref}
-        src={item.src}
-        alt={item.alt}
-        width={item.width}
-        height={item.height}
-        loading={large ? 'eager' : 'lazy'}
-        decoding="async"
-        onLoad={() => setLoaded(true)}
-        onError={() => setLoaded(true)}
-        className={`size-full object-cover transition-[opacity,filter,scale] duration-700 motion-reduce:transition-opacity ${loaded ? 'scale-100 opacity-100 blur-0' : 'scale-[1.04] opacity-0 blur-md'}`}
-      />
+      {state === 'failed' ? (
+        <span role="img" aria-label={item.alt} className="flex size-full items-center justify-center bg-[radial-gradient(circle_at_30%_20%,var(--color-ink-muted),var(--color-ink)_70%)]"><ImageOff className="size-8 text-teal-bright/60" strokeWidth={1.3} aria-hidden /></span>
+      ) : (
+        <Image
+          src={item.src}
+          alt={item.alt}
+          width={item.width}
+          height={item.height}
+          sizes={large ? '(min-width: 640px) 92vw, 100vw' : '(min-width: 1024px) 33vw, 50vw'}
+          priority={large}
+          onLoad={() => setState('loaded')}
+          onError={() => setState('failed')}
+          className={`size-full object-cover transition-[opacity,filter,scale] duration-700 motion-reduce:transition-opacity ${loaded ? 'scale-100 opacity-100 blur-0' : 'scale-[1.04] opacity-0 blur-md'}`}
+        />
+      )}
     </span>
   )
 }

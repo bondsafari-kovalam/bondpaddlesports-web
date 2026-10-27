@@ -3,6 +3,7 @@
 import { useRef, type ReactNode } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from 'motion/react'
 import { AmbientVideo } from '@/components/motion/ambient-video'
+import type { Film } from '@/lib/media'
 
 // Scroll-linked values can run on the browser's native ScrollTimeline, which eases back to the
 // starting value outside a partial range. Every mapping below therefore spans the full 0–1 progress.
@@ -32,7 +33,7 @@ export function ScrollRevealText({ text, className = '' }: { text: string; class
  * Pinned film section: the video opens from a framed window to full bleed as the visitor scrolls,
  * then the overlay copy settles in. Falls back to a plain full-bleed panel for reduced motion.
  */
-export function ExpandingFilm({ src, poster, focus, children }: { src: string; poster: string; focus?: string; children: ReactNode }) {
+export function ExpandingFilm({ film, children }: { film: Film; children: ReactNode }) {
   const ref = useRef<HTMLElement>(null)
   const reduce = useReducedMotion()
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] })
@@ -46,7 +47,7 @@ export function ExpandingFilm({ src, poster, focus, children }: { src: string; p
       <div className={`${reduce ? 'relative h-[80vh]' : 'sticky top-0 h-svh'} overflow-hidden`}>
         <motion.div className="absolute inset-0" style={reduce ? undefined : { clipPath }}>
           <motion.div className="size-full" style={reduce ? undefined : { scale }}>
-            <AmbientVideo src={src} poster={poster} focus={focus} className="size-full" />
+            <AmbientVideo film={film} className="size-full" />
           </motion.div>
           <div className="absolute inset-0 bg-[linear-gradient(0deg,color-mix(in_srgb,var(--color-ink)_85%,transparent),transparent_55%)]" />
         </motion.div>
