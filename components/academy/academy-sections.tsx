@@ -10,6 +10,7 @@ import { SiteFooter } from '@/components/site/site-footer'
 import { SiteHeader } from '@/components/site/site-header'
 import { CAMPUSES, COURSE_CATEGORIES, PARTNER_STATEMENT, courses, formatRupees, getCourse, type CourseCategoryId } from '@/lib/academy'
 import { RevealGroup, RevealLines } from '@/components/motion/reveal'
+import type { Film } from '@/lib/media'
 
 export const goldButton = `inline-flex min-h-12 items-center justify-center rounded-full bg-sand px-7 text-sm font-semibold text-ink transition hover:bg-white ${focusRing}`
 export const ghostButton = `inline-flex min-h-12 items-center justify-center rounded-full border border-white/40 px-7 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white hover:text-ink ${focusRing}`
@@ -37,13 +38,13 @@ export function AcademyHero({ eyebrow, title, description, actions, breadcrumb, 
   /** Optional background photo; treated as illustrative until approved Bond photography is supplied. */
   image?: string
   /** Optional full-height film hero, used by the Academy overview. Takes precedence over `image`. */
-  video?: { src: string; poster: string; focus?: string }
+  video?: Film
   children?: ReactNode
 }) {
   return (
     <>
       <section className={`relative overflow-hidden bg-ink text-white ${video ? 'flex min-h-[88svh] items-end pb-16 pt-40 lg:pb-20' : 'pb-14 pt-32 lg:pb-20 lg:pt-40'}`}>
-        {video ? <HeroFilm {...video} /> : image && <HeroBackdrop src={image} />}
+        {video ? <HeroFilm film={video} /> : image && <HeroBackdrop src={image} />}
         {!video && !image && <div className="absolute -right-24 top-20 size-120 rounded-full border-52 border-teal-bright/6" aria-hidden />}
         <div className="relative mx-auto w-full max-w-7xl px-5 lg:px-8">
           {breadcrumb && (

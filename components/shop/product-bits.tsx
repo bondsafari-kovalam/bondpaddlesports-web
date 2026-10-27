@@ -19,6 +19,7 @@ import {
   type ShopCategoryId,
   type Variant,
 } from '@/lib/shop'
+import { SmartImage } from '@/components/site/smart-image'
 
 const CATEGORY_IMAGES: Record<ShopCategoryId, { src: string; alt: string }> = {
   apparel: {
@@ -43,14 +44,17 @@ const CATEGORY_IMAGES: Record<ShopCategoryId, { src: string; alt: string }> = {
   },
 }
 
+// Product tiles are at most a quarter of the page wide on desktop and half on phones.
+const PRODUCT_SIZES = '(min-width: 1280px) 25vw, (min-width: 768px) 33vw, 50vw'
+
 /** Show product photography when supplied; otherwise use an illustrative category image. */
 export function ProductVisual({ product, className = '', label = true }: { product: Product; className?: string; label?: boolean }) {
   const image = product.images[0]
-  if (image && !image.illustrative) return <img src={image.src} alt={image.alt} loading="lazy" decoding="async" className={`object-cover ${className}`} />
+  if (image && !image.illustrative) return <div className={`relative overflow-hidden ${className}`}><SmartImage src={image.src} alt={image.alt} fill sizes={PRODUCT_SIZES} className="object-cover" /></div>
   if (image?.illustrative) {
     return (
       <div className={`relative overflow-hidden bg-ink ${className}`} role="img" aria-label={image.alt}>
-        <img src={image.src} alt="" loading="lazy" decoding="async" className="size-full object-cover" />
+        <SmartImage src={image.src} alt="" fill sizes={PRODUCT_SIZES} className="object-cover" />
         <span className="absolute bottom-2 right-2 rounded-full bg-ink/75 px-2 py-1 text-[9px] font-semibold text-white/90 backdrop-blur">Illustrative</span>
       </div>
     )
@@ -58,7 +62,7 @@ export function ProductVisual({ product, className = '', label = true }: { produ
   const illustration = CATEGORY_IMAGES[product.category]
   return (
     <div className={`group relative overflow-hidden bg-ink ${className}`} role="img" aria-label={`${product.name}: illustrative category image`}>
-      <img src={illustration.src} alt="" loading="lazy" decoding="async" className="size-full object-cover transition duration-700 group-hover:scale-105" />
+      <SmartImage src={illustration.src} alt="" fill sizes={PRODUCT_SIZES} className="object-cover transition duration-700 group-hover:scale-105" />
       <span className="absolute bottom-2 right-2 rounded-full bg-ink/75 px-2 py-1 text-[9px] font-semibold text-white/90 backdrop-blur">Illustrative</span>
       {label && <span className="sr-only">Illustrative category image</span>}
     </div>
@@ -134,7 +138,7 @@ export function ShopCategoryCard({ category }: { category: ShopCategory }) {
   const image = CATEGORY_IMAGES[category.id]
   return (
     <a href={categoryHref(category.id)} className={`group relative block aspect-[3/4] overflow-hidden rounded-3xl bg-ink text-white ${focusRing}`}>
-      <img src={image.src} alt={image.alt} loading="lazy" decoding="async" className="size-full object-cover transition duration-1000 group-hover:scale-105" />
+      <SmartImage src={image.src} alt={image.alt} fill sizes="(min-width: 1024px) 20vw, (min-width: 640px) 42vw, 68vw" className="object-cover transition duration-1000 group-hover:scale-105" />
       <div className="absolute inset-0 bg-[linear-gradient(0deg,color-mix(in_srgb,var(--color-ink)_88%,transparent)_0%,transparent_60%)]" />
       {category.salesMethod !== 'standard' && <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-bold uppercase text-ink">{category.salesMethod === 'made-to-order' ? 'Enquiry' : 'With courses'}</span>}
       <span className="absolute right-3 top-3 rounded-full bg-ink/70 px-2.5 py-1 text-[10px] font-semibold text-white/85 backdrop-blur">Illustrative image</span>

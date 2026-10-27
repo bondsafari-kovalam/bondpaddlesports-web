@@ -2,6 +2,7 @@
 
 import { Children, isValidElement, useEffect, useRef, useState, type ComponentPropsWithoutRef, type ReactNode } from 'react'
 import { animate, motion, useInView, useReducedMotion, useScroll, useTransform } from 'motion/react'
+import { SmartImage } from '@/components/site/smart-image'
 
 // Expo-out: fast start, long soft settle. Mirrors --ease-expo in globals.css.
 export const EXPO = [0.19, 1, 0.22, 1] as const
@@ -76,30 +77,39 @@ export function RevealGroup<T extends keyof typeof groupTags = 'div'>({ as, ...p
 }
 
 /** Image that rises into view like a water line, then drifts with scroll. */
-export function ParallaxImage({ src, alt, className = '', imgClassName = '', strength = 10 }: { src: string; alt: string; className?: string; imgClassName?: string; strength?: number }) {
+/**
+ * Image that rises into view like a water line, then drifts with scroll. Responsive and lazy via
+ * next/image; `sizes` should describe the rendered width so phones don't download desktop files.
+ */
+export function ParallaxImage({ src, alt, className = '', imgClassName = '', strength = 10, sizes = '(min-width: 1024px) 50vw, 100vw' }: { src: string; alt: string; className?: string; imgClassName?: string; strength?: number; sizes?: string }) {
   const ref = useRef<HTMLDivElement>(null)
   const reduce = useReducedMotion()
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
   const y = useTransform(scrollYProgress, [0, 1], [`-${strength}%`, `${strength}%`])
 
   return (
-    <motion.div ref={ref} className={`overflow-hidden ${className}`} initial={reduce ? false : { clipPath: 'inset(100% 0% 0% 0%)' }} whileInView={{ clipPath: 'inset(0% 0% 0% 0%)' }} viewport={inView} transition={{ duration: 1.4, ease: EXPO }}>
-      <motion.div className="size-full" style={reduce ? undefined : { y, scale: 1 + (2 * strength) / 100 }}>
-        <img src={src} alt={alt} className={`size-full object-cover ${imgClassName}`} />
+    <motion.div ref={ref} className={`relative overflow-hidden bg-mist ${className}`} initial={reduce ? false : { clipPath: 'inset(100% 0% 0% 0%)' }} whileInView={{ clipPath: 'inset(0% 0% 0% 0%)' }} viewport={inView} transition={{ duration: 1.4, ease: EXPO }}>
+      <motion.div className="relative size-full" style={reduce ? undefined : { y, scale: 1 + (2 * strength) / 100 }}>
+        <SmartImage src={src} alt={alt} fill sizes={sizes} className={`object-cover ${imgClassName}`} />
       </motion.div>
     </motion.div>
   )
 }
 
-/** Full-bleed page hero image: settles from a slow zoom on load, then drifts as the page scrolls. Parent needs overflow-hidden. */
+/**
+ * Full-bleed page hero image: settles from a slow zoom on load, then drifts as the page scrolls.
+ * It is the page's LCP element, so it is fetched with high priority. Parent needs overflow-hidden.
+ */
 export function HeroImage({ src, alt }: { src: string; alt: string }) {
   const reduce = useReducedMotion()
   const { scrollY } = useScroll()
   const y = useTransform(scrollY, [0, 800], ['0%', '20%'])
 
   return (
-    <div className="absolute inset-0 overflow-hidden">
-      <motion.img src={src} alt={alt} className="size-full object-cover" style={reduce ? undefined : { y }} initial={reduce ? false : { scale: 1.2 }} animate={{ scale: 1 }} transition={{ duration: 2.4, ease: EXPO }} />
+    <div className="absolute inset-0 overflow-hidden bg-ink">
+      <motion.div className="relative size-full" style={reduce ? undefined : { y }} initial={reduce ? false : { scale: 1.2 }} animate={{ scale: 1 }} transition={{ duration: 2.4, ease: EXPO }}>
+        <SmartImage src={src} alt={alt} fill priority sizes="100vw" className="object-cover" />
+      </motion.div>
     </div>
   )
 }

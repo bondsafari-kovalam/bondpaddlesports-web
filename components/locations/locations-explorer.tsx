@@ -12,6 +12,7 @@ import { HeroFilm } from '@/components/motion/ambient-video'
 import { CountUp, ParallaxImage, Reveal, RevealGroup, RevealLines } from '@/components/motion/reveal'
 import { SectionNav } from '@/components/site/section-nav'
 import { ACTIVITY_LABELS, DESTINATION_TARGET, formatDate, formatPrice, locationHref, locations, type Location } from '@/lib/locations'
+import { FILMS } from '@/lib/media'
 
 const SECTIONS = [
   { id: 'paddling-now', label: 'Paddling now', status: 'operating' },
@@ -25,7 +26,7 @@ export function LocationsHero() {
 
   return (
     <section className="relative flex min-h-[88svh] items-end overflow-hidden bg-ink pb-12 pt-40 text-white lg:pb-16">
-      <HeroFilm src="/video/sup-loop.mp4" poster="/video/sup-poster.jpg" focus="62% 50%" />
+      <HeroFilm film={FILMS.sup} />
 
       <div className="relative mx-auto w-full max-w-7xl px-5 lg:px-8">
         <p className="mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-teal-pale"><span className="h-px w-10 bg-sand" /> Explore Kerala</p>

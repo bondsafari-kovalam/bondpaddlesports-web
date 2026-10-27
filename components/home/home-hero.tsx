@@ -5,6 +5,7 @@ import { ArrowRight } from 'lucide-react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import { AmbientVideo } from '@/components/motion/ambient-video'
 import { EXPO, Reveal, RevealLines } from '@/components/motion/reveal'
+import { FILMS } from '@/lib/media'
 
 export function HomeHero() {
   const ref = useRef<HTMLElement>(null)
@@ -20,7 +21,7 @@ export function HomeHero() {
       <motion.div className="absolute inset-0" initial={reduce ? false : { clipPath: 'inset(14% 8% 14% 8% round 40px)' }} animate={{ clipPath: 'inset(0% 0% 0% 0% round 0px)' }} transition={{ duration: 1.8, ease: EXPO, delay: 0.15 }}>
         <motion.div className="absolute inset-0" style={reduce ? undefined : { y: imageY }}>
           <motion.div className="size-full" initial={reduce ? false : { scale: 1.25 }} animate={{ scale: 1 }} transition={{ duration: 2.4, ease: EXPO, delay: 0.15 }}>
-            <AmbientVideo src="/video/canoeing-loop.mp4" poster="/video/canoeing-poster.jpg" className="size-full" eager />
+            <AmbientVideo film={FILMS.canoeing} className="size-full" eager />
           </motion.div>
         </motion.div>
         <div className="absolute inset-0 bg-[linear-gradient(90deg,color-mix(in_srgb,var(--color-ink)_88%,transparent)_0%,color-mix(in_srgb,var(--color-ink)_55%,transparent)_45%,color-mix(in_srgb,var(--color-ink)_12%,transparent)_100%)]" />

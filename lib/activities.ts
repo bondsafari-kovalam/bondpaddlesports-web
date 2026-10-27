@@ -8,6 +8,7 @@
 
 import { locations, type Location, type LocationImage, type WaterType } from '@/lib/locations'
 import { BOOKING_ENGINE_CONNECTED } from '@/lib/booking-config'
+import { FILMS, type Film } from '@/lib/media'
 
 export type ActivityCategory = 'Paddling' | 'Guided experience' | 'Private session' | 'White-water'
 export type ActivityStatus = 'available' | 'opening-soon' | 'coming-soon' | 'no-sessions'
@@ -46,7 +47,7 @@ export type Activity = {
   video?: { src: string; captions: string }
   /** Muted, decorative loop shown in place of the image where motion adds atmosphere. */
   /** `focus` is the CSS object-position that keeps the subject in frame when the loop is cropped tall. */
-  ambientVideo?: { src: string; poster: string; focus?: string }
+  ambientVideo?: Film
   offerings: Offering[]
   durationMinutes?: number
   skillLevel?: 'Beginner' | 'Intermediate' | 'Advanced' | 'All levels'
@@ -97,7 +98,7 @@ export const activities: Activity[] = [
       alt: 'Kayaker paddling through a calm tropical mangrove channel',
       illustrative: true,
     },
-    ambientVideo: { src: '/video/kayaking-loop.mp4', poster: '/video/kayaking-poster.jpg', focus: '72% 50%' },
+    ambientVideo: FILMS.kayaking,
     offerings: [...muzirisDemo, kovalamConfirmed],
     related: ['canoeing', 'guided-trails'],
     nextSteps: ['academy', 'longer-experience', 'membership'],
@@ -115,7 +116,7 @@ export const activities: Activity[] = [
       alt: 'Paddler in a canoe on quiet, calm water',
       illustrative: true,
     },
-    ambientVideo: { src: '/video/canoeing-loop.mp4', poster: '/video/canoeing-poster.jpg' },
+    ambientVideo: FILMS.canoeing,
     offerings: [...muzirisDemo, kovalamConfirmed],
     related: ['kayaking', 'private-sessions'],
     nextSteps: ['academy', 'membership'],
@@ -133,7 +134,7 @@ export const activities: Activity[] = [
       alt: 'Stand-up paddleboarders on the sea at dusk',
       illustrative: true,
     },
-    ambientVideo: { src: '/video/sup-loop.mp4', poster: '/video/sup-poster.jpg', focus: '62% 50%' },
+    ambientVideo: FILMS.sup,
     offerings: muzirisDemo,
     related: ['sunrise-paddles', 'sunset-paddles'],
     nextSteps: ['academy', 'season-pass'],

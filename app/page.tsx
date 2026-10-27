@@ -1,21 +1,10 @@
-'use client'
-
-import { useState } from 'react'
-import {
-  ArrowRight,
-  CalendarDays,
-  ChevronDown,
-  Dumbbell,
-  Leaf,
-  Sparkles,
-  Star,
-  Waves,
-} from 'lucide-react'
-import { DatePicker } from '@/components/booking/date-picker'
+import { ArrowRight, Sparkles, Star, Waves } from 'lucide-react'
+import { HomeBooking } from '@/components/home/home-booking'
 import { HomeExperiences } from '@/components/home/home-experiences'
 import { HomeHero } from '@/components/home/home-hero'
 import { ParallaxImage, Reveal, RevealLines } from '@/components/motion/reveal'
 import { ExpandingFilm, ScrollRevealText } from '@/components/motion/scroll-story'
+import { FILMS } from '@/lib/media'
 import { SiteFooter } from '@/components/site/site-footer'
 import { SiteHeader } from '@/components/site/site-header'
 
@@ -43,29 +32,15 @@ const locations = [
   },
 ]
 
+// A Server Component: only the booking panel, motion wrappers and films hydrate on the client.
 export default function Page() {
-  const [selectedActivity, setSelectedActivity] = useState('Any activity')
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
-  const [submitted, setSubmitted] = useState(false)
-
   return (
     <main className="min-h-screen overflow-x-clip bg-paper text-ink">
       <SiteHeader bookHref="#book" />
 
       <HomeHero />
 
-      <section id="book" className="relative z-10 mx-auto -mt-8 max-w-6xl px-5 lg:-mt-14">
-        <div className="rounded-3xl bg-white p-5 shadow-[0_20px_60px_color-mix(in_srgb,var(--color-ink)_16%,transparent)] sm:p-7">
-          <div className="mb-5 flex items-center justify-between"><div><p className="text-xs font-extrabold uppercase tracking-[0.2em] text-teal-strong">Plan your paddle</p><h2 className="mt-2 font-display text-2xl font-bold">Where will you go?</h2></div><CalendarDays className="size-7 text-teal" /></div>
-          <div className="grid gap-3 md:grid-cols-4">
-            <label className="rounded-2xl border border-line bg-paper-bright px-4 py-3 text-xs font-bold uppercase tracking-wider text-slate">Location<select className="mt-2 block w-full bg-transparent text-sm font-semibold normal-case tracking-normal text-ink outline-none"><option>Muziris–Kottapuram</option><option>Muziris–North Paravur</option><option>Kovalam</option></select></label>
-            <label className="rounded-2xl border border-line bg-paper-bright px-4 py-3 text-xs font-bold uppercase tracking-wider text-slate">Activity<select value={selectedActivity} onChange={(e) => setSelectedActivity(e.target.value)} className="mt-2 block w-full bg-transparent text-sm font-semibold normal-case tracking-normal text-ink outline-none"><option>Any activity</option><option>Kayaking</option><option>Canoeing</option><option>Stand-up paddleboarding</option></select></label>
-            <DatePicker value={selectedDate} onChange={setSelectedDate} />
-            <button onClick={() => setSubmitted(true)} className="rounded-2xl bg-ink px-5 py-4 text-sm font-extrabold uppercase tracking-[0.1em] text-white transition hover:bg-ink-soft">{submitted ? 'Request received' : 'Find sessions'} <ArrowRight className="ml-2 inline size-4" /></button>
-          </div>
-          <p className="mt-4 text-xs text-slate-light">Live availability and payment will appear here once the booking engine is connected. This preview uses demonstration data.</p>
-        </div>
-      </section>
+      <HomeBooking />
 
       <section className="mx-auto max-w-6xl px-5 py-28 lg:px-8 lg:py-40" aria-label="Our story">
         <p className="mb-8 text-xs font-extrabold uppercase tracking-[0.2em] text-teal-strong">Kerala, from the water</p>
@@ -73,11 +48,11 @@ export default function Page() {
       </section>
 
       <section id="locations" className="mx-auto max-w-7xl px-5 py-24 lg:px-8 lg:py-32">
-        <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end"><div><p className="text-xs font-extrabold uppercase tracking-[0.2em] text-teal-strong">Go somewhere good</p><h2 className="mt-3 max-w-xl font-display text-4xl font-black tracking-tight sm:text-5xl"><RevealLines>Water has a way<br />of changing everything.</RevealLines></h2></div><a href="#locations" className="text-sm font-bold text-teal">View all locations <ArrowRight className="ml-1 inline size-4" /></a></div>
-        <div className="mt-12 grid gap-5 md:grid-cols-3">{locations.map((location, i) => <Reveal as="article" key={location.name} delay={i * 0.1} className="group overflow-hidden rounded-3xl bg-white shadow-sm"><div className="relative h-72 overflow-hidden"><ParallaxImage src={location.image} alt="Scenic water landscape" className="size-full" imgClassName="transition duration-1000 group-hover:scale-105" /><span className={`absolute left-4 top-4 rounded-full px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider ${location.status === 'Operating now' ? 'bg-success-soft text-success' : 'bg-white/90 text-slate'}`}>{location.status}</span></div><div className="p-5"><h3 className="font-display text-xl font-bold">{location.name}</h3><p className="mt-1 text-sm text-slate-light">{location.meta}</p><div className="mt-6 flex items-center justify-between"><span className="text-sm font-bold text-teal-strong">{location.price}</span><button className="flex items-center gap-1 text-sm font-bold text-ink">{location.status === 'Operating now' ? 'Book now' : 'Notify me'} <ArrowRight className="size-4" /></button></div></div></Reveal>)}</div>
+        <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end"><div><p className="text-xs font-extrabold uppercase tracking-[0.2em] text-teal-strong">Go somewhere good</p><h2 className="mt-3 max-w-xl font-display text-4xl font-black tracking-tight sm:text-5xl"><RevealLines>Water has a way<br />of changing everything.</RevealLines></h2></div><a href="/locations" className="text-sm font-bold text-teal">View all locations <ArrowRight className="ml-1 inline size-4" /></a></div>
+        <div className="mt-12 grid gap-5 md:grid-cols-3">{locations.map((location, i) => <Reveal as="article" key={location.name} delay={i * 0.1} className="group overflow-hidden rounded-3xl bg-white shadow-sm"><div className="relative h-72 overflow-hidden"><ParallaxImage src={location.image} alt="Scenic water landscape" className="size-full" sizes="(min-width: 768px) 33vw, 100vw" imgClassName="transition duration-1000 group-hover:scale-105" /><span className={`absolute left-4 top-4 rounded-full px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider ${location.status === 'Operating now' ? 'bg-success-soft text-success' : 'bg-white/90 text-slate'}`}>{location.status}</span></div><div className="p-5"><h3 className="font-display text-xl font-bold">{location.name}</h3><p className="mt-1 text-sm text-slate-light">{location.meta}</p><div className="mt-6 flex items-center justify-between"><span className="text-sm font-bold text-teal-strong">{location.price}</span><button className="flex items-center gap-1 text-sm font-bold text-ink">{location.status === 'Operating now' ? 'Book now' : 'Notify me'} <ArrowRight className="size-4" /></button></div></div></Reveal>)}</div>
       </section>
 
-      <ExpandingFilm src="/video/kayaking-loop.mp4" poster="/video/kayaking-poster.jpg" focus="72% 50%">
+      <ExpandingFilm film={FILMS.kayaking}>
         <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-teal-pale">Muziris heritage waterways</p>
         <h2 className="mt-4 max-w-3xl font-display text-4xl font-black leading-[1] tracking-tight sm:text-6xl lg:text-7xl">Where the spice routes<br /><span className="text-sand">meet still water.</span></h2>
         <a href="/locations" className="mt-8 inline-flex items-center gap-2 border-b border-white/40 pb-1 text-sm font-semibold transition hover:border-sand hover:text-sand">Explore our locations <ArrowRight className="size-4" aria-hidden /></a>

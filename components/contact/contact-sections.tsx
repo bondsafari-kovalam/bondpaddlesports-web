@@ -10,6 +10,7 @@ import { ROUTES } from '@/lib/site'
 import { Reveal, RevealGroup, RevealLines } from '@/components/motion/reveal'
 import { HeroBackdrop } from '@/components/site/hero-backdrop'
 import { HERO_IMAGES } from '@/lib/hero-images'
+import { SmartImage } from '@/components/site/smart-image'
 
 const gold = `inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-sand px-7 text-sm font-semibold text-ink transition hover:bg-white ${focusRing}`
 const dark = `inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-ink px-7 text-sm font-semibold text-white transition hover:bg-ink-soft ${focusRing}`
@@ -114,7 +115,7 @@ export function ContactLocations() {
             const directions = location.coordinates ? `https://www.google.com/maps/dir/?api=1&destination=${location.coordinates.lat},${location.coordinates.lng}` : undefined
             return (
               <li key={location.slug} className="group grid gap-4 border-b border-line py-6 transition-colors hover:bg-white md:grid-cols-[6rem_minmax(0,1fr)_auto] md:items-center md:gap-8 md:px-4">
-                <div className="hidden aspect-square overflow-hidden rounded-2xl md:block">{location.image ? <img src={location.image.src} alt="" loading="lazy" decoding="async" className="size-full object-cover" /> : <div className="size-full bg-ink-soft" />}</div>
+                <div className="relative hidden aspect-square overflow-hidden rounded-2xl md:block">{location.image ? <SmartImage src={location.image.src} alt="" fill sizes="6rem" className="object-cover" /> : <div className="size-full bg-ink-soft" />}</div>
                 <div>
                   <div className="flex flex-wrap items-center gap-3"><h3 className="font-display text-2xl font-bold tracking-tight">{location.name}</h3><LocationStatusBadge status={location.status} /></div>
                   <p className="mt-2 flex gap-1.5 text-sm text-slate-strong"><MapPin className="mt-0.5 size-4 shrink-0 text-teal-strong" aria-hidden />{meeting ? `Meeting point: ${meeting}` : location.status === 'operating' ? 'Meeting point shared with your booking.' : `${location.context} · not yet open for bookings`}</p>

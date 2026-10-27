@@ -2,6 +2,7 @@ import { ArrowRight, CalendarClock, Waves } from 'lucide-react'
 import { IllustrativeLabel, LocationStatusBadge, focusRing } from '@/components/locations/primitives'
 import { NotifyMeButton } from '@/components/locations/notify-me'
 import { ACTIVITY_LABELS, formatDate, formatPrice, locationHref, type Location } from '@/lib/locations'
+import { SmartImage } from '@/components/site/smart-image'
 
 export function LocationImageFallback({ label = 'Approved photography coming soon' }: { label?: string }) {
   return (
@@ -16,7 +17,7 @@ export function LocationImageFallback({ label = 'Approved photography coming soo
 export function LocationTile({ location, className = '' }: { location: Location; className?: string }) {
   return (
     <a href={locationHref(location)} className={`group relative block aspect-[3/4] overflow-hidden rounded-3xl bg-ink text-white ${focusRing} ${className}`}>
-      {location.image && <img src={location.image.src} alt="" loading="lazy" decoding="async" className="size-full object-cover transition duration-1000 group-hover:scale-105" />}
+      {location.image && <SmartImage src={location.image.src} alt="" fill sizes="(min-width: 1024px) 25vw, (min-width: 640px) 42vw, 70vw" className="object-cover transition duration-1000 group-hover:scale-105" />}
       <div className="absolute inset-0 bg-[linear-gradient(0deg,color-mix(in_srgb,var(--color-ink)_90%,transparent)_0%,transparent_60%)]" />
       <LocationStatusBadge status={location.status} className="absolute left-4 top-4" />
       {location.image?.illustrative && <IllustrativeLabel className="absolute right-4 top-4" />}
@@ -38,7 +39,7 @@ export function LocationCard({ location }: { location: Location }) {
   return (
     <article className="group flex flex-col overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-ink/5 transition hover:shadow-[0_20px_50px_color-mix(in_srgb,var(--color-ink)_12%,transparent)]">
       <a href={href} className={`relative block aspect-[4/3] overflow-hidden ${focusRing}`} tabIndex={-1} aria-hidden>
-        {location.image ? <img src={location.image.src} alt="" loading="lazy" decoding="async" className="size-full object-cover transition duration-700 group-hover:scale-105" /> : <LocationImageFallback />}
+        {location.image ? <SmartImage src={location.image.src} alt="" fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition duration-700 group-hover:scale-105" /> : <LocationImageFallback />}
         <LocationStatusBadge status={location.status} className="absolute left-4 top-4" />
         {location.image?.illustrative && <IllustrativeLabel className="absolute bottom-3 right-3" />}
       </a>

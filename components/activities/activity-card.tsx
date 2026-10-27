@@ -13,6 +13,7 @@ import {
   type ActivityStatus,
 } from '@/lib/activities'
 import { formatPrice } from '@/lib/locations'
+import { SmartImage } from '@/components/site/smart-image'
 
 export const ACTIVITY_ICONS: Record<string, LucideIcon> = {
   kayaking: Waves,
@@ -37,14 +38,15 @@ export function ActivityStatusBadge({ status, className = '' }: { status: Activi
 }
 
 /** Approved media when supplied; otherwise a branded, clearly replaceable placeholder. */
-export function ActivityVisual({ activity, className = '', showLabel = true }: { activity: Activity; className?: string; showLabel?: boolean }) {
+/** `priority` marks an above-the-fold visual (a page hero) so its poster/image is preloaded rather than lazy. */
+export function ActivityVisual({ activity, className = '', showLabel = true, priority = false }: { activity: Activity; className?: string; showLabel?: boolean; priority?: boolean }) {
   const Icon = ACTIVITY_ICONS[activity.slug] ?? Waves
   if (activity.image) {
     return (
       <div className={`relative overflow-hidden ${className}`}>
         {activity.ambientVideo
-          ? <AmbientVideo src={activity.ambientVideo.src} poster={activity.ambientVideo.poster} focus={activity.ambientVideo.focus} className="size-full transition duration-1000 group-hover:scale-105" />
-          : <img src={activity.image.src} alt={activity.image.alt} loading="lazy" decoding="async" className="size-full object-cover transition duration-700 group-hover:scale-105" />}
+          ? <AmbientVideo film={activity.ambientVideo} eager={priority} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="size-full transition duration-1000 group-hover:scale-105" />
+          : <SmartImage src={activity.image.src} alt={activity.image.alt} fill priority={priority} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition duration-700 group-hover:scale-105" />}
         {activity.image.illustrative && <IllustrativeLabel className="absolute bottom-3 right-3" />}
       </div>
     )
