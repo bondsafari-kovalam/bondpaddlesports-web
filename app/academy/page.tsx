@@ -21,6 +21,7 @@ import {
 } from '@/components/academy/academy-sections'
 import { COURSE_CATEGORIES, courseSessions } from '@/lib/academy'
 import { RevealGroup } from '@/components/motion/reveal'
+import { HERO_IMAGES } from '@/lib/hero-images'
 
 const description = 'Bond Safari Academy: paddlesport courses in Kerala from first paddle to instructor, leader and coach pathways, the Bond Paddle Guide Programme and school programmes.'
 
@@ -45,6 +46,7 @@ export default function AcademyPage() {
     <AcademyShell>
       <AcademyHero
         eyebrow="Bond Safari Academy"
+        image={HERO_IMAGES.academy}
         title={<>From your first paddle<br />to your <span className="text-[#f5b82e]">future on the water.</span></>}
         description="Build confidence, develop your paddling skills and explore a pathway from learning the basics to leading experiences on the water."
         actions={<><a href="/academy/courses" className={goldButton}>Explore courses <ArrowRight className="ml-2 size-4" aria-hidden /></a><a href="/academy/qualification-pathway" className={ghostButton}>Discover the pathway</a></>}

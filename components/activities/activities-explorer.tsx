@@ -9,13 +9,16 @@ import { activities, activitiesAt, activityHref } from '@/lib/activities'
 import { locationHref, locations } from '@/lib/locations'
 import { ROUTES } from '@/lib/site'
 import { RevealGroup, RevealLines } from '@/components/motion/reveal'
+import { HeroBackdrop } from '@/components/site/hero-backdrop'
+import { HERO_IMAGES } from '@/lib/hero-images'
 
 const featured = activities.filter((activity) => activity.featured)
 
 export function ActivitiesHero() {
   return (
     <section className="relative overflow-hidden bg-[#06263b] pb-16 pt-36 text-white lg:pb-24 lg:pt-44">
-      <div className="absolute -right-24 top-24 size-[28rem] rounded-full border-[48px] border-[#00c8e8]/[.06]" aria-hidden />
+      <HeroBackdrop src={HERO_IMAGES.activities} />
+      <div className="absolute -right-24 top-24 size-112 rounded-full border-48 border-[#00c8e8]/6" aria-hidden />
       <div className="relative mx-auto grid max-w-7xl gap-12 px-5 lg:grid-cols-[1fr_1.05fr] lg:items-center lg:px-8">
         <div>
           <p className="mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-[#8fe8f4]"><span className="h-px w-10 bg-[#f5b82e]" /> Explore our experiences</p>
@@ -29,7 +32,7 @@ export function ActivitiesHero() {
         {/* Replace these placeholders with approved Bond paddling photography or video. */}
         <RevealGroup className="grid grid-cols-3 gap-3" aria-hidden>{featured.map((activity, index) => (
             <div key={activity.slug} className={index === 1 ? 'translate-y-8' : ''}>
-              <ActivityVisual activity={activity} showLabel={false} className="aspect-[3/5] rounded-3xl" />
+              <ActivityVisual activity={activity} showLabel={false} className="aspect-3/5 rounded-3xl" />
               <p className="mt-3 text-center text-xs font-bold uppercase tracking-[0.16em] text-white/70">{activity.slug === 'stand-up-paddleboarding' ? 'SUP' : activity.name}</p>
             </div>
           ))}

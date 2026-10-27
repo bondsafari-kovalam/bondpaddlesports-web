@@ -4,6 +4,7 @@ import { CareerInterestForm } from '@/components/academy/academy-forms'
 import { AcademyHero, AcademyShell, CampusCards, PartnerNote, QualificationPathway, SectionHeading, goldButton } from '@/components/academy/academy-sections'
 import { Pending } from '@/components/locations/primitives'
 import { formatRupees, getCourse } from '@/lib/academy'
+import { HERO_IMAGES } from '@/lib/hero-images'
 
 const description = 'Careers on the water with Bond Safari Academy: the Bond Paddle Guide Programme, professional paddlesport pathways and planned training campuses in Kerala.'
 
@@ -28,6 +29,7 @@ export default function CareersPage() {
   return (
     <AcademyShell>
       <AcademyHero
+        image={HERO_IMAGES.academyCareers}
         eyebrow="Careers"
         title={<>Make the water<br /><span className="text-[#f5b82e]">your workplace.</span></>}
         description="Explore professional paddlesport development with the Bond Safari Academy, from instructor and leader training to the Bond Paddle Guide Programme."

@@ -9,6 +9,8 @@ import { SiteHeader } from '@/components/site/site-header'
 import { HYGIENE_POLICY, MEMBER_DISCOUNTS, getProduct, productHref } from '@/lib/shop'
 import { ROUTES } from '@/lib/site'
 import { RevealGroup, RevealLines } from '@/components/motion/reveal'
+import { HeroBackdrop } from '@/components/site/hero-backdrop'
+import { HERO_IMAGES } from '@/lib/hero-images'
 
 export const gold = `inline-flex min-h-12 items-center justify-center rounded-full bg-[#f5b82e] px-6 text-sm font-extrabold uppercase tracking-[0.12em] text-[#06263b] transition hover:bg-white ${focusRing}`
 export const ghost = `inline-flex min-h-12 items-center justify-center rounded-full border border-white/40 px-6 text-sm font-bold text-white transition hover:bg-white/10 ${focusRing}`
@@ -26,10 +28,11 @@ export function ShopShell({ children, bookHref }: { children: ReactNode; bookHre
   )
 }
 
-export function PageHero({ eyebrow, title, description, children, compact = false }: { eyebrow: string; title: ReactNode; description?: string; children?: ReactNode; compact?: boolean }) {
+export function PageHero({ eyebrow, title, description, children, compact = false, image = HERO_IMAGES.shop }: { eyebrow: string; title: ReactNode; description?: string; children?: ReactNode; compact?: boolean; image?: string }) {
   return (
     <section className={`relative overflow-hidden bg-[#06263b] text-white ${compact ? 'pb-10 pt-32 lg:pt-36' : 'pb-16 pt-36 lg:pb-24 lg:pt-44'}`}>
-      <div className="absolute -right-24 top-20 size-[28rem] rounded-full border-[48px] border-[#00c8e8]/[.06]" aria-hidden />
+      <HeroBackdrop src={image} />
+      <div className="absolute -right-24 top-20 size-112 rounded-full border-48 border-[#00c8e8]/6" aria-hidden />
       <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
         <p className="mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-[#8fe8f4]"><span className="h-px w-10 bg-[#f5b82e]" /> {eyebrow}</p>
         <h1 className={`font-display font-black leading-[.98] tracking-tight ${compact ? 'text-4xl sm:text-5xl' : 'text-5xl sm:text-7xl'}`}><RevealLines>{title}</RevealLines></h1>
@@ -52,7 +55,7 @@ export function PaddlingEssentials() {
         </div>
         <RevealGroup as="ul" className="grid grid-cols-2 gap-3">{items.map((item) => (
             <li key={item.slug}>
-              <a href={productHref(item)} className={`group flex h-full flex-col rounded-3xl bg-white/[.06] p-5 transition hover:bg-white/10 ${focusRing}`}>
+              <a href={productHref(item)} className={`group flex h-full flex-col rounded-3xl bg-white/6 p-5 transition hover:bg-white/10 ${focusRing}`}>
                 <LifeBuoy className="size-7 text-[#00c8e8]" strokeWidth={1.3} aria-hidden />
                 <span className="mt-8 font-display text-xl font-bold">{item.name}</span>
                 <span className="mt-1 text-sm text-white/60">{item.type}</span>
@@ -105,12 +108,12 @@ export function MembershipSection() {
   return (
     <section className="mx-auto max-w-7xl px-5 py-20 lg:px-8" aria-labelledby="membership">
       <div className="relative overflow-hidden rounded-3xl bg-[#f5b82e] p-8 sm:p-12">
-        <div className="absolute -right-16 -top-16 size-64 rounded-full border-[28px] border-white/20" aria-hidden />
+        <div className="absolute -right-16 -top-16 size-64 rounded-full border-28 border-white/20" aria-hidden />
         <BadgePercent className="relative size-9" strokeWidth={1.4} aria-hidden />
         <h2 id="membership" className="relative mt-6 max-w-2xl font-display text-3xl font-black sm:text-4xl"><RevealLines>{MEMBER_DISCOUNTS.bondBlue.rule}</RevealLines></h2>
         <p className="relative mt-3 max-w-xl text-sm leading-6 text-[#06263b]/75">{MEMBER_DISCOUNTS.stacking} Your discount is applied at checkout once your membership has been verified.</p>
         <div className="relative mt-8 flex flex-wrap gap-3">
-          <a href={ROUTES.membership} className={`inline-flex min-h-12 items-center rounded-full bg-[#06263b] px-6 text-sm font-extrabold uppercase tracking-[0.1em] text-white ${focusRing}`}>Compare membership</a>
+          <a href={ROUTES.membership} className={`inline-flex min-h-12 items-center rounded-full bg-[#06263b] px-6 text-sm font-extrabold uppercase tracking-widest text-white ${focusRing}`}>Compare membership</a>
           <a href={ROUTES.membership} className={`inline-flex min-h-12 items-center rounded-full border border-[#06263b]/30 px-6 text-sm font-bold ${focusRing}`}>Join Bond Safari Club</a>
           <a href={ROUTES.membership} className={`inline-flex min-h-12 items-center rounded-full border border-[#06263b]/30 px-6 text-sm font-bold ${focusRing}`}>View membership benefits</a>
         </div>

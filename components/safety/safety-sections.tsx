@@ -1,16 +1,17 @@
 import type { ReactNode } from 'react'
 import {
   AlertCircle, ArrowRight, Backpack, Bird, CalendarClock, ChevronDown, ClipboardCheck, Clock, CloudSun, Compass, FileText,
-  Hand, Heart, Home, Leaf, LifeBuoy, ListChecks, Mail, MapPin, MessageCircle, Mountain, Phone, Recycle, Shirt, ShieldCheck, Sparkles, Users, Waves, Wind,
+  Hand, Heart, Home, Leaf, LifeBuoy, ListChecks, Mail, MapPin, MessageCircle, Mountain, Phone, Recycle, Shirt, ShieldCheck, Sparkles, Users, Waves,
   type LucideIcon,
 } from 'lucide-react'
 import { ComingSoonLink } from '@/components/about/about-sections'
-import { PhotoPlaceholder } from '@/components/groups/groups-sections'
 import { Eyebrow, focusRing } from '@/components/locations/primitives'
 import { Ripples } from '@/components/membership/membership-sections'
 import { activities, activityHref } from '@/lib/activities'
 import { CONTACT, ROUTES } from '@/lib/site'
 import { RevealGroup, RevealLines } from '@/components/motion/reveal'
+import { HeroBackdrop } from '@/components/site/hero-backdrop'
+import { HERO_IMAGES } from '@/lib/hero-images'
 
 const gold = `inline-flex min-h-12 items-center justify-center rounded-full bg-[#f5b82e] px-6 text-sm font-extrabold uppercase tracking-[0.12em] text-[#06263b] transition hover:bg-white ${focusRing}`
 const ghost = `inline-flex min-h-12 items-center justify-center rounded-full border border-white/40 px-6 text-sm font-bold text-white transition hover:bg-white/10 ${focusRing}`
@@ -20,6 +21,7 @@ const textLink = `inline-flex min-h-11 items-center text-sm font-bold text-[#0b7
 export function SafetyHero() {
   return (
     <section className="relative overflow-hidden bg-[#06263b] pb-20 pt-36 text-white lg:pb-32 lg:pt-48">
+      <HeroBackdrop src={HERO_IMAGES.safety} aboveWave />
       <Ripples className="absolute -right-40 -top-24 size-[46rem] opacity-80" />
       <Ripples className="absolute -bottom-64 left-0 size-[34rem] opacity-40" tone="gold" />
       <svg viewBox="0 0 1440 120" className="absolute inset-x-0 bottom-0 w-full text-[#f6f3ec]" preserveAspectRatio="none" aria-hidden><path d="M0 80 C 240 40 480 120 720 80 S 1200 40 1440 80 V120 H0Z" fill="currentColor" /></svg>
@@ -61,7 +63,7 @@ export function SafetyApproachSection() {
             ))}
           </RevealGroup>
         </div>
-        <PhotoPlaceholder icon={Compass} label="A paddler preparing before a session" className="aspect-[4/5] rounded-3xl" />
+        <img src={HERO_IMAGES.academy} alt="Paddlers wearing helmets and buoyancy aids prepare for a session" className="aspect-[4/5] w-full rounded-3xl object-cover" />
       </div>
     </section>
   )
@@ -106,7 +108,7 @@ export function EquipmentGuidance() {
   return (
     <section className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28" aria-labelledby="equipment-title">
       <div className="grid gap-12 lg:grid-cols-[1fr_1.2fr] lg:items-center">
-        <PhotoPlaceholder icon={LifeBuoy} label="Paddling equipment ready for a session" className="aspect-[4/3] rounded-3xl lg:aspect-[4/5]" />
+        <img src={HERO_IMAGES.safety} alt="Kayak and life jackets ready beside the water" className="aspect-[4/3] w-full rounded-3xl object-cover lg:aspect-[4/5]" />
         <div>
           <Eyebrow>Equipment & guidance</Eyebrow>
           <h2 id="equipment-title" className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>The right preparation makes a difference.</RevealLines></h2>
@@ -131,7 +133,7 @@ export function WeatherConditions() {
   return (
     <section id="conditions" className="scroll-mt-6 bg-[#eef2ed] px-5 py-20 lg:px-8 lg:py-28" aria-labelledby="conditions-title">
       <div className="mx-auto max-w-7xl">
-        <PhotoPlaceholder icon={Wind} label="A wide view of Kerala's waterways" className="aspect-[16/7] rounded-3xl" />
+        <img src={HERO_IMAGES.about} alt="Calm Kerala backwaters framed by coconut palms" className="aspect-[16/7] w-full rounded-3xl object-cover" />
         <div className="mt-12 grid gap-10 lg:grid-cols-[1.1fr_1fr]">
           <div>
             <Eyebrow>Weather & water conditions</Eyebrow>
@@ -170,7 +172,7 @@ export function ResponsibleTourismSection() {
           </div>
           <p className="text-base leading-7 text-[#3d5862]">Kerala’s waterways connect natural landscapes, local communities, and everyday life. Responsible tourism means enjoying these places thoughtfully and respecting the environment and people who share them.</p>
         </div>
-        <PhotoPlaceholder icon={Leaf} label="A natural Kerala landscape by the water" className="mt-12 aspect-[16/6] rounded-3xl" />
+        <img src={HERO_IMAGES.activities} alt="Kerala backwaters and palm-lined waterways" className="mt-12 aspect-[16/6] w-full rounded-3xl object-cover" />
         <RevealGroup className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{tourismPrinciples.map(({ icon: Icon, title, points }) => (
             <article key={title} className="rounded-3xl bg-white p-6 ring-1 ring-[#14785a]/10">
               <Icon className="size-8 text-[#14785a]" strokeWidth={1.4} aria-hidden />

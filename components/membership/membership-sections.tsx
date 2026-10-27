@@ -5,6 +5,8 @@ import { Eyebrow, focusRing } from '@/components/locations/primitives'
 import { BOND_BLUE_OPTIONS, COMPARISON, PEARL_RULES, PLANS, SEASON_PASS, TIERS, formatRupee, type Plan } from '@/lib/membership'
 import { ROUTES } from '@/lib/site'
 import { RevealGroup, RevealLines } from '@/components/motion/reveal'
+import { HeroBackdrop } from '@/components/site/hero-backdrop'
+import { HERO_IMAGES } from '@/lib/hero-images'
 
 const gold = `inline-flex min-h-12 items-center justify-center rounded-full bg-[#f5b82e] px-6 text-sm font-extrabold uppercase tracking-[0.12em] text-[#06263b] transition hover:bg-white ${focusRing}`
 const ghostDark = `inline-flex min-h-12 items-center justify-center rounded-full border border-white/40 px-6 text-sm font-bold text-white transition hover:bg-white/10 ${focusRing}`
@@ -29,6 +31,7 @@ function JoinButton({ plan, variant = 'solid', label, className = '' }: { plan: 
 export function MembershipHero() {
   return (
     <section className="relative overflow-hidden bg-[#06263b] pb-20 pt-36 text-white lg:pb-28 lg:pt-44">
+      <HeroBackdrop src={HERO_IMAGES.membership} />
       <Ripples className="absolute -right-32 -top-20 size-[42rem] opacity-80" />
       <Ripples className="absolute -bottom-56 left-1/4 size-[30rem] opacity-60" tone="gold" />
       <div className="relative mx-auto max-w-7xl px-5 lg:px-8">

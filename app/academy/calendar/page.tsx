@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { AcademyFinalCTA, AcademyHero, AcademyShell } from '@/components/academy/academy-sections'
 import { CourseCalendar } from '@/components/academy/course-calendar'
+import { HERO_IMAGES } from '@/lib/hero-images'
 
 const description = 'Bond Safari Academy course calendar: upcoming paddlesport course dates, locations and enrolment status.'
 
@@ -15,6 +16,7 @@ export default function CalendarPage() {
   return (
     <AcademyShell>
       <AcademyHero
+        image={HERO_IMAGES.academyCalendar}
         eyebrow="Course calendar"
         title={<>Plan your <span className="text-[#f5b82e]">next course.</span></>}
         description="Browse Academy course dates by month, category and location. Only confirmed dates appear here."

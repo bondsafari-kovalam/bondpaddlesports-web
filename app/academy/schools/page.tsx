@@ -4,6 +4,7 @@ import { SchoolEnquiryForm } from '@/components/academy/academy-forms'
 import { AcademyHero, AcademyShell, CampusCards, SectionHeading, goldButton } from '@/components/academy/academy-sections'
 import { DevNote, Pending } from '@/components/locations/primitives'
 import { RevealGroup } from '@/components/motion/reveal'
+import { HERO_IMAGES } from '@/lib/hero-images'
 
 const description = 'Structured paddling programmes for schools and colleges in Kerala with Bond Safari Academy, including the Schools Paddle Year.'
 
@@ -25,6 +26,7 @@ export default function SchoolsPage() {
   return (
     <AcademyShell>
       <AcademyHero
+        image={HERO_IMAGES.academySchools}
         eyebrow="Schools & colleges"
         title={<>Take learning<br /><span className="text-[#f5b82e]">onto the water.</span></>}
         description="Structured paddling experiences for schools, colleges and organised groups, planned around your learners."

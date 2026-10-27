@@ -10,6 +10,8 @@ import { locations } from '@/lib/locations'
 import { BOND_BLUE_OPTIONS, SEASON_PASS, formatRupee } from '@/lib/membership'
 import { ROUTES } from '@/lib/site'
 import { RevealGroup, RevealLines } from '@/components/motion/reveal'
+import { HeroBackdrop } from '@/components/site/hero-backdrop'
+import { HERO_IMAGES } from '@/lib/hero-images'
 
 const gold = `inline-flex min-h-12 items-center justify-center rounded-full bg-[#f5b82e] px-6 text-sm font-extrabold uppercase tracking-[0.12em] text-[#06263b] transition hover:bg-white ${focusRing}`
 const ghost = `inline-flex min-h-12 items-center justify-center rounded-full border border-white/40 px-6 text-sm font-bold text-white transition hover:bg-white/10 ${focusRing}`
@@ -27,6 +29,7 @@ export function ComingSoonLink({ children, tone = 'light' }: { children: string;
 export function AboutHero() {
   return (
     <section className="relative overflow-hidden bg-[#06263b] pb-20 pt-36 text-white lg:pb-32 lg:pt-48">
+      <HeroBackdrop src={HERO_IMAGES.about} aboveWave />
       <Ripples className="absolute -right-40 -top-24 size-[46rem] opacity-80" />
       <Ripples className="absolute -bottom-64 left-0 size-[34rem] opacity-50" tone="gold" />
       <svg viewBox="0 0 1440 120" className="absolute inset-x-0 bottom-0 w-full text-[#f6f3ec]" preserveAspectRatio="none" aria-hidden><path d="M0 80 C 240 40 480 120 720 80 S 1200 40 1440 80 V120 H0Z" fill="currentColor" /></svg>

@@ -11,6 +11,8 @@ import { locationHref, locations } from '@/lib/locations'
 import { ROUTES } from '@/lib/site'
 import { cn } from '@/lib/utils'
 import { RevealGroup, RevealLines } from '@/components/motion/reveal'
+import { HeroBackdrop } from '@/components/site/hero-backdrop'
+import { HERO_IMAGES } from '@/lib/hero-images'
 
 const gold = `inline-flex min-h-12 items-center justify-center rounded-full bg-[#f5b82e] px-6 text-sm font-extrabold uppercase tracking-[0.12em] text-[#06263b] transition hover:bg-white ${focusRing}`
 const ghost = `inline-flex min-h-12 items-center justify-center rounded-full border border-white/40 px-6 text-sm font-bold text-white transition hover:bg-white/10 ${focusRing}`
@@ -22,6 +24,7 @@ const contactLocations = locations.filter((l) => l.hasDetailPage)
 export function ContactHero() {
   return (
     <section className="relative overflow-hidden bg-[#06263b] pb-20 pt-36 text-white lg:pb-28 lg:pt-44">
+      <HeroBackdrop src={HERO_IMAGES.contact} aboveWave />
       <Ripples className="absolute -right-40 -top-24 size-[44rem] opacity-80" />
       <svg viewBox="0 0 1440 120" className="absolute inset-x-0 bottom-0 w-full text-[#f6f3ec]" preserveAspectRatio="none" aria-hidden><path d="M0 80 C 240 40 480 120 720 80 S 1200 40 1440 80 V120 H0Z" fill="currentColor" /></svg>
       <div className="relative mx-auto max-w-7xl px-5 lg:px-8">

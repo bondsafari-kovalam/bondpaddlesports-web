@@ -9,6 +9,8 @@ import { REVIEWS, REVIEW_SOURCE } from '@/lib/gallery'
 import { locations } from '@/lib/locations'
 import { CONTACT, ROUTES } from '@/lib/site'
 import { RevealGroup, RevealLines } from '@/components/motion/reveal'
+import { HeroBackdrop } from '@/components/site/hero-backdrop'
+import { HERO_IMAGES } from '@/lib/hero-images'
 
 const gold = `inline-flex min-h-12 items-center justify-center rounded-full bg-[#f5b82e] px-6 text-sm font-extrabold uppercase tracking-[0.12em] text-[#06263b] transition hover:bg-white ${focusRing}`
 const ghost = `inline-flex min-h-12 items-center justify-center rounded-full border border-white/40 px-6 text-sm font-bold text-white transition hover:bg-white/10 ${focusRing}`
@@ -17,6 +19,7 @@ const dark = `inline-flex min-h-12 items-center justify-center rounded-full bg-[
 export function GalleryHero() {
   return (
     <section className="relative overflow-hidden bg-[#06263b] pb-20 pt-36 text-white lg:pb-28 lg:pt-44">
+      <HeroBackdrop src={HERO_IMAGES.gallery} />
       <Ripples className="absolute -right-40 -top-24 size-[46rem] opacity-80" />
       <div className="relative mx-auto grid max-w-7xl gap-12 px-5 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:px-8">
         <div>

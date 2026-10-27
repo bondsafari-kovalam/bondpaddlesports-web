@@ -87,8 +87,8 @@ export const activities: Activity[] = [
     tags: ['paddling', 'kayak'],
     summary: 'Glide through quiet waters, hidden channels and living landscapes.',
     image: {
-      src: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1400&q=85',
-      alt: 'Kayak adventure on calm tropical water',
+      src: 'https://images.unsplash.com/photo-1646440912030-d58d2394b1cd?auto=format&fit=crop&w=1400&q=85',
+      alt: 'Kayaker paddling through a calm tropical mangrove channel',
       illustrative: true,
     },
     offerings: muzirisDemo,
@@ -104,8 +104,8 @@ export const activities: Activity[] = [
     tags: ['paddling', 'canoe', 'shared'],
     summary: 'Find your rhythm on the water with a craft built for shared adventure.',
     image: {
-      src: 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1400&q=85',
-      alt: 'Quiet water surrounded by a green landscape',
+      src: 'https://images.unsplash.com/photo-1635749687861-4341928cbf97?auto=format&fit=crop&w=1400&q=85',
+      alt: 'Paddler in a canoe on quiet, calm water',
       illustrative: true,
     },
     offerings: muzirisDemo,
@@ -121,8 +121,8 @@ export const activities: Activity[] = [
     tags: ['paddling', 'sup'],
     summary: 'A fresh perspective, a full-body workout and a slower way to explore.',
     image: {
-      src: 'https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=1400&q=85',
-      alt: 'Paddler on the sea near the Kerala coast',
+      src: 'https://images.unsplash.com/photo-1557151498-af2467d6f7f4?auto=format&fit=crop&w=1400&q=85',
+      alt: 'Stand-up paddleboarders on the sea at dusk',
       illustrative: true,
     },
     offerings: muzirisDemo,

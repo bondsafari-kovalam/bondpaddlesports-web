@@ -4,6 +4,7 @@ import { AcademyFinalCTA, AcademyHero, AcademyShell, PartnerNote, QualificationP
 import { Pending, focusRing } from '@/components/locations/primitives'
 import { QUALIFICATION_LEVELS, WATER_ENVIRONMENTS, courseHref, courses, type QualificationLevelInfo } from '@/lib/academy'
 import { RevealGroup } from '@/components/motion/reveal'
+import { HERO_IMAGES } from '@/lib/hero-images'
 
 const description = 'The Bond Safari Academy qualification pathway: Try, Learn, Qualify, Lead, Coach, Tutor. Personal Awards, Instructor, Leader, Coach and Tutor levels explained.'
 
@@ -53,6 +54,7 @@ export default function PathwayPage() {
   return (
     <AcademyShell>
       <AcademyHero
+        image={HERO_IMAGES.academyPathway}
         eyebrow="Qualification pathway"
         title={<>One journey.<br /><span className="text-[#f5b82e]">Many possibilities.</span></>}
         description="Discover how paddlesport learning can progress from personal skills to instruction, leadership, coaching and tutoring."

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Lock } from 'lucide-react'
 import { CertificateCheckForm } from '@/components/academy/academy-forms'
 import { AcademyHero, AcademyShell } from '@/components/academy/academy-sections'
+import { HERO_IMAGES } from '@/lib/hero-images'
 
 const description = 'Check a certificate issued for a course delivered by Bond Safari Academy.'
 
@@ -16,6 +17,7 @@ export default function CertificateCheckPage() {
   return (
     <AcademyShell>
       <AcademyHero
+        image={HERO_IMAGES.academyCertificate}
         eyebrow="Certificate check"
         title={<>Verify an <span className="text-[#f5b82e]">Academy certificate.</span></>}
         description="Employers and partners can confirm a certificate for a course delivered by Bond Safari Academy."

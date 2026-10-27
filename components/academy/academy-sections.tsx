@@ -4,6 +4,7 @@ import { AcademySubnav } from '@/components/academy/academy-nav'
 import { CourseCard, CourseVisual } from '@/components/academy/course-card'
 import { NotifyMeProvider } from '@/components/locations/notify-me'
 import { Eyebrow, focusRing } from '@/components/locations/primitives'
+import { HeroBackdrop } from '@/components/site/hero-backdrop'
 import { SiteFooter } from '@/components/site/site-footer'
 import { SiteHeader } from '@/components/site/site-header'
 import { CAMPUSES, COURSE_CATEGORIES, PARTNER_STATEMENT, PATHWAY_STAGES, courses, formatRupees, getCourse, type CourseCategoryId } from '@/lib/academy'
@@ -26,19 +27,22 @@ export function AcademyShell({ children }: { children: ReactNode }) {
   )
 }
 
-export function AcademyHero({ eyebrow, title, description, actions, breadcrumb, children }: {
+export function AcademyHero({ eyebrow, title, description, actions, breadcrumb, image, children }: {
   eyebrow: string
   title: ReactNode
   description: string
   actions?: ReactNode
   breadcrumb?: { label: string; href?: string }[]
+  /** Optional background photo; treated as illustrative until approved Bond photography is supplied. */
+  image?: string
   children?: ReactNode
 }) {
   return (
     <>
       <section className="relative overflow-hidden bg-[#06263b] pb-14 pt-32 text-white lg:pb-20 lg:pt-40">
-        <div className="absolute -right-24 top-20 size-[30rem] rounded-full border-[52px] border-[#00c8e8]/[.06]" aria-hidden />
-        <div className="absolute -bottom-40 left-1/3 size-80 rounded-full border-[40px] border-[#f5b82e]/[.05]" aria-hidden />
+        {image && <HeroBackdrop src={image} />}
+        <div className="absolute -right-24 top-20 size-120 rounded-full border-52 border-[#00c8e8]/6" aria-hidden />
+        <div className="absolute -bottom-40 left-1/3 size-80 rounded-full border-40 border-[#f5b82e]/5" aria-hidden />
         <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
           {breadcrumb && (
             <nav aria-label="Breadcrumb" className="mb-8">
@@ -106,7 +110,7 @@ export function CourseCategoryCard({ id }: { id: CourseCategoryId }) {
   const prices = inCategory.map((course) => course.price).filter((price): price is number => !!price)
   return (
     <article className="flex flex-col overflow-hidden rounded-3xl bg-[#0b3850] text-white">
-      <CourseVisual course={inCategory[0]} className="aspect-[16/7]" />
+      <CourseVisual course={inCategory[0]} className="aspect-16/7" />
       <div className="flex flex-1 flex-col p-6">
         <h3 className="font-display text-2xl font-bold">{category.name}</h3>
         <p className="mt-2 text-sm leading-6 text-white/70">{category.summary}</p>
@@ -130,7 +134,7 @@ export function QualificationPathway({ tone = 'dark' }: { tone?: 'dark' | 'light
   return (
     <RevealGroup as="ol" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-6">{PATHWAY_STAGES.map((stage, index) => (
         <li key={stage.id} className="relative">
-          <a href={stage.href} className={`group flex h-full flex-col rounded-3xl p-5 transition ${dark ? 'bg-white/[.06] hover:bg-white/10' : 'bg-white ring-1 ring-[#06263b]/5 hover:shadow-[0_20px_50px_rgba(6,38,59,.10)]'} ${focusRing}`}>
+          <a href={stage.href} className={`group flex h-full flex-col rounded-3xl p-5 transition ${dark ? 'bg-white/6 hover:bg-white/10' : 'bg-white ring-1 ring-[#06263b]/5 hover:shadow-[0_20px_50px_rgba(6,38,59,.10)]'} ${focusRing}`}>
             <span className={`flex size-10 items-center justify-center rounded-full font-display text-sm font-bold ${index < 2 ? 'bg-[#00c8e8] text-[#06263b]' : index < 5 ? 'bg-[#f5b82e] text-[#06263b]' : 'bg-[#f0783e] text-[#06263b]'}`}>{String(index + 1).padStart(2, '0')}</span>
             <span className="mt-6 font-display text-2xl font-bold">{stage.label}</span>
             <span className={`mt-2 flex-1 text-sm leading-6 ${dark ? 'text-white/65' : 'text-[#57717b]'}`}>{stage.text}</span>
@@ -161,7 +165,7 @@ export function GuideProgrammeFeature({ ctaHref = '/academy/careers' }: { ctaHre
   const programme = getCourse('bond-paddle-guide-programme')!
   return (
     <div className="relative overflow-hidden rounded-3xl bg-[#06263b] p-8 text-white sm:p-12">
-      <div className="absolute -right-16 -top-16 size-64 rounded-full border-[28px] border-[#00c8e8]/15" aria-hidden />
+      <div className="absolute -right-16 -top-16 size-64 rounded-full border-28 border-[#00c8e8]/15" aria-hidden />
       <div className="relative grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-end">
         <div>
           <Eyebrow tone="cyan">Careers on the water</Eyebrow>
@@ -219,11 +223,11 @@ export function LearningStories() {
 export function AcademyFinalCTA() {
   return (
     <section className="relative overflow-hidden bg-[#f0783e] px-5 py-20 text-[#06263b] lg:px-8">
-      <div className="absolute -right-20 -top-28 size-96 rounded-full border-[52px] border-white/10" aria-hidden />
+      <div className="absolute -right-20 -top-28 size-96 rounded-full border-52 border-white/10" aria-hidden />
       <div className="relative mx-auto flex max-w-7xl flex-col justify-between gap-8 lg:flex-row lg:items-end">
         <h2 className="max-w-2xl font-display text-4xl font-black sm:text-5xl"><RevealLines>Ready to take<br />your next step?</RevealLines></h2>
         <div className="flex flex-wrap gap-3">
-          <a href="/academy/courses" className="inline-flex min-h-12 items-center rounded-full bg-[#06263b] px-6 text-sm font-extrabold uppercase tracking-[0.1em] text-white">Explore courses <ArrowRight className="ml-2 size-4" aria-hidden /></a>
+          <a href="/academy/courses" className="inline-flex min-h-12 items-center rounded-full bg-[#06263b] px-6 text-sm font-extrabold uppercase tracking-widest text-white">Explore courses <ArrowRight className="ml-2 size-4" aria-hidden /></a>
           <a href="/academy/qualification-pathway" className="inline-flex min-h-12 items-center rounded-full border border-[#06263b]/30 px-6 text-sm font-bold">Find your pathway</a>
           <a href="/academy#contact" className="inline-flex min-h-12 items-center rounded-full border border-[#06263b]/30 px-6 text-sm font-bold">Contact the Academy</a>
         </div>

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
-import { ArrowRight, Briefcase, CalendarCheck, ChevronDown, ClipboardList, Compass, Handshake, Heart, Leaf, Mail, MapPin, MessageCircle, Mountain, Phone, School, ShieldCheck, Sparkles, Users, UsersRound, Waves, type LucideIcon } from 'lucide-react'
+import { ArrowRight, Briefcase, CalendarCheck, ChevronDown, ClipboardList, Compass, Handshake, Heart, Leaf, Mail, MapPin, MessageCircle, Phone, School, ShieldCheck, Sparkles, Users, UsersRound, Waves, type LucideIcon } from 'lucide-react'
+import { ActivityVisual } from '@/components/activities/activity-card'
 import { EnquiryButton, ENQUIRY_ID, GroupEnquiryForm } from '@/components/groups/group-enquiry'
 import { LocationImageFallback } from '@/components/locations/location-card'
 import { Eyebrow, IllustrativeLabel, LocationStatusBadge, focusRing } from '@/components/locations/primitives'
@@ -9,6 +10,8 @@ import { GROUP_ACTIVITIES, GROUP_LOCATIONS, activityOptionsFor, type EnquiryType
 import { locationHref } from '@/lib/locations'
 import { CONTACT, ROUTES } from '@/lib/site'
 import { RevealGroup, RevealLines } from '@/components/motion/reveal'
+import { HeroBackdrop } from '@/components/site/hero-backdrop'
+import { HERO_IMAGES } from '@/lib/hero-images'
 
 const gold = 'inline-flex min-h-12 items-center justify-center rounded-full bg-[#f5b82e] px-6 text-sm font-extrabold uppercase tracking-[0.12em] text-[#06263b] transition hover:bg-white'
 const ghost = 'inline-flex min-h-12 items-center justify-center rounded-full border border-white/40 px-6 text-sm font-bold text-white transition hover:bg-white/10'
@@ -29,6 +32,7 @@ export function PhotoPlaceholder({ icon: Icon, label, className = '' }: { icon: 
 export function GroupsHero() {
   return (
     <section className="relative overflow-hidden bg-[#06263b] pb-20 pt-36 text-white lg:pb-28 lg:pt-44">
+      <HeroBackdrop src={HERO_IMAGES.groups} />
       <Ripples className="absolute -right-40 -top-24 size-[44rem] opacity-80" />
       <Ripples className="absolute -bottom-64 left-10 size-[32rem] opacity-50" tone="gold" />
       <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
@@ -130,19 +134,15 @@ export function SchoolsSection() {
   )
 }
 
-const activityIcons: Record<string, LucideIcon> = { kayaking: Waves, canoeing: Mountain, 'stand-up-paddleboarding': Compass }
-
 export function GroupActivities() {
   return (
     <section className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28" aria-labelledby="activities-title">
       <Eyebrow>Activities for groups</Eyebrow>
       <h2 id="activities-title" className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>Choose your way onto the water.</RevealLines></h2>
       <p className="mt-4 max-w-2xl text-base leading-7 text-[#3d5862]">Availability, session format, age requirements and group suitability depend on the location and are confirmed by the team.</p>
-      <RevealGroup className="mt-12 grid gap-5 md:grid-cols-3">{GROUP_ACTIVITIES.map((activity) => {
-          const Icon = activityIcons[activity.slug] ?? Waves
-          return (
-            <article key={activity.slug} className="flex flex-col overflow-hidden rounded-3xl bg-white ring-1 ring-[#06263b]/5">
-              <PhotoPlaceholder icon={Icon} label={activity.name} className="aspect-[16/10]" />
+      <RevealGroup className="mt-12 grid gap-5 md:grid-cols-3">{GROUP_ACTIVITIES.map((activity) => (
+            <article key={activity.slug} className="group flex flex-col overflow-hidden rounded-3xl bg-white ring-1 ring-[#06263b]/5">
+              <ActivityVisual activity={activity} className="aspect-[16/10]" />
               <div className="flex flex-1 flex-col p-6">
                 <h3 className="font-display text-2xl font-bold">{activity.name}</h3>
                 <p className="mt-2 flex-1 text-sm leading-6 text-[#57717b]">{activity.summary}</p>
@@ -152,8 +152,7 @@ export function GroupActivities() {
                 </div>
               </div>
             </article>
-          )
-        })}
+        ))}
       </RevealGroup>
     </section>
   )
