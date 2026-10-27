@@ -165,14 +165,17 @@ export function Gallery() {
               <button
                 type="button"
                 onClick={(e) => { triggerRef.current = e.currentTarget; setOpen(i) }}
-                className={`group relative block w-full overflow-hidden rounded-3xl text-left ${focusRing}`}
-                style={{ aspectRatio: `${item.width} / ${item.height}` }}
+                className={`group block w-full rounded-2xl text-left sm:rounded-3xl ${focusRing}`}
                 aria-label={`Open image: ${item.caption}`}
               >
-                <span className="block size-full transition duration-500 group-hover:scale-[1.03]"><Tile item={item} /></span>
-                <span className="absolute inset-x-0 bottom-0 bg-[linear-gradient(0deg,color-mix(in_srgb,var(--color-ink)_90%,transparent),transparent)] p-4 pt-10 text-white">
-                  <span className="block text-[10px] font-bold uppercase tracking-[0.16em] text-teal-pale">{categoryLabel(item.category)}</span>
-                  <span className="mt-1 block font-display text-sm font-bold leading-snug sm:text-base">{item.caption}</span>
+                <span className="relative block overflow-hidden rounded-2xl sm:rounded-3xl" style={{ aspectRatio: `${item.width} / ${item.height}` }}>
+                  <span className="block size-full transition duration-500 group-hover:scale-[1.03]"><Tile item={item} /></span>
+                  {/* Overlaid caption only where tiles are large enough to hold it; phones show the photo alone,
+                      and the caption appears in the lightbox (and in the button's accessible name). */}
+                  <span className="absolute inset-x-0 bottom-0 hidden bg-[linear-gradient(0deg,color-mix(in_srgb,var(--color-ink)_90%,transparent),transparent)] p-4 pt-10 text-white sm:block">
+                    <span className="block text-[10px] font-bold uppercase tracking-[0.16em] text-teal-pale">{categoryLabel(item.category)}</span>
+                    <span className="mt-1 block font-display text-base font-bold leading-snug">{item.caption}</span>
+                  </span>
                 </span>
               </button>
             </li>
