@@ -11,9 +11,9 @@ export const metadata: Metadata = {
 export default function AccountCoursesPage() {
   return (
     <AcademyShell>
-      <section className="bg-[#06263b] pb-12 pt-32 text-white lg:pt-36">
+      <section className="bg-ink pb-12 pt-32 text-white lg:pt-36">
         <div className="mx-auto max-w-5xl px-5">
-          <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#8fe8f4]">My account</p>
+          <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-teal-pale">My account</p>
           <h1 className="mt-2 font-display text-4xl font-black sm:text-5xl"><RevealLines>My courses</RevealLines></h1>
         </div>
       </section>

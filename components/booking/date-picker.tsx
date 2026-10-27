@@ -57,31 +57,31 @@ export function DatePicker({ value, onChange }: DatePickerProps) {
         onClick={() => setOpen((o) => !o)}
         aria-haspopup="dialog"
         aria-expanded={open}
-        className="block w-full rounded-2xl border border-[#dfe6e5] bg-[#f8faf8] px-4 py-3 text-left transition hover:border-[#00a9c3]"
+        className="block w-full rounded-2xl border border-line bg-paper-bright px-4 py-3 text-left transition hover:border-teal"
       >
-        <span className="text-xs font-bold uppercase tracking-wider text-[#57717b]">Date</span>
-        <span className="mt-2 flex items-center justify-between text-sm font-semibold text-[#06263b]">
-          <span className={value ? '' : 'text-[#8a9ba1]'}>
+        <span className="text-xs font-bold uppercase tracking-wider text-slate">Date</span>
+        <span className="mt-2 flex items-center justify-between text-sm font-semibold text-ink">
+          <span className={value ? '' : 'text-slate-light'}>
             {value ? value.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }) : 'Select a date'}
           </span>
-          <CalendarDays className="size-4 text-[#00a9c3]" />
+          <CalendarDays className="size-4 text-teal" />
         </span>
       </button>
 
       {open && (
-        <div role="dialog" aria-label="Choose a date" className="absolute left-0 z-30 mt-2 w-72 rounded-2xl border border-[#dfe6e5] bg-white p-4 shadow-[0_20px_60px_rgba(6,38,59,.18)]">
+        <div role="dialog" aria-label="Choose a date" className="absolute left-0 z-30 mt-2 w-72 rounded-2xl border border-line bg-white p-4 shadow-[0_20px_60px_color-mix(in_srgb,var(--color-ink)_18%,transparent)]">
           <div className="mb-3 flex items-center justify-between">
-            <button type="button" onClick={() => setView(new Date(year, month - 1, 1))} disabled={!canGoBack} aria-label="Previous month" className="rounded-full p-1.5 text-[#06263b] transition hover:bg-[#f0f5f4] disabled:opacity-30 disabled:hover:bg-transparent">
+            <button type="button" onClick={() => setView(new Date(year, month - 1, 1))} disabled={!canGoBack} aria-label="Previous month" className="rounded-full p-1.5 text-ink transition hover:bg-mist disabled:opacity-30 disabled:hover:bg-transparent">
               <ChevronLeft className="size-4" />
             </button>
-            <p className="font-display text-sm font-bold text-[#06263b]">{view.toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })}</p>
-            <button type="button" onClick={() => setView(new Date(year, month + 1, 1))} aria-label="Next month" className="rounded-full p-1.5 text-[#06263b] transition hover:bg-[#f0f5f4]">
+            <p className="font-display text-sm font-bold text-ink">{view.toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })}</p>
+            <button type="button" onClick={() => setView(new Date(year, month + 1, 1))} aria-label="Next month" className="rounded-full p-1.5 text-ink transition hover:bg-mist">
               <ChevronRight className="size-4" />
             </button>
           </div>
           <div className="grid grid-cols-7 gap-1 text-center">
             {WEEKDAYS.map((d) => (
-              <span key={d} className="py-1 text-[11px] font-bold uppercase text-[#71848b]">{d}</span>
+              <span key={d} className="py-1 text-[11px] font-bold uppercase text-slate-light">{d}</span>
             ))}
             {cells.map((date, i) => {
               if (!date) return <span key={`blank-${i}`} />
@@ -99,10 +99,10 @@ export function DatePicker({ value, onChange }: DatePickerProps) {
                   }}
                   className={`aspect-square rounded-full text-sm font-semibold transition ${
                     selected
-                      ? 'bg-[#06263b] text-white'
+                      ? 'bg-ink text-white'
                       : past
-                        ? 'cursor-not-allowed text-[#c3cdd0]'
-                        : `text-[#06263b] hover:bg-[#e6f7fa] ${isToday ? 'ring-1 ring-[#00a9c3]' : ''}`
+                        ? 'cursor-not-allowed text-line'
+                        : `text-ink hover:bg-mist ${isToday ? 'ring-1 ring-teal' : ''}`
                   }`}
                 >
                   {date.getDate()}

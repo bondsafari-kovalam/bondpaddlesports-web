@@ -8,7 +8,7 @@ import { Pending, focusRing } from '@/components/locations/primitives'
 import { BALANCE_DUE_DAYS_BEFORE, CAMPUSES, formatRupees, type Course, type CourseSession } from '@/lib/academy'
 import { ENROLMENT_STATUS, createEnrolment, getCourseSessions, paymentOptions, type DocumentKind, type EnrolmentStatus } from '@/lib/academy-service'
 
-const toneStyles = { neutral: 'bg-[#eef2ed] text-[#3d5862]', pending: 'bg-[#fff1cf] text-[#7a4f00]', good: 'bg-[#d9f7ed] text-[#14785a]', bad: 'bg-[#fdecea] text-[#b42318]' }
+const toneStyles = { neutral: 'bg-mist text-slate-strong', pending: 'bg-sand-soft text-sand-ink', good: 'bg-success-soft text-success', bad: 'bg-danger-soft text-danger' }
 
 export function EnrolmentStatusBadge({ status }: { status: EnrolmentStatus }) {
   const info = ENROLMENT_STATUS[status]
@@ -25,16 +25,16 @@ export function DocumentUpload({ kind, file, onChange, error }: { kind: Document
   const [localError, setLocalError] = useState('')
   const id = `upload-${kind}`
   return (
-    <div className="rounded-2xl border border-dashed border-[#06263b]/20 bg-[#f8faf8] p-4">
+    <div className="rounded-2xl border border-dashed border-ink/20 bg-paper-bright p-4">
       <p className="text-sm font-bold">{DOC_LABELS[kind]}</p>
       {file ? (
         <div className="mt-3 flex items-center justify-between gap-3 rounded-xl bg-white p-3 text-sm">
-          <span className="flex min-w-0 items-center gap-2"><Paperclip className="size-4 shrink-0 text-[#00a9c3]" aria-hidden /><span className="truncate">{file.name}</span></span>
+          <span className="flex min-w-0 items-center gap-2"><Paperclip className="size-4 shrink-0 text-teal" aria-hidden /><span className="truncate">{file.name}</span></span>
           <button type="button" onClick={() => onChange(undefined)} className={`flex size-11 shrink-0 items-center justify-center rounded-full ${focusRing}`} aria-label={`Remove ${file.name}`}><X className="size-4" /></button>
         </div>
       ) : (
         <>
-          <label htmlFor={id} className={`mt-3 flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-xl border border-[#dfe6e5] bg-white text-sm font-bold has-focus-visible:ring-2 has-focus-visible:ring-[#00a9c3]`}>
+          <label htmlFor={id} className={`mt-3 flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-xl border border-line bg-white text-sm font-bold has-focus-visible:ring-2 has-focus-visible:ring-teal`}>
             <FileUp className="size-4" aria-hidden /> Choose file
             <input
               ref={inputRef}
@@ -53,10 +53,10 @@ export function DocumentUpload({ kind, file, onChange, error }: { kind: Document
               }}
             />
           </label>
-          <p id={`${id}-hint`} className="mt-2 text-xs text-[#57717b]">PDF, JPG or PNG, up to 10 MB.</p>
+          <p id={`${id}-hint`} className="mt-2 text-xs text-slate">PDF, JPG or PNG, up to 10 MB.</p>
         </>
       )}
-      {(localError || error) && <p className="mt-2 text-xs font-semibold text-[#b42318]" role="alert">{localError || error}</p>}
+      {(localError || error) && <p className="mt-2 text-xs font-semibold text-danger" role="alert">{localError || error}</p>}
     </div>
   )
 }
@@ -68,8 +68,8 @@ function Stepper({ step }: { step: number }) {
     <ol className="grid grid-cols-5 gap-1.5" aria-label="Enrolment progress">
       {STEPS.map((label, index) => (
         <li key={label} aria-current={index === step ? 'step' : undefined}>
-          <div className={`h-1.5 rounded-full ${index <= step ? 'bg-[#f5b82e]' : 'bg-[#dfe6e5]'}`} />
-          <p className={`mt-2 hidden text-xs font-bold sm:block ${index === step ? 'text-[#06263b]' : 'text-[#57717b]'}`}>{index < step && <Check className="mr-1 inline size-3.5 text-[#14785a]" aria-hidden />}{label}</p>
+          <div className={`h-1.5 rounded-full ${index <= step ? 'bg-sand' : 'bg-line'}`} />
+          <p className={`mt-2 hidden text-xs font-bold sm:block ${index === step ? 'text-ink' : 'text-slate'}`}>{index < step && <Check className="mr-1 inline size-3.5 text-success" aria-hidden />}{label}</p>
         </li>
       ))}
     </ol>
@@ -112,13 +112,13 @@ export function CourseEnrolmentStepper({ course }: { course: Course }) {
 
   if (!sessions.length && !demo) {
     return (
-      <div className="rounded-3xl bg-white p-6 shadow-[0_20px_60px_rgba(6,38,59,.10)] sm:p-8">
+      <div className="rounded-3xl bg-white p-6 shadow-[0_20px_60px_color-mix(in_srgb,var(--color-ink)_10%,transparent)] sm:p-8">
         <h2 className="font-display text-2xl font-bold">Enrolment isn’t open yet</h2>
-        <p className="mt-2 text-sm leading-6 text-[#3d5862]">{course.status === 'enquiry' ? `${course.name} is arranged on enquiry.` : `Dates for ${course.name} haven’t been announced. Register your interest and we’ll tell you when enrolment opens.`}</p>
+        <p className="mt-2 text-sm leading-6 text-slate-strong">{course.status === 'enquiry' ? `${course.name} is arranged on enquiry.` : `Dates for ${course.name} haven’t been announced. Register your interest and we’ll tell you when enrolment opens.`}</p>
         <div className="mt-6 flex flex-wrap gap-3"><CourseAction course={course} /></div>
-        <div className="mt-8 border-t border-[#eef2ed] pt-6">
-          <p className="text-sm text-[#57717b]">Want to see how enrolment will work? Walk through the journey with demonstration data. Nothing is saved and no payment is taken.</p>
-          <button type="button" onClick={() => { setDemo(true); setSessionId('demo') }} className={`mt-4 inline-flex min-h-11 items-center rounded-full border border-[#06263b]/20 px-5 text-sm font-bold ${focusRing}`}>Preview the enrolment journey (demo)</button>
+        <div className="mt-8 border-t border-mist pt-6">
+          <p className="text-sm text-slate">Want to see how enrolment will work? Walk through the journey with demonstration data. Nothing is saved and no payment is taken.</p>
+          <button type="button" onClick={() => { setDemo(true); setSessionId('demo') }} className={`mt-4 inline-flex min-h-11 items-center rounded-full border border-ink/20 px-5 text-sm font-bold ${focusRing}`}>Preview the enrolment journey (demo)</button>
         </div>
       </div>
     )
@@ -167,7 +167,7 @@ export function CourseEnrolmentStepper({ course }: { course: Course }) {
   const campusName = session && CAMPUSES.find((campus) => campus.id === session.campus)?.name
 
   return (
-    <div className="rounded-3xl bg-white p-6 shadow-[0_20px_60px_rgba(6,38,59,.10)] sm:p-8">
+    <div className="rounded-3xl bg-white p-6 shadow-[0_20px_60px_color-mix(in_srgb,var(--color-ink)_10%,transparent)] sm:p-8">
       {demo && <div className="mb-6"><DemoBanner><strong>Demo preview.</strong> The date below is not a real course date, files stay on your device, and no enrolment or payment is created.</DemoBanner></div>}
       <Stepper step={step} />
       <h2 ref={headingRef} tabIndex={-1} className="mt-8 font-display text-2xl font-bold outline-none">{STEPS[step]}</h2>
@@ -176,26 +176,26 @@ export function CourseEnrolmentStepper({ course }: { course: Course }) {
         <form ref={formRef} onSubmit={next} noValidate className="mt-6 space-y-5" key={step}>
           {step === 0 && (
             <fieldset>
-              <legend className="text-xs font-bold uppercase tracking-wider text-[#57717b]">Course date</legend>
+              <legend className="text-xs font-bold uppercase tracking-wider text-slate">Course date</legend>
               <div className="mt-3 grid gap-2">
                 {available.map((item) => (
-                  <label key={item.id} className={`flex min-h-14 cursor-pointer items-center justify-between gap-3 rounded-2xl border p-4 has-focus-visible:ring-2 has-focus-visible:ring-[#00a9c3] ${sessionId === item.id ? 'border-[#06263b] bg-[#f8faf8]' : 'border-[#dfe6e5]'}`}>
+                  <label key={item.id} className={`flex min-h-14 cursor-pointer items-center justify-between gap-3 rounded-2xl border p-4 has-focus-visible:ring-2 has-focus-visible:ring-teal ${sessionId === item.id ? 'border-ink bg-paper-bright' : 'border-line'}`}>
                     <input type="radio" name="session" value={item.id} checked={sessionId === item.id} onChange={() => setSessionId(item.id)} className="sr-only" />
-                    <span><span className="block font-bold">{item.startDate ? new Date(item.startDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : 'Demo date — not a real course date'}</span><span className="text-sm text-[#57717b]">{CAMPUSES.find((c) => c.id === item.campus)?.name}{item.remaining !== undefined && ` · ${item.remaining} places left`}</span></span>
+                    <span><span className="block font-bold">{item.startDate ? new Date(item.startDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : 'Demo date — not a real course date'}</span><span className="text-sm text-slate">{CAMPUSES.find((c) => c.id === item.campus)?.name}{item.remaining !== undefined && ` · ${item.remaining} places left`}</span></span>
                     <CoursePrice course={course} />
                   </label>
                 ))}
               </div>
-              {errors.session && <p role="alert" tabIndex={-1} className="mt-2 text-xs font-semibold text-[#b42318]">{errors.session}</p>}
+              {errors.session && <p role="alert" tabIndex={-1} className="mt-2 text-xs font-semibold text-danger">{errors.session}</p>}
             </fieldset>
           )}
 
           {step === 1 && (
             <>
-              <div className="rounded-2xl bg-[#eef2ed] p-4 text-sm"><p className="font-bold">Entry requirements for {course.name}</p><p className="mt-1">{course.entryRequirements ?? <Pending>To be confirmed from the Paddle UK qualification documents.</Pending>}</p></div>
+              <div className="rounded-2xl bg-mist p-4 text-sm"><p className="font-bold">Entry requirements for {course.name}</p><p className="mt-1">{course.entryRequirements ?? <Pending>To be confirmed from the Paddle UK qualification documents.</Pending>}</p></div>
               {required.length > 0 ? (
                 <div className="grid gap-3 sm:grid-cols-3">{required.map((kind) => <DocumentUpload key={kind} kind={kind} file={files[kind]} error={errors[kind]} onChange={(file) => setFiles({ ...files, [kind]: file })} />)}</div>
-              ) : <p className="text-sm text-[#57717b]">No documents are needed for this course.</p>}
+              ) : <p className="text-sm text-slate">No documents are needed for this course.</p>}
               <CheckboxField name="eligible" error={errors.eligible}>I have read the entry requirements. I understand the Academy will review my documents, and if I don’t meet them I’ll be offered a preparation course or refund under the approved process.</CheckboxField>
             </>
           )}
@@ -209,9 +209,9 @@ export function CourseEnrolmentStepper({ course }: { course: Course }) {
                 <TextField label="Phone" name="phone" type="tel" autoComplete="tel" error={errors.phone} />
               </div>
               <SelectField label="Swimming ability" name="swimming" options={['Confident swimmer', 'Can swim a little', 'Cannot swim']} error={errors.swimming} hint="Course-specific swimming requirements will be shown here once confirmed." />
-              <CheckboxField name="health" error={errors.health}>I confirm the learner is fit to take part and I will tell the Academy about any medical condition relevant to paddling. <span className="text-[#57717b]">Used only to keep the learner safe on this course.</span></CheckboxField>
+              <CheckboxField name="health" error={errors.health}>I confirm the learner is fit to take part and I will tell the Academy about any medical condition relevant to paddling. <span className="text-slate">Used only to keep the learner safe on this course.</span></CheckboxField>
               {minor && (
-                <fieldset className="space-y-4 rounded-2xl border border-[#f5b82e] bg-[#fffaf0] p-4">
+                <fieldset className="space-y-4 rounded-2xl border border-sand bg-paper-bright p-4">
                   <legend className="px-1 text-sm font-bold">Parent or guardian (learner is under 18)</legend>
                   <div className="grid gap-4 sm:grid-cols-2">
                     <TextField label="Parent or guardian name" name="guardianName" error={errors.guardianName} />
@@ -226,29 +226,29 @@ export function CourseEnrolmentStepper({ course }: { course: Course }) {
           {step === 3 && (
             <>
               <fieldset>
-                <legend className="text-xs font-bold uppercase tracking-wider text-[#57717b]">Payment option</legend>
+                <legend className="text-xs font-bold uppercase tracking-wider text-slate">Payment option</legend>
                 <div className="mt-3 grid gap-2">
                   {options.map((option) => (
-                    <label key={option.id} className={`flex min-h-14 items-center justify-between gap-3 rounded-2xl border p-4 has-focus-visible:ring-2 has-focus-visible:ring-[#00a9c3] ${option.available ? 'cursor-pointer' : 'opacity-60'} ${chosen.id === option.id ? 'border-[#06263b] bg-[#f8faf8]' : 'border-[#dfe6e5]'}`}>
+                    <label key={option.id} className={`flex min-h-14 items-center justify-between gap-3 rounded-2xl border p-4 has-focus-visible:ring-2 has-focus-visible:ring-teal ${option.available ? 'cursor-pointer' : 'opacity-60'} ${chosen.id === option.id ? 'border-ink bg-paper-bright' : 'border-line'}`}>
                       <input type="radio" name="payment" value={option.id} disabled={!option.available} checked={chosen.id === option.id} onChange={() => setPayment(option.id)} className="sr-only" />
-                      <span><span className="block font-bold">{option.label}</span>{option.note && <span className="text-xs text-[#57717b]">{option.note}</span>}</span>
+                      <span><span className="block font-bold">{option.label}</span>{option.note && <span className="text-xs text-slate">{option.note}</span>}</span>
                       <span className="font-bold">{option.available ? formatRupees(option.payNow) : '—'}</span>
                     </label>
                   ))}
                 </div>
               </fieldset>
-              <dl className="space-y-2 rounded-2xl bg-[#f8faf8] p-4 text-sm">
+              <dl className="space-y-2 rounded-2xl bg-paper-bright p-4 text-sm">
                 <div className="flex justify-between"><dt>Course fee (2027 rate)</dt><dd>{course.price ? formatRupees(course.price) : 'On enquiry'}</dd></div>
-                <div className="flex justify-between text-xs text-[#57717b]"><dt>Member discounts & bundles</dt><dd>Not yet connected</dd></div>
-                <div className="flex justify-between text-xs text-[#57717b]"><dt>Academy starter kit</dt><dd>Available once the Shop is connected</dd></div>
-                <div className="flex justify-between border-t border-[#dfe6e5] pt-2 font-display text-lg font-bold"><dt>Pay now</dt><dd>{formatRupees(chosen.payNow)}</dd></div>
+                <div className="flex justify-between text-xs text-slate"><dt>Member discounts & bundles</dt><dd>Not yet connected</dd></div>
+                <div className="flex justify-between text-xs text-slate"><dt>Academy starter kit</dt><dd>Available once the Shop is connected</dd></div>
+                <div className="flex justify-between border-t border-line pt-2 font-display text-lg font-bold"><dt>Pay now</dt><dd>{formatRupees(chosen.payNow)}</dd></div>
                 {chosen.balance > 0 && <div className="flex justify-between text-xs"><dt>Balance due {BALANCE_DUE_DAYS_BEFORE} days before the course</dt><dd>{formatRupees(chosen.balance)}</dd></div>}
               </dl>
-              <CheckboxField name="terms" error={errors.terms}>I accept the booking terms, cancellation and transfer policy, and the digital waiver. <span className="text-[#57717b]">Final wording awaiting approval.</span></CheckboxField>
+              <CheckboxField name="terms" error={errors.terms}>I accept the booking terms, cancellation and transfer policy, and the digital waiver. <span className="text-slate">Final wording awaiting approval.</span></CheckboxField>
             </>
           )}
 
-          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#eef2ed] pt-5">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-mist pt-5">
             {step > 0 ? <button type="button" onClick={() => setStep(step - 1)} className={`inline-flex min-h-12 items-center rounded-full px-4 text-sm font-bold ${focusRing}`}><ArrowLeft className="mr-2 size-4" aria-hidden />Back</button> : <span />}
             <button type="submit" disabled={submitting} className={primaryButton}>{submitting && <Loader2 className="mr-2 size-4 animate-spin" aria-hidden />}{step === 3 ? (demo ? 'Pay (demo — no charge)' : 'Pay securely') : 'Continue'}{step < 3 && <ArrowRight className="ml-2 size-4" aria-hidden />}</button>
           </div>
@@ -261,7 +261,7 @@ export function CourseEnrolmentStepper({ course }: { course: Course }) {
 }
 
 function Row({ label, children }: { label: string; children: ReactNode }) {
-  return <div className="flex justify-between gap-4 py-2"><dt className="text-[#57717b]">{label}</dt><dd className="text-right font-semibold">{children}</dd></div>
+  return <div className="flex justify-between gap-4 py-2"><dt className="text-slate">{label}</dt><dd className="text-right font-semibold">{children}</dd></div>
 }
 
 function Confirmation({ course, demo, campusName, payNow, balance, uploaded }: { course: Course; demo: boolean; campusName?: string; payNow: number; balance: number; uploaded: number }) {
@@ -269,7 +269,7 @@ function Confirmation({ course, demo, campusName, payNow, balance, uploaded }: {
   return (
     <div className="mt-6 space-y-6" role="status">
       <DemoBanner><strong>{demo ? 'Demo preview — no enrolment was created and no payment was taken.' : 'Enrolment service not connected.'}</strong> Once enrolment and payment are live, this page shows your reference only after payment is verified.</DemoBanner>
-      <dl className="divide-y divide-[#eef2ed] text-sm">
+      <dl className="divide-y divide-mist text-sm">
         <Row label="Enrolment reference">Issued after verified payment</Row>
         <Row label="Course">{course.name}</Row>
         <Row label="Location">{campusName ?? '—'}</Row>
@@ -280,9 +280,9 @@ function Confirmation({ course, demo, campusName, payNow, balance, uploaded }: {
         <Row label="Joining instructions">Sent once your enrolment is approved</Row>
         <Row label="eLearning">Linked here where the course includes it</Row>
       </dl>
-      <div className="rounded-2xl bg-[#eef2ed] p-5">
+      <div className="rounded-2xl bg-mist p-5">
         <p className="flex items-center gap-2 font-bold"><Info className="size-4" aria-hidden />What happens next</p>
-        <ol className="mt-3 space-y-2 text-sm text-[#3d5862]">
+        <ol className="mt-3 space-y-2 text-sm text-slate-strong">
           <li>1. {ENROLMENT_STATUS['awaiting-document-review'].guidance}</li>
           <li>2. If anything is missing, your status changes to <strong>{ENROLMENT_STATUS['additional-information-required'].label}</strong> and we’ll tell you what to upload.</li>
           <li>3. Your enrolment shows <strong>Approved</strong> only once the review is complete.</li>

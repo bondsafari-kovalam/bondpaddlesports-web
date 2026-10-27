@@ -44,8 +44,8 @@ export function CareerInterestForm() {
           <SelectField label="Current paddling experience" name="experience" options={['New to paddling', 'Some recreational paddling', 'Regular paddler', 'Already working on the water']} error={errors.experience} />
           <TextField label="Previous qualifications" name="qualifications" optional hint="Any paddlesport, first aid or water-safety awards." />
           <TextAreaField label="Message" name="message" optional />
-          <CheckboxField name="consent" error={errors.consent}>Contact me about the Bond Paddle Guide Programme. <span className="text-[#57717b]">Required.</span></CheckboxField>
-          <CheckboxField name="marketing">Also send me Bond Safari Academy news. <span className="text-[#57717b]">Optional.</span></CheckboxField>
+          <CheckboxField name="consent" error={errors.consent}>Contact me about the Bond Paddle Guide Programme. <span className="text-slate">Required.</span></CheckboxField>
+          <CheckboxField name="marketing">Also send me Bond Safari Academy news. <span className="text-slate">Optional.</span></CheckboxField>
         </>
       )}
     </ServiceForm>
@@ -82,7 +82,7 @@ export function SchoolEnquiryForm() {
           </div>
           <TextAreaField label="Special requirements" name="requirements" optional hint="Accessibility, medical or learning needs we should plan for." />
           <TextField label="GST number" name="gst" optional hint="Only if you need a GST invoice." error={errors.gst} />
-          <CheckboxField name="consent" error={errors.consent}>Contact me about this school enquiry. <span className="text-[#57717b]">Required.</span></CheckboxField>
+          <CheckboxField name="consent" error={errors.consent}>Contact me about this school enquiry. <span className="text-slate">Required.</span></CheckboxField>
         </>
       )}
     </ServiceForm>
@@ -106,7 +106,7 @@ export function AcademyContactForm() {
             <SelectField label="Course of interest" name="course" options={courses.map((course) => course.name)} optional />
           </div>
           <TextAreaField label="Message" name="message" error={errors.message} />
-          <CheckboxField name="consent" error={errors.consent}>Reply to me about this enquiry. <span className="text-[#57717b]">Required.</span></CheckboxField>
+          <CheckboxField name="consent" error={errors.consent}>Reply to me about this enquiry. <span className="text-slate">Required.</span></CheckboxField>
         </>
       )}
     </ServiceForm>
@@ -151,14 +151,14 @@ export function CertificateCheckForm() {
 
       <div aria-live="polite">
         {state.kind === 'valid' && (
-          <div className="flex gap-3 rounded-2xl bg-[#d9f7ed] p-5 text-sm text-[#14785a]">
+          <div className="flex gap-3 rounded-2xl bg-success-soft p-5 text-sm text-success">
             <BadgeCheck className="size-6 shrink-0" aria-hidden />
             <div><p className="font-bold">Record found</p><p className="mt-1">{state.record.holderInitial}. {state.record.surname} completed {state.record.course} on {state.record.awardedOn}, delivered by {state.record.deliveredBy}.</p></div>
           </div>
         )}
-        {state.kind === 'no-match' && <div className="flex gap-3 rounded-2xl bg-white p-5 text-sm text-[#3d5862] ring-1 ring-[#dfe6e5]"><SearchX className="size-6 shrink-0 text-[#57717b]" aria-hidden /><p><strong className="text-[#06263b]">No matching record.</strong> Check the number and surname exactly as printed. We can only confirm courses Bond Safari Academy delivered.</p></div>}
-        {state.kind === 'error' && <div role="alert" className="flex gap-3 rounded-2xl bg-[#fdecea] p-5 text-sm text-[#b42318]"><AlertCircle className="size-6 shrink-0" aria-hidden /><p>We couldn’t check this right now. Please try again later.</p></div>}
-        {state.kind === 'unavailable' && <div className="flex gap-3 rounded-2xl bg-[#fff1cf] p-5 text-sm text-[#7a4f00]"><ShieldAlert className="size-6 shrink-0" aria-hidden /><p><strong>Demo preview — nothing was checked.</strong> The certificate verification service isn’t connected yet, so this page cannot confirm or reject any certificate.</p></div>}
+        {state.kind === 'no-match' && <div className="flex gap-3 rounded-2xl bg-white p-5 text-sm text-slate-strong ring-1 ring-line"><SearchX className="size-6 shrink-0 text-slate" aria-hidden /><p><strong className="text-ink">No matching record.</strong> Check the number and surname exactly as printed. We can only confirm courses Bond Safari Academy delivered.</p></div>}
+        {state.kind === 'error' && <div role="alert" className="flex gap-3 rounded-2xl bg-danger-soft p-5 text-sm text-danger"><AlertCircle className="size-6 shrink-0" aria-hidden /><p>We couldn’t check this right now. Please try again later.</p></div>}
+        {state.kind === 'unavailable' && <div className="flex gap-3 rounded-2xl bg-sand-soft p-5 text-sm text-sand-ink"><ShieldAlert className="size-6 shrink-0" aria-hidden /><p><strong>Demo preview — nothing was checked.</strong> The certificate verification service isn’t connected yet, so this page cannot confirm or reject any certificate.</p></div>}
       </div>
     </div>
   )

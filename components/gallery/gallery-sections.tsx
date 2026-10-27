@@ -1,144 +1,122 @@
 import { ArrowRight, Camera, ExternalLink, GraduationCap, Heart, MessageSquareQuote, ShieldCheck, Star, Users, Waves, type LucideIcon } from 'lucide-react'
 import { FeedbackForm } from '@/components/gallery/feedback-form'
 import { Gallery } from '@/components/gallery/gallery'
-import { PhotoPlaceholder } from '@/components/groups/groups-sections'
-import { LocationCard } from '@/components/locations/location-card'
-import { Eyebrow, focusRing } from '@/components/locations/primitives'
-import { Ripples } from '@/components/membership/membership-sections'
+import { LocationTile } from '@/components/locations/location-card'
+import { Eyebrow, IllustrativeLabel, focusRing } from '@/components/locations/primitives'
 import { REVIEWS, REVIEW_SOURCE } from '@/lib/gallery'
 import { locations } from '@/lib/locations'
 import { CONTACT, ROUTES } from '@/lib/site'
-import { RevealGroup, RevealLines } from '@/components/motion/reveal'
+import { Reveal, RevealGroup, RevealLines } from '@/components/motion/reveal'
 import { HeroBackdrop } from '@/components/site/hero-backdrop'
-import { HERO_IMAGES } from '@/lib/hero-images'
+import { SectionNav } from '@/components/site/section-nav'
+import { HERO_IMAGES, isBondPhoto } from '@/lib/hero-images'
 
-const gold = `inline-flex min-h-12 items-center justify-center rounded-full bg-[#f5b82e] px-6 text-sm font-extrabold uppercase tracking-[0.12em] text-[#06263b] transition hover:bg-white ${focusRing}`
-const ghost = `inline-flex min-h-12 items-center justify-center rounded-full border border-white/40 px-6 text-sm font-bold text-white transition hover:bg-white/10 ${focusRing}`
-const dark = `inline-flex min-h-12 items-center justify-center rounded-full bg-[#06263b] px-6 text-sm font-extrabold uppercase tracking-[0.1em] text-white transition hover:bg-[#0b3850] ${focusRing}`
+const gold = `inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-sand px-7 text-sm font-semibold text-ink transition hover:bg-white ${focusRing}`
+const ghost = `inline-flex min-h-12 items-center justify-center rounded-full border border-white/40 px-7 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white hover:text-ink ${focusRing}`
+const dark = `inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-ink px-7 text-sm font-semibold text-white transition hover:bg-ink-soft ${focusRing}`
+const textLink = `inline-flex min-h-11 w-fit items-center gap-1.5 border-b border-ink/25 text-sm font-semibold text-ink transition hover:border-ink ${focusRing}`
 
 export function GalleryHero() {
   return (
-    <section className="relative overflow-hidden bg-[#06263b] pb-20 pt-36 text-white lg:pb-28 lg:pt-44">
+    <section className="relative overflow-hidden bg-ink pb-20 pt-36 text-white lg:pb-28 lg:pt-44">
       <HeroBackdrop src={HERO_IMAGES.gallery} />
-      <Ripples className="absolute -right-40 -top-24 size-[46rem] opacity-80" />
-      <div className="relative mx-auto grid max-w-7xl gap-12 px-5 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:px-8">
-        <div>
-          <p className="mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-[#8fe8f4]"><span className="h-px w-10 bg-[#f5b82e]" /> Gallery & Reviews</p>
-          <h1 className="font-display text-5xl font-black leading-[.95] tracking-tight sm:text-7xl"><RevealLines>Life looks different<br /><span className="text-[#f5b82e]">from the water.</span></RevealLines></h1>
-          <p className="mt-7 max-w-xl text-base leading-7 text-white/80 sm:text-lg">Explore the moments, places, and paddling experiences that make every adventure memorable.</p>
+      <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
+        <div className="max-w-3xl">
+          <p className="mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-teal-pale"><span className="h-px w-10 bg-sand" /> Gallery & Reviews</p>
+          <h1 className="font-display text-5xl font-black leading-[.95] tracking-tight sm:text-7xl"><RevealLines>Life looks different<br /><span className="text-sand">from the water.</span></RevealLines></h1>
+          <p className="mt-7 max-w-xl text-base leading-7 text-white/80 sm:text-lg">Explore the moments, places, and paddling experiences that make every adventure memorable, and share your own.</p>
           <div className="mt-9 flex flex-wrap gap-3">
-            <a href="#gallery" className={gold}>Explore the gallery <ArrowRight className="ml-2 size-4" aria-hidden /></a>
-            <a href="#reviews" className={ghost}>Read guest reviews</a>
+            <a href="#gallery" className={gold}>Explore the gallery <ArrowRight className="size-4" aria-hidden /></a>
+            <a href="#feedback" className={ghost}>Share your experience</a>
           </div>
-        </div>
-        {/* Editorial collage; swap the tiles for approved photographs when available. */}
-        <div className="grid grid-cols-3 grid-rows-2 gap-3" aria-hidden>
-          <PhotoPlaceholder icon={Waves} label="Paddling on Kerala's waterways" className="col-span-2 row-span-2 aspect-square rounded-3xl" />
-          <PhotoPlaceholder icon={Users} label="Paddling together" className="rounded-3xl" />
-          <PhotoPlaceholder icon={Camera} label="Moments on the water" className="rounded-3xl" />
         </div>
       </div>
     </section>
+  )
+}
+
+const NAV = [
+  { id: 'gallery', label: 'Gallery' },
+  { id: 'reviews', label: 'Reviews' },
+  { id: 'feedback', label: 'Share feedback' },
+  { id: 'experiences', label: 'Experiences' },
+  { id: 'where', label: 'Locations' },
+]
+
+export function GalleryNav() {
+  return (
+    <div className="sticky top-0 z-20 border-b border-line bg-paper/85 backdrop-blur-xl">
+      <div className="mx-auto max-w-7xl px-5 py-2.5 lg:px-8">
+        <SectionNav sections={NAV} label="Gallery page sections" layoutId="gallery-nav-pill" />
+      </div>
+    </div>
   )
 }
 
 export function GallerySection() {
   return (
-    <section id="gallery" className="mx-auto max-w-7xl scroll-mt-6 px-5 py-20 lg:px-8 lg:py-28" aria-labelledby="gallery-title">
-      <Eyebrow>Gallery</Eyebrow>
-      <h2 id="gallery-title" className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>Explore our world.</RevealLines></h2>
-      <p className="mt-4 max-w-xl text-base leading-7 text-[#3d5862]">A closer look at paddling, places, and life on Kerala’s waterways.</p>
-      <div className="mt-10"><Gallery /></div>
-    </section>
-  )
-}
-
-export function FeaturedExperiences() {
-  const cards: { icon: LucideIcon; title: string; text: string; cta: string; href: string }[] = [
-    { icon: Waves, title: 'Explore the backwaters', text: 'Guided paddling at our operating Muziris locations, with more of Kerala’s waterways planned.', cta: 'Explore locations', href: ROUTES.locations },
-    { icon: GraduationCap, title: 'Learn on the water', text: 'From a first paddle to developing your skills with the Bond Safari Academy.', cta: 'Explore the Academy', href: ROUTES.academy },
-    { icon: Users, title: 'Bring everyone together', text: 'Paddling for teams, schools, friends, families and community groups.', cta: 'Explore group experiences', href: ROUTES.groups },
-  ]
-  return (
-    <section className="bg-white/60 px-5 py-20 lg:px-8 lg:py-28" aria-labelledby="featured-title">
-      <div className="mx-auto max-w-7xl">
-        <Eyebrow>Featured experiences</Eyebrow>
-        <h2 id="featured-title" className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>Every paddle has a story.</RevealLines></h2>
-        <RevealGroup className="mt-12 grid gap-5 md:grid-cols-3">{cards.map(({ icon, title, text, cta, href }) => (
-            <article key={title} className="flex flex-col overflow-hidden rounded-3xl bg-white ring-1 ring-[#06263b]/5">
-              <PhotoPlaceholder icon={icon} label={title} className="aspect-[4/3]" />
-              <div className="flex flex-1 flex-col p-6">
-                <h3 className="font-display text-2xl font-bold">{title}</h3>
-                <p className="mt-2 flex-1 text-sm leading-6 text-[#57717b]">{text}</p>
-                <a href={href} className={`mt-6 inline-flex min-h-11 items-center text-sm font-bold text-[#0b7f95] hover:text-[#06263b] ${focusRing}`}>{cta} <ArrowRight className="ml-1 size-4" aria-hidden /></a>
-              </div>
-            </article>
-          ))}
-        </RevealGroup>
+    <section id="gallery" className="mx-auto max-w-7xl scroll-mt-16 px-5 py-24 lg:px-8 lg:py-32" aria-labelledby="gallery-title">
+      <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
+        <div>
+          <Eyebrow>Gallery</Eyebrow>
+          <h2 id="gallery-title" className="mt-3 font-display text-4xl font-black tracking-tight sm:text-5xl"><RevealLines>Explore our world.</RevealLines></h2>
+        </div>
+        <p className="max-w-md text-sm leading-6 text-slate">A closer look at paddling, places, and life on Kerala’s waterways. Tap any photo to view it full screen.</p>
       </div>
+      <div className="mt-12"><Gallery /></div>
     </section>
   )
 }
 
 export function ReviewsSection() {
+  const hasSummary = REVIEW_SOURCE && (REVIEW_SOURCE.averageRating !== undefined || REVIEW_SOURCE.totalReviews !== undefined)
   return (
-    <section id="reviews" className="relative scroll-mt-6 overflow-hidden bg-[#06263b] px-5 py-20 text-white lg:px-8 lg:py-28" aria-labelledby="reviews-title">
-      <Ripples className="absolute -left-40 top-0 size-[36rem]" />
-      <div className="relative mx-auto max-w-7xl">
-        <Eyebrow tone="cyan">Guest experiences</Eyebrow>
-        <h2 id="reviews-title" className="mt-3 max-w-3xl font-display text-4xl font-black sm:text-5xl"><RevealLines>The memories matter. <span className="text-[#f5b82e]">The voices matter too.</span></RevealLines></h2>
-        <p className="mt-4 max-w-xl text-base leading-7 text-white/70">Discover feedback shared by guests about their experiences with Bond Safari.</p>
+    <section id="reviews" className="scroll-mt-16 bg-ink px-5 py-24 text-white lg:px-8 lg:py-32" aria-labelledby="reviews-title">
+      <div className="mx-auto max-w-7xl">
+        <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr] lg:items-end">
+          <div>
+            <Eyebrow tone="cyan">Guest experiences</Eyebrow>
+            <h2 id="reviews-title" className="mt-3 max-w-3xl font-display text-4xl font-black tracking-tight sm:text-5xl"><RevealLines>The memories matter.<br /><span className="text-sand">The voices matter too.</span></RevealLines></h2>
+          </div>
+          <p className="max-w-md text-base leading-7 text-white/70">Feedback shared by guests about their experiences with Bond Safari. We only show genuine reviews from real guests.</p>
+        </div>
 
         {/* The summary shows only figures supplied by a verified review platform, never computed from a subset. */}
-        {REVIEW_SOURCE && (REVIEW_SOURCE.averageRating !== undefined || REVIEW_SOURCE.totalReviews !== undefined) && (
-          <div className="mt-10 flex flex-wrap items-center gap-6 rounded-3xl bg-white/[.07] p-6">
-            {REVIEW_SOURCE.averageRating !== undefined && <p className="flex items-center gap-2 font-display text-4xl font-black"><Star className="size-8 fill-[#f5b82e] text-[#f5b82e]" aria-hidden />{REVIEW_SOURCE.averageRating.toFixed(1)}</p>}
+        {hasSummary && REVIEW_SOURCE && (
+          <div className="mt-12 flex flex-wrap items-center gap-6 border-y border-white/15 py-6">
+            {REVIEW_SOURCE.averageRating !== undefined && <p className="flex items-center gap-2 font-display text-5xl font-black"><Star className="size-9 fill-sand text-sand" aria-hidden />{REVIEW_SOURCE.averageRating.toFixed(1)}</p>}
             {REVIEW_SOURCE.totalReviews !== undefined && <p className="text-sm text-white/70">{REVIEW_SOURCE.totalReviews} reviews on {REVIEW_SOURCE.name}</p>}
-            <a href={REVIEW_SOURCE.url} target="_blank" rel="noopener noreferrer" className="ml-auto inline-flex min-h-11 items-center gap-1 text-sm font-bold text-[#8fe8f4]">View on {REVIEW_SOURCE.name} <ExternalLink className="size-4" aria-hidden /></a>
+            <a href={REVIEW_SOURCE.url} target="_blank" rel="noopener noreferrer" className={`ml-auto inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-teal-pale transition hover:text-white ${focusRing}`}>View on {REVIEW_SOURCE.name} <ExternalLink className="size-4" aria-hidden /></a>
           </div>
         )}
 
         {REVIEWS.length ? (
-          <RevealGroup as="ul" className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">{REVIEWS.map((review) => (
-              <li key={review.displayName + review.text.slice(0, 20)} className="flex flex-col rounded-3xl bg-white p-6 text-[#06263b]">
-                {review.rating !== undefined && <p className="flex gap-0.5" aria-label={`${review.rating} out of 5`}>{Array.from({ length: 5 }, (_, i) => <Star key={i} className={`size-4 ${i < review.rating! ? 'fill-[#f5b82e] text-[#f5b82e]' : 'text-[#dfe6e5]'}`} aria-hidden />)}</p>}
-                <blockquote className="mt-4 flex-1 text-sm leading-6">“{review.text}”</blockquote>
-                <p className="mt-5 font-bold">{review.displayName}</p>
-                <p className="text-xs text-[#57717b]">{[review.activity, review.date, review.source?.name].filter(Boolean).join(' · ')}</p>
+          <RevealGroup as="ul" className="mt-12 grid gap-px overflow-hidden rounded-3xl bg-white/10 md:grid-cols-2 lg:grid-cols-3">{REVIEWS.map((review) => (
+              <li key={review.displayName + review.text.slice(0, 20)} className="flex flex-col bg-ink p-7">
+                {review.rating !== undefined && <p className="flex gap-0.5" aria-label={`${review.rating} out of 5`}>{Array.from({ length: 5 }, (_, i) => <Star key={i} className={`size-4 ${i < review.rating! ? 'fill-sand text-sand' : 'text-white/20'}`} aria-hidden />)}</p>}
+                <blockquote className="mt-5 flex-1 font-display text-lg leading-7">“{review.text}”</blockquote>
+                <p className="mt-6 font-semibold">{review.displayName}</p>
+                <p className="text-xs text-white/60">{[review.activity, review.date, review.source?.name].filter(Boolean).join(' · ')}</p>
               </li>
             ))}
           </RevealGroup>
         ) : (
-          <div className="mt-10 flex flex-col items-start gap-4 rounded-3xl border border-white/15 bg-white/[.04] p-8 sm:flex-row sm:items-center">
-            <MessageSquareQuote className="size-10 shrink-0 text-[#00c8e8]" strokeWidth={1.3} aria-hidden />
+          <Reveal className="mt-12 grid gap-8 border-t border-white/15 pt-10 md:grid-cols-[auto_1fr_auto] md:items-center">
+            <MessageSquareQuote className="size-10 text-sand" strokeWidth={1.3} aria-hidden />
             <div>
-              <p className="font-display text-xl font-bold">Guest reviews will appear here when available.</p>
-              <p className="mt-1 text-sm text-white/65">We only show genuine feedback from real guests, shared with their permission.</p>
+              <p className="font-display text-2xl font-bold tracking-tight">Guest reviews will appear here.</p>
+              <p className="mt-1 text-sm text-white/65">Paddled with us already? Your words could be the first.</p>
             </div>
-            <a href="#feedback" className={`sm:ml-auto ${gold}`}>Share your feedback</a>
-          </div>
+            <a href="#feedback" className={gold}>Share your feedback <ArrowRight className="size-4" aria-hidden /></a>
+          </Reveal>
         )}
       </div>
     </section>
   )
 }
 
-export function GalleryLocations() {
-  const shown = locations.filter((location) => location.hasDetailPage)
-  return (
-    <section className="bg-[#eef2ed] px-5 py-20 lg:px-8 lg:py-28" aria-labelledby="where-title">
-      <div className="mx-auto max-w-7xl">
-        <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
-          <div><Eyebrow>Locations</Eyebrow><h2 id="where-title" className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>See where the adventure takes you.</RevealLines></h2></div>
-          <a href={ROUTES.locations} className={dark}>All locations</a>
-        </div>
-        <RevealGroup className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">{shown.map((location) => <LocationCard key={location.slug} location={location} />)}</RevealGroup>
-      </div>
-    </section>
-  )
-}
-
-export function ResponsiblePhotography() {
+export function FeedbackSection() {
+  const contact = CONTACT.email ? `mailto:${CONTACT.email}` : CONTACT.phone ? `tel:${CONTACT.phone.replace(/\s/g, '')}` : undefined
   const principles = [
     'Use approved images and respect guest privacy.',
     'Get permission before publishing identifiable guest photographs.',
@@ -147,33 +125,64 @@ export function ResponsiblePhotography() {
     'Use authentic captions that accurately describe the photograph.',
   ]
   return (
-    <section className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28" aria-labelledby="photography-title">
-      <div className="grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:items-start">
-        <div>
-          <Eyebrow>Responsible storytelling</Eyebrow>
-          <h2 id="photography-title" className="mt-3 font-display text-3xl font-black sm:text-4xl"><RevealLines>Real people. Shared adventures. Respectful storytelling.</RevealLines></h2>
-          <p className="mt-4 text-base leading-7 text-[#3d5862]">We believe outdoor experiences should be shared thoughtfully, with respect for the people, communities, and natural environments involved.</p>
+    <section id="feedback" className="scroll-mt-16 px-5 py-24 lg:px-8 lg:py-32" aria-labelledby="feedback-title">
+      <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
+        <div className="lg:sticky lg:top-24 lg:self-start">
+          <Heart className="size-8 text-teal-strong" strokeWidth={1.4} aria-hidden />
+          <h2 id="feedback-title" className="mt-5 font-display text-4xl font-black tracking-tight sm:text-5xl"><RevealLines>Paddled with us? Tell us about it.</RevealLines></h2>
+          <p className="mt-4 text-base leading-7 text-slate-strong">We value feedback that helps us understand what guests enjoyed and where we can improve.</p>
+          {/* How shared photos and stories are handled, shown where people decide to share them. */}
+          <div className="mt-10 border-t border-line pt-6">
+            <p className="flex items-center gap-2 font-display text-lg font-bold"><ShieldCheck className="size-5 text-success" aria-hidden />Respectful storytelling</p>
+            <ul className="mt-3 space-y-2 text-sm leading-6 text-slate">{principles.map((p) => <li key={p} className="flex gap-2"><span className="mt-2.5 size-1 shrink-0 rounded-full bg-slate-light" aria-hidden />{p}</li>)}</ul>
+          </div>
+          <a href={contact ?? ROUTES.contact} className={`mt-8 ${textLink}`}>Or contact our team directly <ArrowRight className="size-4" aria-hidden /></a>
         </div>
-        <ul className="divide-y divide-[#dfe6e5] rounded-3xl bg-white px-6 ring-1 ring-[#06263b]/5">
-          {principles.map((p) => <li key={p} className="flex gap-3 py-4 text-sm leading-6"><ShieldCheck className="mt-0.5 size-5 shrink-0 text-[#14785a]" aria-hidden />{p}</li>)}
-        </ul>
+        <div className="rounded-3xl border border-line bg-white p-6 sm:p-10"><FeedbackForm /></div>
       </div>
     </section>
   )
 }
 
-export function FeedbackSection() {
-  const contact = CONTACT.email ? `mailto:${CONTACT.email}` : CONTACT.phone ? `tel:${CONTACT.phone.replace(/\s/g, '')}` : undefined
+export function FeaturedExperiences() {
+  const cards: { icon: LucideIcon; image: string; title: string; text: string; cta: string; href: string }[] = [
+    { icon: Waves, image: HERO_IMAGES.activities, title: 'Explore Kerala’s waters', text: 'Guided paddling on the Muziris backwaters and the Kovalam coast, with more of Kerala’s waterways planned.', cta: 'Explore locations', href: ROUTES.locations },
+    { icon: GraduationCap, image: HERO_IMAGES.academy, title: 'Learn on the water', text: 'From a first paddle to developing your skills with the Bond Safari Academy.', cta: 'Explore the Academy', href: ROUTES.academy },
+    { icon: Users, image: HERO_IMAGES.groups, title: 'Bring everyone together', text: 'Paddling for teams, schools, friends, families and community groups.', cta: 'Explore group experiences', href: ROUTES.groups },
+  ]
   return (
-    <section id="feedback" className="scroll-mt-6 bg-white px-5 py-20 lg:px-8 lg:py-24" aria-labelledby="feedback-title">
-      <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1fr_1.4fr]">
-        <div>
-          <Heart className="size-9 text-[#c95a22]" strokeWidth={1.4} aria-hidden />
-          <h2 id="feedback-title" className="mt-5 font-display text-4xl font-black"><RevealLines>Paddled with us? Tell us about your experience.</RevealLines></h2>
-          <p className="mt-4 text-base leading-7 text-[#3d5862]">We value feedback that helps us understand what guests enjoyed and where we can improve.</p>
-          <div className="mt-8"><a href={contact ?? ROUTES.contact} className={dark}>Contact our team</a></div>
+    <section id="experiences" className="scroll-mt-16 border-t border-line px-5 py-24 lg:px-8 lg:py-32" aria-labelledby="featured-title">
+      <div className="mx-auto max-w-7xl">
+        <Eyebrow>Featured experiences</Eyebrow>
+        <h2 id="featured-title" className="mt-3 font-display text-4xl font-black tracking-tight sm:text-5xl"><RevealLines>Every paddle has a story.</RevealLines></h2>
+        <RevealGroup className="mt-14 grid gap-x-8 gap-y-14 md:grid-cols-3">{cards.map(({ icon: Icon, image, title, text, cta, href }) => (
+            <article key={title} className="group flex flex-col">
+              <a href={href} tabIndex={-1} aria-hidden className="relative block overflow-hidden rounded-3xl">
+                <img src={image} alt="" loading="lazy" decoding="async" className="aspect-[4/5] w-full object-cover transition duration-1000 group-hover:scale-105" />
+                {!isBondPhoto(image) && <IllustrativeLabel className="absolute bottom-4 right-4" />}
+              </a>
+              <Icon className="mt-6 size-6 text-teal-strong" strokeWidth={1.5} aria-hidden />
+              <h3 className="mt-3 font-display text-2xl font-bold tracking-tight">{title}</h3>
+              <p className="mt-2 flex-1 text-sm leading-6 text-slate">{text}</p>
+              <a href={href} className={`mt-5 ${textLink}`}>{cta} <ArrowRight className="size-4 transition group-hover:translate-x-1" aria-hidden /></a>
+            </article>
+          ))}
+        </RevealGroup>
+      </div>
+    </section>
+  )
+}
+
+export function GalleryLocations() {
+  const shown = locations.filter((location) => location.hasDetailPage)
+  return (
+    <section id="where" className="scroll-mt-16 border-t border-line px-5 py-24 lg:px-8 lg:py-32" aria-labelledby="where-title">
+      <div className="mx-auto max-w-7xl">
+        <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
+          <div><Eyebrow>Locations</Eyebrow><h2 id="where-title" className="mt-3 font-display text-4xl font-black tracking-tight sm:text-5xl"><RevealLines>See where the adventure takes you.</RevealLines></h2></div>
+          <a href={ROUTES.locations} className={textLink}>All locations <ArrowRight className="size-4" aria-hidden /></a>
         </div>
-        <div className="rounded-3xl bg-[#f6f3ec] p-6 sm:p-8"><FeedbackForm /></div>
+        <RevealGroup className="-mx-5 mt-12 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-4 lg:overflow-visible lg:px-0">{shown.map((location) => <LocationTile key={location.slug} location={location} className="w-[70vw] shrink-0 snap-start sm:w-[42vw] lg:w-auto" />)}</RevealGroup>
       </div>
     </section>
   )
@@ -181,16 +190,16 @@ export function FeedbackSection() {
 
 export function GalleryFinalCTA() {
   return (
-    <section className="relative overflow-hidden bg-[#0b3850] px-5 py-20 text-white lg:px-8 lg:py-28">
-      <Ripples className="absolute -right-24 top-1/2 size-[40rem] -translate-y-1/2" />
-      <div className="relative mx-auto flex max-w-7xl flex-col justify-between gap-8 lg:flex-row lg:items-end">
+    <section className="bg-sand px-5 py-20 text-ink lg:px-8 lg:py-24">
+      <div className="mx-auto flex max-w-7xl flex-col justify-between gap-8 lg:flex-row lg:items-end">
         <div>
-          <h2 className="max-w-2xl font-display text-4xl font-black sm:text-6xl"><RevealLines>Ready to make <span className="text-[#f5b82e]">your own memories?</span></RevealLines></h2>
-          <p className="mt-4 max-w-xl text-base text-white/70">Find a place to paddle, choose your experience, and discover Kerala from the water.</p>
+          <p className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.2em] text-ink/60"><Camera className="size-4" aria-hidden />Your story next</p>
+          <h2 className="mt-3 max-w-2xl font-display text-4xl font-black tracking-tight sm:text-6xl"><RevealLines>Ready to make<br />your own memories?</RevealLines></h2>
+          <p className="mt-4 max-w-xl text-base text-ink/70">Find a place to paddle, choose your experience, and discover Kerala from the water.</p>
         </div>
         <div className="flex flex-wrap gap-3">
-          <a href={ROUTES.book} className={gold}>Book your adventure <ArrowRight className="ml-2 size-4" aria-hidden /></a>
-          <a href={ROUTES.locations} className={ghost}>Explore locations</a>
+          <a href={ROUTES.book} className={dark}>Book your adventure <ArrowRight className="size-4" aria-hidden /></a>
+          <a href={ROUTES.locations} className={`inline-flex min-h-12 items-center rounded-full border border-ink/30 px-7 text-sm font-semibold transition hover:border-ink ${focusRing}`}>Explore locations</a>
         </div>
       </div>
     </section>
@@ -199,9 +208,9 @@ export function GalleryFinalCTA() {
 
 export function GalleryMobileBar() {
   return (
-    <div className="fixed inset-x-4 bottom-4 z-20 flex gap-2 rounded-2xl border border-white/30 bg-[#06263b]/95 p-2 shadow-xl backdrop-blur-md sm:hidden">
-      <a href={ROUTES.book} className="flex min-h-11 flex-1 items-center justify-center rounded-xl bg-[#f5b82e] text-xs font-extrabold uppercase text-[#06263b]">Book now</a>
-      <a href={ROUTES.locations} className="flex min-h-11 flex-1 items-center justify-center rounded-xl bg-white/10 text-xs font-extrabold uppercase text-white">Locations</a>
+    <div className="fixed inset-x-4 bottom-4 z-30 flex gap-2 rounded-2xl border border-white/20 bg-ink/95 p-2 shadow-xl backdrop-blur-md sm:hidden">
+      <a href={ROUTES.book} className="flex min-h-11 flex-1 items-center justify-center rounded-xl bg-sand text-sm font-semibold text-ink">Book a paddle</a>
+      <a href="#feedback" className="flex min-h-11 flex-1 items-center justify-center rounded-xl bg-white/10 text-sm font-semibold text-white">Share feedback</a>
     </div>
   )
 }

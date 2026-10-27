@@ -71,7 +71,7 @@ export default async function ActivityPage({ params }: Props) {
 
   return (
     <NotifyMeProvider>
-      <main className="min-h-screen overflow-hidden bg-[#f6f3ec] text-[#06263b]">
+      <main className="min-h-screen overflow-hidden bg-paper text-ink">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs(activity)) }} />
         <SiteHeader bookHref="#book" />
         <ActivityDetailHero activity={activity} />

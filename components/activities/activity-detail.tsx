@@ -52,23 +52,23 @@ function bookableOfferings(activity: Activity) {
 export function ActivityDetailHero({ activity }: { activity: Activity }) {
   const canPreviewBooking = bookableOfferings(activity).length > 0
   return (
-    <section className="relative overflow-hidden bg-[#06263b] pb-16 pt-32 text-white lg:pb-24 lg:pt-40">
+    <section className="relative overflow-hidden bg-ink pb-16 pt-32 text-white lg:pb-24 lg:pt-40">
       <div className="relative mx-auto grid max-w-7xl gap-10 px-5 lg:grid-cols-[1fr_1fr] lg:items-center lg:gap-14 lg:px-8">
         <div>
           <nav aria-label="Breadcrumb" className="mb-8">
             <ol className="flex flex-wrap items-center gap-1.5 text-xs font-semibold text-white/70">
-              <li><a href={ROUTES.home} className="hover:text-[#f5b82e]">Home</a></li>
+              <li><a href={ROUTES.home} className="hover:text-sand">Home</a></li>
               <li aria-hidden><ChevronRight className="size-3.5" /></li>
-              <li><a href={ROUTES.activities} className="hover:text-[#f5b82e]">Activities</a></li>
+              <li><a href={ROUTES.activities} className="hover:text-sand">Activities</a></li>
               <li aria-hidden><ChevronRight className="size-3.5" /></li>
               <li aria-current="page" className="text-white">{activity.name}</li>
             </ol>
           </nav>
-          <span className="inline-flex rounded-full bg-white/10 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider text-[#8fe8f4]">{activity.category}</span>
+          <span className="inline-flex rounded-full bg-white/10 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider text-teal-pale">{activity.category}</span>
           <h1 className="mt-5 font-display text-5xl font-black leading-[.95] tracking-tight sm:text-6xl lg:text-7xl"><RevealLines>{activity.name}</RevealLines></h1>
           <p className="mt-5 max-w-lg text-base leading-7 text-white/80 sm:text-lg">{activity.summary}</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <a href="#book" className={`inline-flex min-h-12 items-center rounded-full bg-[#f5b82e] px-6 text-sm font-extrabold uppercase tracking-[0.12em] text-[#06263b] transition hover:bg-white ${focusRing}`}>{canPreviewBooking ? 'Book this experience' : 'Check availability'} <ArrowRight className="ml-2 size-4" aria-hidden /></a>
+            <a href="#book" className={`inline-flex min-h-12 items-center rounded-full bg-sand px-6 text-sm font-extrabold uppercase tracking-[0.12em] text-ink transition hover:bg-white ${focusRing}`}>{canPreviewBooking ? 'Book this experience' : 'Check availability'} <ArrowRight className="ml-2 size-4" aria-hidden /></a>
             <a href="#locations" className={`inline-flex min-h-12 items-center rounded-full border border-white/40 px-6 text-sm font-bold text-white transition hover:bg-white/10 ${focusRing}`}>Explore locations</a>
           </div>
         </div>
@@ -83,7 +83,7 @@ export function ActivityOverview({ activity }: { activity: Activity }) {
     <section aria-labelledby="overview-title">
       <Eyebrow>The experience</Eyebrow>
       <h2 id="overview-title" className="mt-3 font-display text-3xl font-black sm:text-4xl"><RevealLines>What to expect</RevealLines></h2>
-      <p className="mt-4 max-w-2xl text-base leading-7 text-[#3d5862]">{activity.description ?? activity.summary}</p>
+      <p className="mt-4 max-w-2xl text-base leading-7 text-slate-strong">{activity.description ?? activity.summary}</p>
       {!activity.description && <div className="mt-6"><DevNote title="Overview">Add the approved full description: what the session involves, who it suits, whether it is beginner-friendly and what makes it distinctive. Avoid promises about wildlife, scenery or routes unless confirmed.</DevNote></div>}
     </section>
   )
@@ -106,16 +106,16 @@ export function ActivityInformationGrid({ activity }: { activity: Activity }) {
     <section aria-labelledby="info-title">
       <h2 id="info-title" className="font-display text-2xl font-bold">At a glance</h2>
       {visible.length ? (
-        <dl className="mt-6 grid gap-px overflow-hidden rounded-3xl bg-[#dfe6e5] sm:grid-cols-2">
+        <dl className="mt-6 grid gap-px overflow-hidden rounded-3xl bg-line sm:grid-cols-2">
           {visible.map(([Icon, label, value]) => (
             <div key={label} className="flex gap-4 bg-white p-5 sm:last:odd:col-span-2">
-              <Icon className="mt-0.5 size-5 shrink-0 text-[#00a9c3]" aria-hidden />
-              <div><dt className="text-xs font-bold uppercase tracking-wider text-[#57717b]">{label}</dt><dd className="mt-1 font-semibold">{value}</dd></div>
+              <Icon className="mt-0.5 size-5 shrink-0 text-teal" aria-hidden />
+              <div><dt className="text-xs font-bold uppercase tracking-wider text-slate">{label}</dt><dd className="mt-1 font-semibold">{value}</dd></div>
             </div>
           ))}
         </dl>
       ) : (
-        <p className="mt-4 text-sm text-[#57717b]">Full session details will be published once confirmed.</p>
+        <p className="mt-4 text-sm text-slate">Full session details will be published once confirmed.</p>
       )}
     </section>
   )
@@ -124,10 +124,10 @@ export function ActivityInformationGrid({ activity }: { activity: Activity }) {
 function BulletBlock({ title, icon: Icon, items, empty }: { title: string; icon: LucideIcon; items?: string[]; empty: string }) {
   if (!items?.length && !IS_DEV) return null
   return (
-    <div className="rounded-3xl bg-white p-6 ring-1 ring-[#06263b]/5">
-      <h3 className="flex items-center gap-2.5 font-display text-lg font-bold"><Icon className="size-5 text-[#00a9c3]" aria-hidden />{title}</h3>
+    <div className="rounded-3xl bg-white p-6 ring-1 ring-ink/5">
+      <h3 className="flex items-center gap-2.5 font-display text-lg font-bold"><Icon className="size-5 text-teal" aria-hidden />{title}</h3>
       {items?.length ? (
-        <ul className="mt-4 space-y-2 text-sm leading-6 text-[#3d5862]">{items.map((item) => <li key={item} className="flex gap-2"><span className="mt-2.5 size-1.5 shrink-0 rounded-full bg-[#f5b82e]" aria-hidden />{item}</li>)}</ul>
+        <ul className="mt-4 space-y-2 text-sm leading-6 text-slate-strong">{items.map((item) => <li key={item} className="flex gap-2"><span className="mt-2.5 size-1.5 shrink-0 rounded-full bg-sand" aria-hidden />{item}</li>)}</ul>
       ) : (
         <p className="mt-4"><Pending>{empty}</Pending></p>
       )}
@@ -170,20 +170,20 @@ export function ActivitySafetySection({ activity }: { activity: Activity }) {
     ['Participant requirements', activity.healthRequirement],
   ]
   return (
-    <section id="safety" aria-labelledby="safety-title" className="scroll-mt-6 rounded-3xl bg-[#0b3850] p-6 text-white sm:p-8">
-      <ShieldCheck className="size-8 text-[#00c8e8]" strokeWidth={1.4} aria-hidden />
+    <section id="safety" aria-labelledby="safety-title" className="scroll-mt-6 rounded-3xl bg-ink-soft p-6 text-white sm:p-8">
+      <ShieldCheck className="size-8 text-teal-bright" strokeWidth={1.4} aria-hidden />
       <h2 id="safety-title" className="mt-4 font-display text-3xl font-black"><RevealLines>Safety & preparation</RevealLines></h2>
       <p className="mt-2 max-w-xl text-sm leading-6 text-white/70">Everything you need to know before you get on the water.</p>
       <dl className="mt-6 grid gap-5 sm:grid-cols-2">
         {rows.map(([label, value]) => (
           <div key={label}>
-            <dt className="text-xs font-bold uppercase tracking-wider text-[#8fe8f4]">{label}</dt>
+            <dt className="text-xs font-bold uppercase tracking-wider text-teal-pale">{label}</dt>
             <dd className="mt-1 text-sm leading-6 text-white/85">{value ?? <span className="italic text-white/60">Awaiting approved client wording.</span>}</dd>
           </div>
         ))}
       </dl>
       <div id="booking-policies" className="mt-6 flex scroll-mt-6 flex-wrap gap-x-6 gap-y-2 border-t border-white/10 pt-5 text-sm font-bold">
-        <a href={ROUTES.safety} className="inline-flex min-h-11 items-center text-[#f5b82e] hover:text-white">Safety & Responsible Tourism <ArrowRight className="ml-1 size-4" aria-hidden /></a>
+        <a href={ROUTES.safety} className="inline-flex min-h-11 items-center text-sand hover:text-white">Safety & Responsible Tourism <ArrowRight className="ml-1 size-4" aria-hidden /></a>
         <span className="inline-flex min-h-11 items-center gap-2 text-white/60"><FileText className="size-4" aria-hidden /> Booking terms & digital waiver: awaiting approved wording</span>
       </div>
     </section>
@@ -195,7 +195,7 @@ function ActivityLocationCard({ offering, activity }: { offering: ResolvedOfferi
   const isOperating = location.status === 'operating' && offering.source !== 'planned'
   const price = offering.source === 'confirmed' ? offering.pricePerParticipant : undefined
   return (
-    <article className="flex flex-col overflow-hidden rounded-3xl bg-white ring-1 ring-[#06263b]/5 sm:flex-row">
+    <article className="flex flex-col overflow-hidden rounded-3xl bg-white ring-1 ring-ink/5 sm:flex-row">
       <div className="relative aspect-[16/9] sm:aspect-auto sm:w-48 sm:shrink-0">
         {location.image ? <img src={location.image.src} alt={location.image.alt} loading="lazy" className="absolute inset-0 size-full object-cover" /> : <div className="absolute inset-0"><LocationImageFallback label="" /></div>}
         {location.image?.illustrative && <IllustrativeLabel className="absolute bottom-3 right-3" />}
@@ -203,10 +203,10 @@ function ActivityLocationCard({ offering, activity }: { offering: ResolvedOfferi
       <div className="flex flex-1 flex-col p-5">
         <div className="flex flex-wrap items-center gap-2">
           <LocationStatusBadge status={location.status} />
-          {offering.source === 'demo' && <span className="rounded-full bg-[#fff1cf] px-2.5 py-1 text-[10px] font-extrabold uppercase text-[#7a4f00]">Preview pairing</span>}
+          {offering.source === 'demo' && <span className="rounded-full bg-sand-soft px-2.5 py-1 text-[10px] font-extrabold uppercase text-sand-ink">Preview pairing</span>}
         </div>
         <h3 className="mt-3 font-display text-xl font-bold">{location.name}</h3>
-        <dl className="mt-2 space-y-1 text-xs text-[#3d5862]">
+        <dl className="mt-2 space-y-1 text-xs text-slate-strong">
           {location.waterTypes.length > 0 && <div><dt className="inline font-bold">Water: </dt><dd className="inline">{location.waterTypes.join(', ')}</dd></div>}
           {(offering.meetingPoint ?? location.meetingPoint) && <div><dt className="inline font-bold">Meeting point: </dt><dd className="inline">{offering.meetingPoint ?? location.meetingPoint}</dd></div>}
           {offering.duration && <div><dt className="inline font-bold">Duration: </dt><dd className="inline">{offering.duration}</dd></div>}
@@ -214,9 +214,9 @@ function ActivityLocationCard({ offering, activity }: { offering: ResolvedOfferi
           <div><dt className="inline font-bold">Next sessions: </dt><dd className="inline">{isOperating ? 'Shown once the booking engine is connected' : location.plannedOpening ?? location.phase ?? 'Dates to be confirmed'}</dd></div>
         </dl>
         <div className="mt-auto flex flex-wrap items-center gap-3 pt-5">
-          <a href={location.hasDetailPage ? locationHref(location) : ROUTES.locations} className={`inline-flex min-h-11 items-center text-sm font-bold text-[#06263b] hover:text-[#0b7f95] ${focusRing}`}>View location <ArrowRight className="ml-1 size-4" aria-hidden /></a>
+          <a href={location.hasDetailPage ? locationHref(location) : ROUTES.locations} className={`inline-flex min-h-11 items-center text-sm font-bold text-ink hover:text-teal ${focusRing}`}>View location <ArrowRight className="ml-1 size-4" aria-hidden /></a>
           {isOperating
-            ? <a href="#book" className={`ml-auto inline-flex min-h-11 items-center rounded-full bg-[#f5b82e] px-5 text-xs font-extrabold uppercase tracking-[0.1em] text-[#06263b] ${focusRing}`} aria-label={`Book ${activity.name} at ${location.name}`}>Book this experience</a>
+            ? <a href="#book" className={`ml-auto inline-flex min-h-11 items-center rounded-full bg-sand px-5 text-xs font-extrabold uppercase tracking-[0.1em] text-ink ${focusRing}`} aria-label={`Book ${activity.name} at ${location.name}`}>Book this experience</a>
             : <NotifyMeButton name={location.name} slug={location.slug} className="ml-auto min-h-11" />}
         </div>
       </div>
@@ -230,14 +230,14 @@ export function ActivityLocationList({ activity }: { activity: Activity }) {
     <section id="locations" aria-labelledby="where-title" className="scroll-mt-6">
       <Eyebrow>Available locations</Eyebrow>
       <h2 id="where-title" className="mt-3 font-display text-3xl font-black sm:text-4xl"><RevealLines>Where can you experience this?</RevealLines></h2>
-      {offerings.some((offering) => offering.source === 'demo') && <p className="mt-3 max-w-2xl text-sm leading-6 text-[#57717b]">Locations marked “preview pairing” are demonstration data until Bond confirms where {activity.name.toLowerCase()} runs.</p>}
+      {offerings.some((offering) => offering.source === 'demo') && <p className="mt-3 max-w-2xl text-sm leading-6 text-slate">Locations marked “preview pairing” are demonstration data until Bond confirms where {activity.name.toLowerCase()} runs.</p>}
       {offerings.length ? (
         <RevealGroup className="mt-8 grid gap-4">{offerings.map((offering) => <ActivityLocationCard key={offering.locationSlug} offering={offering} activity={activity} />)}</RevealGroup>
       ) : (
-        <div className="mt-6 rounded-3xl bg-white p-6 ring-1 ring-[#06263b]/5">
-          <MapPin className="size-7 text-[#00a9c3]" strokeWidth={1.4} aria-hidden />
-          <p className="mt-4 text-sm leading-6 text-[#3d5862]">Locations offering {activity.name.toLowerCase()} will be listed here once confirmed.</p>
-          <a href={ROUTES.locations} className={`mt-4 inline-flex min-h-11 items-center text-sm font-bold text-[#0b7f95] ${focusRing}`}>Browse all locations <ArrowRight className="ml-1 size-4" aria-hidden /></a>
+        <div className="mt-6 rounded-3xl bg-white p-6 ring-1 ring-ink/5">
+          <MapPin className="size-7 text-teal" strokeWidth={1.4} aria-hidden />
+          <p className="mt-4 text-sm leading-6 text-slate-strong">Locations offering {activity.name.toLowerCase()} will be listed here once confirmed.</p>
+          <a href={ROUTES.locations} className={`mt-4 inline-flex min-h-11 items-center text-sm font-bold text-teal ${focusRing}`}>Browse all locations <ArrowRight className="ml-1 size-4" aria-hidden /></a>
         </div>
       )}
     </section>
@@ -262,13 +262,13 @@ export function ActivityBookingPanel({ activity }: { activity: Activity }) {
   }
   const planned = offeringsFor(activity).find((offering) => offering.location.status !== 'operating')
   return (
-    <div id="book" className="scroll-mt-6 rounded-3xl bg-[#06263b] p-6 text-white shadow-[0_20px_60px_rgba(6,38,59,.16)] sm:p-7">
-      <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#f5b82e]">{planned ? 'Coming soon' : 'No sessions currently listed'}</p>
+    <div id="book" className="scroll-mt-6 rounded-3xl bg-ink p-6 text-white shadow-[0_20px_60px_color-mix(in_srgb,var(--color-ink)_16%,transparent)] sm:p-7">
+      <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-sand">{planned ? 'Coming soon' : 'No sessions currently listed'}</p>
       <h2 className="mt-2 font-display text-2xl font-bold">{planned ? `Planned for ${planned.location.name}` : 'Sessions not yet scheduled'}</h2>
       <p className="mt-3 text-sm leading-6 text-white/70">{planned ? `${activity.name} will open with ${planned.location.name}${planned.location.phase ? ` (${planned.location.phase})` : ''}. Dates will be announced once confirmed.` : `We’ll list ${activity.name.toLowerCase()} sessions here as soon as they are confirmed at a location.`}</p>
       {planned
         ? <NotifyMeButton name={planned.location.name} slug={planned.location.slug} variant="solid" className="mt-6 min-h-12 w-full" />
-        : <a href={ROUTES.locations} className={`mt-6 flex min-h-12 w-full items-center justify-center rounded-full bg-[#f5b82e] text-xs font-extrabold uppercase tracking-[0.12em] text-[#06263b] ${focusRing}`}>Explore locations</a>}
+        : <a href={ROUTES.locations} className={`mt-6 flex min-h-12 w-full items-center justify-center rounded-full bg-sand text-xs font-extrabold uppercase tracking-[0.12em] text-ink ${focusRing}`}>Explore locations</a>}
     </div>
   )
 }
@@ -314,11 +314,11 @@ export function ActivityNextSteps({ activity }: { activity: Activity }) {
           const item = nextStepContent[step]
           const dark = index === 0
           return (
-            <div key={step} className={`flex flex-col rounded-3xl p-6 ${dark ? 'bg-[#06263b] text-white' : 'bg-white ring-1 ring-[#06263b]/5'}`}>
-              <p className={`text-xs font-extrabold uppercase tracking-[0.2em] ${dark ? 'text-[#8fe8f4]' : 'text-[#c95a22]'}`}>{item.eyebrow}</p>
+            <div key={step} className={`flex flex-col rounded-3xl p-6 ${dark ? 'bg-ink text-white' : 'bg-white ring-1 ring-ink/5'}`}>
+              <p className={`text-xs font-extrabold uppercase tracking-[0.2em] ${dark ? 'text-teal-pale' : 'text-teal-strong'}`}>{item.eyebrow}</p>
               <h3 className="mt-3 font-display text-xl font-bold">{item.title}</h3>
-              <p className={`mt-2 flex-1 text-sm leading-6 ${dark ? 'text-white/70' : 'text-[#57717b]'}`}>{item.text}</p>
-              <a href={item.href} className={`mt-5 inline-flex min-h-11 items-center text-sm font-bold ${dark ? 'text-[#f5b82e]' : 'text-[#0b7f95]'}`}>{item.cta} <ArrowRight className="ml-1 size-4" aria-hidden /></a>
+              <p className={`mt-2 flex-1 text-sm leading-6 ${dark ? 'text-white/70' : 'text-slate'}`}>{item.text}</p>
+              <a href={item.href} className={`mt-5 inline-flex min-h-11 items-center text-sm font-bold ${dark ? 'text-sand' : 'text-teal'}`}>{item.cta} <ArrowRight className="ml-1 size-4" aria-hidden /></a>
             </div>
           )
         })}
@@ -329,10 +329,10 @@ export function ActivityNextSteps({ activity }: { activity: Activity }) {
 
 export function ActivityReviews({ activity }: { activity: Activity }) {
   return (
-    <section aria-labelledby="reviews-title" className="rounded-3xl bg-white p-6 ring-1 ring-[#06263b]/5 sm:p-8">
-      <MessageSquareQuote className="size-7 text-[#00a9c3]" strokeWidth={1.4} aria-hidden />
+    <section aria-labelledby="reviews-title" className="rounded-3xl bg-white p-6 ring-1 ring-ink/5 sm:p-8">
+      <MessageSquareQuote className="size-7 text-teal" strokeWidth={1.4} aria-hidden />
       <h2 id="reviews-title" className="mt-4 font-display text-2xl font-bold">Guest reviews</h2>
-      <p className="mt-2 max-w-xl text-sm leading-6 text-[#57717b]">No reviews yet. Only guests with a verified {activity.name.toLowerCase()} booking will be able to leave a review here.</p>
+      <p className="mt-2 max-w-xl text-sm leading-6 text-slate">No reviews yet. Only guests with a verified {activity.name.toLowerCase()} booking will be able to leave a review here.</p>
     </section>
   )
 }
@@ -347,14 +347,14 @@ export function ActivityFAQ({ activity }: { activity: Activity }) {
     <section aria-labelledby="faq-title">
       <Eyebrow>Good to know</Eyebrow>
       <h2 id="faq-title" className="mt-3 font-display text-3xl font-black"><RevealLines>Frequently asked questions</RevealLines></h2>
-      <div className="mt-6 divide-y divide-[#dfe6e5] overflow-hidden rounded-3xl bg-white ring-1 ring-[#06263b]/5">
+      <div className="mt-6 divide-y divide-line overflow-hidden rounded-3xl bg-white ring-1 ring-ink/5">
         {activity.faqs.map((faq) => (
           <details key={faq.question} className="group">
-            <summary className={`flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 px-6 py-4 font-display font-bold hover:bg-[#f8faf8] [&::-webkit-details-marker]:hidden ${focusRing}`}>
+            <summary className={`flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 px-6 py-4 font-display font-bold hover:bg-paper-bright [&::-webkit-details-marker]:hidden ${focusRing}`}>
               {faq.question}
-              <ChevronDown className="size-5 shrink-0 text-[#00a9c3] transition group-open:rotate-180" aria-hidden />
+              <ChevronDown className="size-5 shrink-0 text-teal transition group-open:rotate-180" aria-hidden />
             </summary>
-            <div className="px-6 pb-5 text-sm leading-6 text-[#3d5862]">{faq.answer ?? <Pending>Answer awaiting approved content.</Pending>}</div>
+            <div className="px-6 pb-5 text-sm leading-6 text-slate-strong">{faq.answer ?? <Pending>Answer awaiting approved content.</Pending>}</div>
           </details>
         ))}
       </div>
@@ -364,13 +364,15 @@ export function ActivityFAQ({ activity }: { activity: Activity }) {
 
 export function ActivityFinalCTA({ bookHref = '#book' }: { bookHref?: string }) {
   return (
-    <section className="relative overflow-hidden bg-[#f0783e] px-5 py-20 text-[#06263b] lg:px-8">
-      <div className="absolute -right-20 -top-28 size-96 rounded-full border-[52px] border-white/10" aria-hidden />
-      <div className="relative mx-auto flex max-w-7xl flex-col justify-between gap-8 lg:flex-row lg:items-end">
-        <h2 className="max-w-2xl font-display text-4xl font-black sm:text-5xl"><RevealLines>Your next adventure<br />is waiting.</RevealLines></h2>
+    <section className="bg-sand px-5 py-20 text-ink lg:px-8 lg:py-24">
+      <div className="mx-auto flex max-w-7xl flex-col justify-between gap-8 lg:flex-row lg:items-end">
+        <div>
+          <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-ink/60">Ready when you are</p>
+          <h2 className="mt-3 max-w-2xl font-display text-4xl font-black tracking-tight sm:text-6xl"><RevealLines>Your next adventure<br />is waiting.</RevealLines></h2>
+        </div>
         <div className="flex flex-wrap gap-3">
-          <a href={bookHref} className="inline-flex min-h-12 items-center rounded-full bg-[#06263b] px-6 text-sm font-extrabold uppercase tracking-[0.1em] text-white">Find a session <ArrowRight className="ml-2 size-4" aria-hidden /></a>
-          <a href={ROUTES.locations} className="inline-flex min-h-12 items-center rounded-full border border-[#06263b]/30 px-6 text-sm font-bold">Explore locations</a>
+          <a href={bookHref} className={`inline-flex min-h-12 items-center gap-2 rounded-full bg-ink px-7 text-sm font-semibold text-white transition hover:bg-ink-soft ${focusRing}`}>Find a session <ArrowRight className="size-4" aria-hidden /></a>
+          <a href={ROUTES.locations} className={`inline-flex min-h-12 items-center rounded-full border border-ink/30 px-7 text-sm font-semibold transition hover:border-ink ${focusRing}`}>Explore locations</a>
         </div>
       </div>
     </section>
@@ -380,12 +382,12 @@ export function ActivityFinalCTA({ bookHref = '#book' }: { bookHref?: string }) 
 export function ActivityMobileCTA({ activity }: { activity: Activity }) {
   const status = activityStatus(activity)
   return (
-    <div className="fixed inset-x-4 bottom-4 z-20 flex items-center gap-3 rounded-2xl border border-white/30 bg-[#06263b]/95 p-2 pl-4 text-white shadow-xl backdrop-blur-md lg:hidden">
+    <div className="fixed inset-x-4 bottom-4 z-20 flex items-center gap-3 rounded-2xl border border-white/30 bg-ink/95 p-2 pl-4 text-white shadow-xl backdrop-blur-md lg:hidden">
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-bold">{activity.name}</p>
         <p className="truncate text-xs text-white/70">{status === 'available' ? 'Sessions available' : 'Price to be confirmed'}</p>
       </div>
-      <a href="#book" className={`inline-flex min-h-11 items-center rounded-xl bg-[#f5b82e] px-5 text-xs font-extrabold uppercase text-[#06263b] ${focusRing}`}>{bookableOfferings(activity).length ? 'Book now' : 'Details'}</a>
+      <a href="#book" className={`inline-flex min-h-11 items-center rounded-xl bg-sand px-5 text-xs font-extrabold uppercase text-ink ${focusRing}`}>{bookableOfferings(activity).length ? 'Book now' : 'Details'}</a>
     </div>
   )
 }

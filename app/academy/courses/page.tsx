@@ -18,7 +18,7 @@ export default function CoursesPage() {
       <AcademyHero
         image={HERO_IMAGES.academyCourses}
         eyebrow="Course catalogue"
-        title={<>Find the course that<br /><span className="text-[#f5b82e]">moves you forward.</span></>}
+        title={<>Find the course that<br /><span className="text-sand">moves you forward.</span></>}
         description="Explore paddlesport learning, personal skills development and professional pathways through the Bond Safari Academy."
         breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Academy', href: '/academy' }, { label: 'Courses' }]}
       />

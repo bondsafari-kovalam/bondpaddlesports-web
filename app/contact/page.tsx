@@ -1,13 +1,11 @@
 import type { Metadata } from 'next'
 import { ContactFormProvider } from '@/components/contact/contact-form'
 import {
-  ContactFAQ,
   ContactFinalCTA,
   ContactFormSection,
   ContactHero,
   ContactLocations,
   ContactMobileBar,
-  ContactOptions,
   GroupAndAcademyBanners,
   QuickHelp,
 } from '@/components/contact/contact-sections'
@@ -26,15 +24,13 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <ContactFormProvider>
-      <main className="min-h-screen overflow-hidden bg-[#f6f3ec] text-[#06263b]">
+      <main className="min-h-screen overflow-x-clip bg-paper text-ink">
         <SiteHeader />
         <ContactHero />
-        <ContactOptions />
         <ContactFormSection />
         <ContactLocations />
         <QuickHelp />
         <GroupAndAcademyBanners />
-        <ContactFAQ />
         <ContactFinalCTA />
         <SiteFooter />
         <ContactMobileBar />

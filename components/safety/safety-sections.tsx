@@ -1,42 +1,75 @@
 import type { ReactNode } from 'react'
 import {
-  AlertCircle, ArrowRight, Backpack, Bird, CalendarClock, ChevronDown, ClipboardCheck, Clock, CloudSun, Compass, FileText,
-  Hand, Heart, Home, Leaf, LifeBuoy, ListChecks, Mail, MapPin, MessageCircle, Mountain, Phone, Recycle, Shirt, ShieldCheck, Sparkles, Users, Waves,
+  AlertCircle, ArrowRight, Backpack, Bird, CalendarClock, ChevronDown, CircleHelp, ClipboardCheck, CloudSun, FileText,
+  Hand, Home, Leaf, ListChecks, Mail, MessageCircle, Phone, Recycle, Users, Waves,
   type LucideIcon,
 } from 'lucide-react'
+import { ActivityVisual } from '@/components/activities/activity-card'
 import { ComingSoonLink } from '@/components/about/about-sections'
 import { Eyebrow, focusRing } from '@/components/locations/primitives'
-import { Ripples } from '@/components/membership/membership-sections'
+import { PaddleChecklist } from '@/components/safety/paddle-checklist'
 import { activities, activityHref } from '@/lib/activities'
+import { BOND_PHOTOS } from '@/lib/gallery'
 import { CONTACT, ROUTES } from '@/lib/site'
-import { RevealGroup, RevealLines } from '@/components/motion/reveal'
+import { ParallaxImage, Reveal, RevealGroup, RevealLines } from '@/components/motion/reveal'
 import { HeroBackdrop } from '@/components/site/hero-backdrop'
+import { SectionNav } from '@/components/site/section-nav'
 import { HERO_IMAGES } from '@/lib/hero-images'
 
-const gold = `inline-flex min-h-12 items-center justify-center rounded-full bg-[#f5b82e] px-6 text-sm font-extrabold uppercase tracking-[0.12em] text-[#06263b] transition hover:bg-white ${focusRing}`
-const ghost = `inline-flex min-h-12 items-center justify-center rounded-full border border-white/40 px-6 text-sm font-bold text-white transition hover:bg-white/10 ${focusRing}`
-const dark = `inline-flex min-h-12 items-center justify-center rounded-full bg-[#06263b] px-6 text-sm font-extrabold uppercase tracking-[0.1em] text-white transition hover:bg-[#0b3850] ${focusRing}`
-const textLink = `inline-flex min-h-11 items-center text-sm font-bold text-[#0b7f95] hover:text-[#06263b] ${focusRing}`
+const dark = `inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-ink px-7 text-sm font-semibold text-white transition hover:bg-ink-soft ${focusRing}`
+const textLink = `inline-flex min-h-11 w-fit items-center gap-1.5 border-b border-ink/25 text-sm font-semibold text-ink transition hover:border-ink ${focusRing}`
 
 export function SafetyHero() {
+  const shortcuts: { icon: LucideIcon; label: string; href: string }[] = [
+    { icon: ListChecks, label: 'Prepare for my session', href: '#before-you-paddle' },
+    { icon: CloudSun, label: 'Check conditions', href: '#conditions' },
+    { icon: Leaf, label: 'Paddle responsibly', href: '#responsible-tourism' },
+    { icon: CircleHelp, label: 'Read the FAQs', href: '#faq' },
+  ]
   return (
-    <section className="relative overflow-hidden bg-[#06263b] pb-20 pt-36 text-white lg:pb-32 lg:pt-48">
-      <HeroBackdrop src={HERO_IMAGES.safety} aboveWave />
-      <Ripples className="absolute -right-40 -top-24 size-[46rem] opacity-80" />
-      <Ripples className="absolute -bottom-64 left-0 size-[34rem] opacity-40" tone="gold" />
-      <svg viewBox="0 0 1440 120" className="absolute inset-x-0 bottom-0 w-full text-[#f6f3ec]" preserveAspectRatio="none" aria-hidden><path d="M0 80 C 240 40 480 120 720 80 S 1200 40 1440 80 V120 H0Z" fill="currentColor" /></svg>
+    <section className="relative overflow-hidden bg-ink pb-16 pt-36 text-white lg:pb-20 lg:pt-44">
+      <HeroBackdrop src={HERO_IMAGES.safety} />
       <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
         <div className="max-w-3xl">
-          <p className="mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-[#8fe8f4]"><span className="h-px w-10 bg-[#f5b82e]" /> Safety & Responsible Tourism</p>
-          <h1 className="font-display text-5xl font-black leading-[.95] tracking-tight sm:text-7xl"><RevealLines>Adventure is better<br /><span className="text-[#f5b82e]">when we care.</span></RevealLines></h1>
+          <p className="mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-teal-pale"><span className="h-px w-10 bg-sand" /> Safety & Responsible Tourism</p>
+          <h1 className="font-display text-5xl font-black leading-[.95] tracking-tight sm:text-7xl"><RevealLines>Adventure is better<br /><span className="text-sand">when we care.</span></RevealLines></h1>
           <p className="mt-7 max-w-xl text-base leading-7 text-white/80 sm:text-lg">Enjoy Kerala’s waterways with thoughtful preparation, responsible paddling, and respect for the places and people that make every experience special.</p>
-          <div className="mt-9 flex flex-wrap gap-3">
-            <a href="#before-you-paddle" className={gold}>Before you paddle <ArrowRight className="ml-2 size-4" aria-hidden /></a>
-            <a href="#responsible-tourism" className={ghost}>Our responsible tourism approach</a>
-          </div>
         </div>
+        <Reveal delay={0.4} className="mt-12 border-t border-white/15 pt-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/60">I want to…</p>
+          <ul className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+            {shortcuts.map(({ icon: Icon, label, href }) => (
+              <li key={href}>
+                <a href={href} className={`group flex min-h-14 items-center justify-between gap-3 rounded-2xl border border-white/20 bg-white/5 px-4 text-sm font-semibold backdrop-blur-sm transition hover:border-sand hover:bg-sand hover:text-ink ${focusRing}`}>
+                  <span className="flex items-center gap-3"><Icon className="size-5 shrink-0" aria-hidden />{label}</span>
+                  <ArrowRight className="size-4 shrink-0 transition group-hover:translate-x-0.5" aria-hidden />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </Reveal>
       </div>
     </section>
+  )
+}
+
+const NAV = [
+  { id: 'approach', label: 'Approach' },
+  { id: 'before-you-paddle', label: 'Checklist' },
+  { id: 'equipment', label: 'Equipment' },
+  { id: 'conditions', label: 'Conditions' },
+  { id: 'responsible-tourism', label: 'Responsible tourism' },
+  { id: 'groups', label: 'Groups' },
+  { id: 'faq', label: 'FAQs' },
+]
+
+export function SafetyNav() {
+  return (
+    <div className="sticky top-0 z-20 border-b border-line bg-paper/85 backdrop-blur-xl">
+      <div className="mx-auto max-w-7xl px-5 py-2.5 lg:px-8">
+        <SectionNav sections={NAV} label="Safety page sections" layoutId="safety-nav-pill" />
+      </div>
+    </div>
   )
 }
 
@@ -48,52 +81,41 @@ export function SafetyApproachSection() {
     [CloudSun, 'Respect changing conditions', 'Weather, water conditions, and operational decisions can affect whether a session can proceed.'],
   ]
   return (
-    <section className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28" aria-labelledby="approach-title">
-      <div className="grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:items-center">
+    <section id="approach" className="mx-auto max-w-7xl scroll-mt-16 px-5 py-24 lg:px-8 lg:py-32" aria-labelledby="approach-title">
+      <div className="grid gap-12 lg:grid-cols-[1.2fr_1fr] lg:items-center lg:gap-16">
         <div>
           <Eyebrow>Our approach to safety</Eyebrow>
           <h2 id="approach-title" className="mt-3 font-display text-4xl font-black tracking-tight sm:text-5xl"><RevealLines>Enjoy the adventure. Respect the conditions.</RevealLines></h2>
-          <p className="mt-5 text-base leading-7 text-[#3d5862]">Every paddling experience depends on the activity, location, water conditions, and the people taking part. We encourage every participant to understand the requirements of their chosen activity, follow the guidance provided by the team, and communicate any concerns before getting on the water.</p>
-          <RevealGroup as="ul" className="mt-10 grid gap-3 sm:grid-cols-2">{principles.map(([Icon, title, text]) => (
-              <li key={title} className="rounded-3xl bg-white p-6 ring-1 ring-[#06263b]/5">
-                <span className="flex size-11 items-center justify-center rounded-full bg-[#e1f6fa]"><Icon className="size-5 text-[#0b7f95]" aria-hidden /></span>
-                <h3 className="mt-5 font-display text-lg font-bold">{title}</h3>
-                <p className="mt-2 text-sm leading-6 text-[#57717b]">{text}</p>
+          <p className="mt-5 text-base leading-7 text-slate-strong">Every paddling experience depends on the activity, location, water conditions, and the people taking part. We encourage every participant to understand the requirements of their chosen activity, follow the guidance provided by the team, and communicate any concerns before getting on the water.</p>
+          <RevealGroup as="ul" className="mt-10 grid gap-px overflow-hidden rounded-3xl bg-line sm:grid-cols-2">{principles.map(([Icon, title, text], i) => (
+              <li key={title} className="bg-paper-bright p-6">
+                <div className="flex items-center justify-between"><Icon className="size-6 text-teal-strong" strokeWidth={1.5} aria-hidden /><span className="text-xs font-semibold tracking-[0.3em] text-slate-light">0{i + 1}</span></div>
+                <h3 className="mt-6 font-display text-lg font-bold tracking-tight">{title}</h3>
+                <p className="mt-2 text-sm leading-6 text-slate">{text}</p>
               </li>
             ))}
           </RevealGroup>
         </div>
-        <img src={HERO_IMAGES.academy} alt="Paddlers wearing helmets and buoyancy aids prepare for a session" className="aspect-[4/5] w-full rounded-3xl object-cover" />
+        <div className="relative">
+          <ParallaxImage src={BOND_PHOTOS.guidesCarryingKayak.src} alt={BOND_PHOTOS.guidesCarryingKayak.alt} className="aspect-[5/4] rounded-3xl" strength={4} />
+        </div>
       </div>
     </section>
   )
 }
 
 export function BeforeYouPaddle() {
-  const checks: [LucideIcon, string][] = [
-    [FileText, 'Read the activity description and participation requirements.'],
-    [MapPin, 'Check your booking confirmation and meeting-point instructions.'],
-    [Clock, 'Arrive at the time communicated for your session.'],
-    [Users, 'Follow the team’s instructions before and during the activity.'],
-    [Shirt, 'Wear clothing appropriate for the activity and conditions.'],
-    [LifeBuoy, 'Use the equipment provided or approved for your session.'],
-    [Heart, 'Tell the team about relevant participation or accessibility requirements before the session.'],
-    [ShieldCheck, 'Follow any activity-specific swimming, age, health or fitness requirements.'],
-    [MessageCircle, 'Ask questions if you are unsure about an instruction or requirement.'],
-  ]
   return (
-    <section id="before-you-paddle" className="scroll-mt-6 bg-[#06263b] px-5 py-20 text-white lg:px-8 lg:py-28" aria-labelledby="checklist-title">
+    <section id="before-you-paddle" className="scroll-mt-16 bg-ink px-5 py-24 text-white lg:px-8 lg:py-32" aria-labelledby="checklist-title">
       <div className="mx-auto max-w-7xl">
-        <Eyebrow tone="cyan">Before you paddle</Eyebrow>
-        <h2 id="checklist-title" className="mt-3 max-w-3xl font-display text-4xl font-black sm:text-5xl"><RevealLines>A few things to check <span className="text-[#f5b82e]">before you head out.</span></RevealLines></h2>
-        <RevealGroup as="ul" className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{checks.map(([Icon, text]) => (
-            <li key={text} className="flex gap-4 rounded-3xl bg-white/[.06] p-5">
-              <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[#00c8e8]/15"><Icon className="size-5 text-[#00c8e8]" aria-hidden /></span>
-              <span className="pt-2 text-sm leading-6 text-white/85">{text}</span>
-            </li>
-          ))}
-        </RevealGroup>
-        <p className="mt-8 flex gap-3 rounded-2xl bg-[#f5b82e] p-5 text-sm font-semibold text-[#06263b]"><AlertCircle className="size-5 shrink-0" aria-hidden />Requirements vary by activity and location. Review the information provided for your specific session before arriving.</p>
+        <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr] lg:items-end">
+          <div>
+            <Eyebrow tone="cyan">Before you paddle</Eyebrow>
+            <h2 id="checklist-title" className="mt-3 max-w-3xl font-display text-4xl font-black tracking-tight sm:text-5xl"><RevealLines>A few things to check<br /><span className="text-sand">before you head out.</span></RevealLines></h2>
+          </div>
+          <p className="max-w-md text-sm leading-6 text-white/70">Tick each one off as you go. Requirements vary by activity and location, so review the information for your specific session before arriving.</p>
+        </div>
+        <div className="mt-12"><PaddleChecklist /></div>
       </div>
     </section>
   )
@@ -106,22 +128,24 @@ export function EquipmentGuidance() {
     [Hand, 'Speak up before starting', 'Raise questions or concerns with the team before your activity begins.'],
   ]
   return (
-    <section className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28" aria-labelledby="equipment-title">
-      <div className="grid gap-12 lg:grid-cols-[1fr_1.2fr] lg:items-center">
-        <img src={HERO_IMAGES.safety} alt="Kayak and life jackets ready beside the water" className="aspect-[4/3] w-full rounded-3xl object-cover lg:aspect-[4/5]" />
+    <section id="equipment" className="mx-auto max-w-7xl scroll-mt-16 px-5 py-24 lg:px-8 lg:py-32" aria-labelledby="equipment-title">
+      <div className="grid gap-12 lg:grid-cols-[1fr_1.2fr] lg:items-center lg:gap-16">
+        <div className="relative">
+          <ParallaxImage src={BOND_PHOTOS.paddlesAndBuoyancyAid.src} alt={BOND_PHOTOS.paddlesAndBuoyancyAid.alt} className="aspect-[4/3] rounded-3xl lg:aspect-[4/5]" strength={6} />
+        </div>
         <div>
           <Eyebrow>Equipment & guidance</Eyebrow>
-          <h2 id="equipment-title" className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>The right preparation makes a difference.</RevealLines></h2>
-          <p className="mt-5 text-base leading-7 text-[#3d5862]">Different paddling activities and locations have different equipment and preparation needs. Follow the instructions provided for your session and ask the team if you are unsure what to bring.</p>
-          <ul className="mt-8 space-y-3">
+          <h2 id="equipment-title" className="mt-3 font-display text-4xl font-black tracking-tight sm:text-5xl"><RevealLines>The right preparation makes a difference.</RevealLines></h2>
+          <p className="mt-5 text-base leading-7 text-slate-strong">Different paddling activities and locations have different equipment and preparation needs. Follow the instructions provided for your session and ask the team if you are unsure what to bring.</p>
+          <ul className="mt-8 divide-y divide-line border-y border-line">
             {cards.map(([Icon, title, text]) => (
-              <li key={title} className="flex gap-4 rounded-2xl bg-white p-5 ring-1 ring-[#06263b]/5">
-                <Icon className="mt-0.5 size-6 shrink-0 text-[#00a9c3]" aria-hidden />
-                <span><span className="block font-display text-lg font-bold">{title}</span><span className="text-sm text-[#57717b]">{text}</span></span>
+              <li key={title} className="flex gap-4 py-5">
+                <Icon className="mt-0.5 size-6 shrink-0 text-teal-strong" strokeWidth={1.5} aria-hidden />
+                <span><span className="block font-display text-lg font-bold tracking-tight">{title}</span><span className="text-sm text-slate">{text}</span></span>
               </li>
             ))}
           </ul>
-          <a href={ROUTES.activities} className={`mt-8 ${dark}`}>Explore activities</a>
+          <a href={ROUTES.activities} className={`mt-8 ${dark}`}>Explore activities <ArrowRight className="size-4" aria-hidden /></a>
         </div>
       </div>
     </section>
@@ -131,20 +155,23 @@ export function EquipmentGuidance() {
 export function WeatherConditions() {
   const items: [LucideIcon, string][] = [[CloudSun, 'Weather conditions'], [Waves, 'Water and local environmental conditions'], [Users, 'Activity and participant suitability'], [CalendarClock, 'Operational decisions and session updates']]
   return (
-    <section id="conditions" className="scroll-mt-6 bg-[#eef2ed] px-5 py-20 lg:px-8 lg:py-28" aria-labelledby="conditions-title">
+    <section id="conditions" className="scroll-mt-16 border-t border-line px-5 py-24 lg:px-8 lg:py-32" aria-labelledby="conditions-title">
       <div className="mx-auto max-w-7xl">
-        <img src={HERO_IMAGES.about} alt="Calm Kerala backwaters framed by coconut palms" className="aspect-[16/7] w-full rounded-3xl object-cover" />
-        <div className="mt-12 grid gap-10 lg:grid-cols-[1.1fr_1fr]">
+        <div className="relative">
+          <ParallaxImage src={BOND_PHOTOS.threeKayaksOnBackwater.src} alt={BOND_PHOTOS.threeKayaksOnBackwater.alt} className="aspect-[16/9] rounded-3xl sm:aspect-[16/7]" strength={6} />
+        </div>
+        <div className="mt-14 grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
           <div>
             <Eyebrow>Weather & water conditions</Eyebrow>
-            <h2 id="conditions-title" className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>Nature sets the conditions.</RevealLines></h2>
-            <p className="mt-5 text-base leading-7 text-[#3d5862]">Water-based activities depend on environmental and operational conditions. Weather, water levels, currents, visibility, and other local factors may affect whether an activity can safely proceed.</p>
-            <RevealGroup as="ul" className="mt-8 grid gap-3 sm:grid-cols-2">{items.map(([Icon, text]) => <li key={text} className="flex items-center gap-3 rounded-2xl bg-white p-4 text-sm font-semibold"><Icon className="size-5 shrink-0 text-[#00a9c3]" aria-hidden />{text}</li>)}
+            <h2 id="conditions-title" className="mt-3 font-display text-4xl font-black tracking-tight sm:text-5xl"><RevealLines>Nature sets the conditions.</RevealLines></h2>
+            <p className="mt-5 text-base leading-7 text-slate-strong">Water-based activities depend on environmental and operational conditions. Weather, water levels, currents, visibility, and other local factors may affect whether an activity can safely proceed.</p>
+            <p className="mt-8 text-xs font-semibold uppercase tracking-[0.2em] text-slate">What decides if a session goes ahead</p>
+            <RevealGroup as="ul" className="mt-3 divide-y divide-line border-y border-line">{items.map(([Icon, text]) => <li key={text} className="flex items-center gap-3 py-4 text-sm font-semibold"><Icon className="size-5 shrink-0 text-teal-strong" aria-hidden />{text}</li>)}
             </RevealGroup>
           </div>
-          <aside className="h-fit rounded-3xl bg-[#0b3850] p-7 text-white" aria-labelledby="session-change">
-            <AlertCircle className="size-8 text-[#f5b82e]" strokeWidth={1.4} aria-hidden />
-            <h3 id="session-change" className="mt-5 font-display text-2xl font-bold">Your session may need to change.</h3>
+          <aside className="h-fit rounded-3xl bg-ink p-8 text-white lg:mt-20" aria-labelledby="session-change">
+            <AlertCircle className="size-8 text-sand" strokeWidth={1.4} aria-hidden />
+            <h3 id="session-change" className="mt-5 font-display text-2xl font-bold tracking-tight">Your session may need to change.</h3>
             <p className="mt-3 text-sm leading-6 text-white/75">Where conditions or operational requirements affect a session, follow the instructions and updates communicated by Bond Safari. Any rescheduling, cancellation, or refund will be handled according to the applicable booking policy, which will be confirmed through your official booking information.</p>
             <div className="mt-6"><ComingSoonLink tone="dark">Booking & cancellation policy</ComingSoonLink></div>
           </aside>
@@ -161,49 +188,27 @@ const tourismPrinciples: { icon: LucideIcon; title: string; points: string[] }[]
   { icon: Waves, title: 'Use waterways responsibly', points: ['Follow the instructions given for the activity and location.', 'Respect other people using the waterways.', 'Follow designated access and meeting-point instructions where provided.'] },
 ]
 
+/** Responsible tourism, including the local culture and community guidance that used to be its own section. */
 export function ResponsibleTourismSection() {
   return (
-    <section id="responsible-tourism" className="scroll-mt-6 relative overflow-hidden bg-[#eaf1e6] px-5 py-20 lg:px-8 lg:py-28" aria-labelledby="tourism-title">
+    <section id="responsible-tourism" className="scroll-mt-16 bg-paper-bright px-5 py-24 lg:px-8 lg:py-32" aria-labelledby="tourism-title">
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-end">
           <div>
             <Eyebrow>Responsible tourism</Eyebrow>
-            <h2 id="tourism-title" className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>Explore with respect. Leave a lighter footprint.</RevealLines></h2>
+            <h2 id="tourism-title" className="mt-3 font-display text-4xl font-black tracking-tight sm:text-5xl"><RevealLines>Explore with respect. Leave a lighter footprint.</RevealLines></h2>
           </div>
-          <p className="text-base leading-7 text-[#3d5862]">Kerala’s waterways connect natural landscapes, local communities, and everyday life. Responsible tourism means enjoying these places thoughtfully and respecting the environment and people who share them.</p>
+          <p className="text-base leading-7 text-slate-strong">Kerala’s waterways connect natural landscapes, local communities, and everyday life. Responsible tourism means enjoying these places thoughtfully, approaching each destination with curiosity and care, and respecting the environment and people who share them.</p>
         </div>
-        <img src={HERO_IMAGES.activities} alt="Kerala backwaters and palm-lined waterways" className="mt-12 aspect-[16/6] w-full rounded-3xl object-cover" />
-        <RevealGroup className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{tourismPrinciples.map(({ icon: Icon, title, points }) => (
-            <article key={title} className="rounded-3xl bg-white p-6 ring-1 ring-[#14785a]/10">
-              <Icon className="size-8 text-[#14785a]" strokeWidth={1.4} aria-hidden />
-              <h3 className="mt-6 font-display text-xl font-bold">{title}</h3>
-              <ul className="mt-4 space-y-2 text-sm leading-6 text-[#3d5862]">{points.map((point) => <li key={point} className="flex gap-2"><Leaf className="mt-1.5 size-3 shrink-0 text-[#14785a]" aria-hidden />{point}</li>)}</ul>
+        <RevealGroup className="mt-14 grid border-t border-line sm:grid-cols-2 lg:grid-cols-4">{tourismPrinciples.map(({ icon: Icon, title, points }) => (
+            <article key={title} className="border-b border-line py-8 sm:odd:pr-6 sm:even:pl-6 lg:border-b-0 lg:border-r lg:px-6 lg:first:pl-0 lg:last:border-r-0 lg:last:pr-0">
+              <Icon className="size-7 text-success" strokeWidth={1.4} aria-hidden />
+              <h3 className="mt-6 font-display text-xl font-bold tracking-tight">{title}</h3>
+              <ul className="mt-4 space-y-2 text-sm leading-6 text-slate-strong">{points.map((point) => <li key={point} className="flex gap-2"><Leaf className="mt-1.5 size-3 shrink-0 text-success" aria-hidden />{point}</li>)}</ul>
             </article>
           ))}
         </RevealGroup>
-      </div>
-    </section>
-  )
-}
-
-export function LocalCulture() {
-  const highlights: [LucideIcon, string][] = [[Home, 'Respect local customs and shared spaces.'], [Users, 'Be considerate of residents and other water users.'], [Mountain, 'Appreciate the local landscape without disturbing it.']]
-  return (
-    <section className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28" aria-labelledby="culture-title">
-      <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:items-center">
-        <div>
-          <Eyebrow>Local culture & community</Eyebrow>
-          <h2 id="culture-title" className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>Every place has a story.</RevealLines></h2>
-          <p className="mt-5 text-base leading-7 text-[#3d5862]">Exploring Kerala’s waterways is also an opportunity to appreciate the places and communities connected to them. Travel thoughtfully, respect local people, and approach each destination with curiosity and care.</p>
-          <a href={ROUTES.locations} className={`mt-8 ${dark}`}>Explore our locations</a>
-        </div>
-        <RevealGroup as="ul" className="grid gap-3 sm:grid-cols-3">{highlights.map(([Icon, text], i) => (
-            <li key={text} className={`flex flex-col rounded-3xl p-6 ${i === 1 ? 'bg-[#0b3850] text-white sm:translate-y-6' : 'bg-white ring-1 ring-[#06263b]/5'}`}>
-              <Icon className={`size-8 ${i === 1 ? 'text-[#f5b82e]' : 'text-[#00a9c3]'}`} strokeWidth={1.4} aria-hidden />
-              <p className="mt-10 font-display text-lg font-bold leading-snug">{text}</p>
-            </li>
-          ))}
-        </RevealGroup>
+        <a href={ROUTES.locations} className={`mt-10 ${textLink}`}>Explore our locations <ArrowRight className="size-4" aria-hidden /></a>
       </div>
     </section>
   )
@@ -218,22 +223,21 @@ export function GroupPreparation() {
     'Participants should follow the instructions provided for their session.',
   ]
   return (
-    <section className="bg-white px-5 py-20 lg:px-8 lg:py-24" aria-labelledby="groups-title">
-      <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1fr_1.4fr] lg:items-start">
-        <div>
+    <section id="groups" className="scroll-mt-16 border-t border-line px-5 py-24 lg:px-8 lg:py-32" aria-labelledby="groups-title">
+      <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1fr_1.4fr] lg:items-start lg:gap-16">
+        <div className="lg:sticky lg:top-24">
           <Eyebrow>Groups & families</Eyebrow>
-          <h2 id="groups-title" className="mt-3 font-display text-4xl font-black"><RevealLines>Good experiences begin with good preparation.</RevealLines></h2>
-          <p className="mt-4 text-sm leading-6 text-[#57717b]">Not every activity suits every participant, and arrangements vary by location. The team will discuss what’s possible for your group.</p>
-          <a href={ROUTES.groups} className={`mt-8 ${dark}`}>Plan a group experience</a>
+          <h2 id="groups-title" className="mt-3 font-display text-4xl font-black tracking-tight sm:text-5xl"><RevealLines>Good experiences begin with good preparation.</RevealLines></h2>
+          <p className="mt-4 text-sm leading-6 text-slate">Not every activity suits every participant, and arrangements vary by location. The team will discuss what’s possible for your group.</p>
+          <a href={ROUTES.groups} className={`mt-8 ${dark}`}>Plan a group experience <ArrowRight className="size-4" aria-hidden /></a>
         </div>
-        <ol className="space-y-3">
-          {points.map((point, i) => (
-            <li key={point} className="flex gap-4 rounded-2xl bg-[#f6f3ec] p-5">
-              <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-[#06263b] font-display text-sm font-bold text-white">{i + 1}</span>
-              <p className="pt-1.5 text-sm leading-6">{point}</p>
+        <RevealGroup as="ol" className="divide-y divide-line border-y border-line">{points.map((point, i) => (
+            <li key={point} className="flex gap-5 py-6">
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-ink font-display text-sm font-bold text-white">{i + 1}</span>
+              <p className="pt-1.5 text-base leading-7">{point}</p>
             </li>
           ))}
-        </ol>
+        </RevealGroup>
       </div>
     </section>
   )
@@ -251,21 +255,26 @@ const faqs: { q: string; a: ReactNode }[] = [
   { q: 'What if I have an accessibility requirement?', a: 'Let the team know before your visit so they can discuss suitable arrangements. Arrangements vary by activity and location.' },
   { q: 'Can I participate if I have a health or fitness concern?', a: 'Please raise it with the team before booking. Activity-specific health and fitness requirements apply and will be confirmed for your session.' },
   { q: 'What happens if Bond Safari needs to cancel a session?', a: 'You’ll be told through the contact details on your booking. Rescheduling, cancellation and refunds follow the applicable booking policy.' },
-  { q: 'How can I find the requirements for my chosen activity?', a: <>Each activity page has a safety and preparation section, and location pages list visitor information. <a href={ROUTES.activities} className="font-bold text-[#0b7f95]">Browse activities</a> or <a href={ROUTES.locations} className="font-bold text-[#0b7f95]">locations</a>.</> },
+  { q: 'How can I find the requirements for my chosen activity?', a: <>Each activity page has a safety and preparation section, and location pages list visitor information. <a href={ROUTES.activities} className="font-bold text-teal">Browse activities</a> or <a href={ROUTES.locations} className="font-bold text-teal">locations</a>.</> },
 ]
 
 export function SafetyFAQ() {
   return (
-    <section className="mx-auto max-w-4xl px-5 py-20 lg:py-28" aria-labelledby="faq-title">
-      <Eyebrow>Safety FAQs</Eyebrow>
-      <h2 id="faq-title" className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>Questions people ask.</RevealLines></h2>
-      <div className="mt-10 divide-y divide-[#dfe6e5] overflow-hidden rounded-3xl bg-white ring-1 ring-[#06263b]/5">
-        {faqs.map(({ q, a }) => (
-          <details key={q} className="group">
-            <summary className={`flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 px-6 py-4 font-display font-bold hover:bg-[#f8faf8] [&::-webkit-details-marker]:hidden ${focusRing}`}>{q}<ChevronDown className="size-5 shrink-0 text-[#00a9c3] transition group-open:rotate-180" aria-hidden /></summary>
-            <div className="px-6 pb-5 text-sm leading-6 text-[#3d5862]">{a}</div>
-          </details>
-        ))}
+    <section id="faq" className="scroll-mt-16 border-t border-line px-5 py-24 lg:px-8 lg:py-32" aria-labelledby="faq-title">
+      <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1fr_1.6fr]">
+        <div>
+          <Eyebrow>Safety FAQs</Eyebrow>
+          <h2 id="faq-title" className="mt-3 font-display text-4xl font-black tracking-tight sm:text-5xl"><RevealLines>Questions people ask.</RevealLines></h2>
+          <p className="mt-4 max-w-sm text-sm leading-6 text-slate">Still unsure about a requirement? <a href={ROUTES.contact} className="font-semibold text-teal underline-offset-4 hover:underline">Contact the team</a> before you book.</p>
+        </div>
+        <div className="divide-y divide-line border-y border-line">
+          {faqs.map(({ q, a }) => (
+            <details key={q} className="group">
+              <summary className={`flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-5 font-display text-lg font-bold transition hover:text-teal [&::-webkit-details-marker]:hidden ${focusRing}`}>{q}<span className="flex size-8 shrink-0 items-center justify-center rounded-full border border-line transition group-open:rotate-180 group-open:border-ink group-open:bg-ink group-open:text-white"><ChevronDown className="size-4" aria-hidden /></span></summary>
+              <div className="pb-6 pr-12 text-sm leading-6 text-slate-strong">{a}</div>
+            </details>
+          ))}
+        </div>
       </div>
     </section>
   )
@@ -276,86 +285,55 @@ const activityCopy: Record<string, string> = {
   canoeing: 'Check the details relevant to your canoeing session and location.',
   'stand-up-paddleboarding': 'Understand the participation requirements and preparation information for your SUP session.',
 }
-const activityIcons: Record<string, LucideIcon> = { kayaking: Waves, canoeing: Mountain, 'stand-up-paddleboarding': Compass }
 
 export function SafetyByActivity() {
   const core = activities.filter((activity) => activityCopy[activity.slug])
   return (
-    <section className="bg-white/60 px-5 py-20 lg:px-8 lg:py-24" aria-labelledby="by-activity-title">
+    <section className="border-t border-line px-5 py-24 lg:px-8 lg:py-32" aria-labelledby="by-activity-title">
       <div className="mx-auto max-w-7xl">
         <Eyebrow>Safety information by activity</Eyebrow>
-        <h2 id="by-activity-title" className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>Know your activity.</RevealLines></h2>
-        <RevealGroup className="mt-12 grid gap-4 md:grid-cols-3">{core.map((activity) => {
-            const Icon = activityIcons[activity.slug]
-            return (
-              <article key={activity.slug} className="flex flex-col rounded-3xl bg-white p-7 ring-1 ring-[#06263b]/5">
-                <Icon className="size-9 text-[#00a9c3]" strokeWidth={1.3} aria-hidden />
-                <h3 className="mt-8 font-display text-2xl font-bold">{activity.name}</h3>
-                <p className="mt-2 flex-1 text-sm leading-6 text-[#57717b]">{activityCopy[activity.slug]}</p>
-                <a href={`${activityHref(activity)}#safety`} className={`mt-6 ${textLink}`}>{activity.name} safety & preparation <ArrowRight className="ml-1 size-4" aria-hidden /></a>
-              </article>
-            )
-          })}
+        <h2 id="by-activity-title" className="mt-3 font-display text-4xl font-black tracking-tight sm:text-5xl"><RevealLines>Know your activity.</RevealLines></h2>
+        <RevealGroup className="mt-14 grid gap-x-8 gap-y-14 md:grid-cols-3">{core.map((activity) => (
+            <article key={activity.slug} className="group flex flex-col">
+              <a href={`${activityHref(activity)}#safety`} tabIndex={-1} aria-hidden className="block overflow-hidden rounded-3xl"><ActivityVisual activity={activity} className="aspect-[16/11]" /></a>
+              <h3 className="mt-6 font-display text-2xl font-bold tracking-tight">{activity.name}</h3>
+              <p className="mt-2 flex-1 text-sm leading-6 text-slate">{activityCopy[activity.slug]}</p>
+              <a href={`${activityHref(activity)}#safety`} className={`mt-5 ${textLink}`}>Safety & preparation <ArrowRight className="size-4 transition group-hover:translate-x-1" aria-hidden /></a>
+            </article>
+          ))}
         </RevealGroup>
       </div>
     </section>
   )
 }
 
-export function PolicyLinks() {
-  const policies = ['Booking terms & conditions', 'Cancellation & refund policy', 'Participant declaration / waiver', 'Privacy policy']
-  return (
-    <section className="mx-auto max-w-7xl px-5 pb-20 lg:px-8" aria-labelledby="policies-title">
-      <h2 id="policies-title" className="font-display text-2xl font-bold">Frequently needed policies</h2>
-      <p className="mt-2 text-sm text-[#57717b]">These policies are awaiting approval and will be linked here once published.</p>
-      <RevealGroup as="ul" className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{policies.map((policy) => (
-          <li key={policy} className="flex min-h-16 items-center gap-3 rounded-2xl border border-dashed border-[#06263b]/15 bg-white px-5 text-sm">
-            <FileText className="size-5 shrink-0 text-[#57717b]" aria-hidden />
-            <span><span className="block font-semibold">{policy}</span><span className="text-xs text-[#57717b]">Coming soon</span></span>
-          </li>
-        ))}
-      </RevealGroup>
-    </section>
-  )
-}
-
+/** Contact routes plus the policies visitors look for; the policies are listed honestly as not yet published. */
 export function SafetyHelp() {
   const channels = [
     CONTACT.phone && { icon: Phone, label: 'Call us', href: `tel:${CONTACT.phone.replace(/\s/g, '')}` },
     CONTACT.email && { icon: Mail, label: 'Email us', href: `mailto:${CONTACT.email}` },
     CONTACT.whatsapp && { icon: MessageCircle, label: 'WhatsApp', href: `https://wa.me/${CONTACT.whatsapp.replace(/\D/g, '')}` },
   ].filter(Boolean) as { icon: LucideIcon; label: string; href: string }[]
+  const policies = ['Booking terms & conditions', 'Cancellation & refund policy', 'Participant declaration / waiver', 'Privacy policy']
   return (
-    <section className="mx-auto max-w-7xl px-5 pb-20 lg:px-8 lg:pb-28" aria-labelledby="help-title">
-      <div className="flex flex-col justify-between gap-8 rounded-3xl bg-white p-8 ring-1 ring-[#06263b]/5 sm:p-12 lg:flex-row lg:items-center">
-        <div className="max-w-xl">
-          <Sparkles className="size-8 text-[#00a9c3]" strokeWidth={1.4} aria-hidden />
-          <h2 id="help-title" className="mt-5 font-display text-3xl font-black sm:text-4xl"><RevealLines>Questions before you paddle?</RevealLines></h2>
-          <p className="mt-3 text-base leading-7 text-[#3d5862]">Not sure which activity is right for you, or need to confirm a participation requirement? Contact the Bond Safari team before making your plans.</p>
+    <section className="bg-sand px-5 py-20 text-ink lg:px-8 lg:py-24" aria-labelledby="help-title">
+      <div className="mx-auto max-w-7xl">
+        <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
+          <div className="max-w-2xl">
+            <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-ink/60">Discover the water. Care for the place.</p>
+            <h2 id="help-title" className="mt-3 font-display text-4xl font-black tracking-tight sm:text-6xl"><RevealLines>Questions before<br />you paddle?</RevealLines></h2>
+            <p className="mt-4 text-base leading-7 text-ink/75">Not sure which activity is right for you, or need to confirm a participation requirement? Contact the Bond Safari team before making your plans.</p>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            {channels.length
+              ? channels.map(({ icon: Icon, label, href }) => <a key={label} href={href} className={dark}><Icon className="size-4" aria-hidden />{label}</a>)
+              : <a href={ROUTES.contact} className={dark}>Contact our team <ArrowRight className="size-4" aria-hidden /></a>}
+            <a href={ROUTES.locations} className={`inline-flex min-h-12 items-center rounded-full border border-ink/30 px-7 text-sm font-semibold transition hover:border-ink ${focusRing}`}>Explore locations</a>
+          </div>
         </div>
-        <div className="flex flex-wrap gap-3">
-          {channels.length
-            ? channels.map(({ icon: Icon, label, href }) => <a key={label} href={href} className={dark}><Icon className="mr-2 size-4" aria-hidden />{label}</a>)
-            : <a href={ROUTES.contact} className={dark}>Contact our team</a>}
-          <a href={ROUTES.activities} className={`inline-flex min-h-12 items-center rounded-full border border-[#06263b]/20 px-6 text-sm font-bold ${focusRing}`}>Explore activities</a>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-export function SafetyFinalCTA() {
-  return (
-    <section className="relative overflow-hidden bg-[#0b3850] px-5 py-20 text-white lg:px-8 lg:py-28">
-      <Ripples className="absolute -right-24 top-1/2 size-[40rem] -translate-y-1/2" />
-      <div className="relative mx-auto flex max-w-7xl flex-col justify-between gap-8 lg:flex-row lg:items-end">
-        <div>
-          <h2 className="max-w-2xl font-display text-4xl font-black sm:text-6xl"><RevealLines>Discover the water. <span className="text-[#f5b82e]">Care for the place.</span></RevealLines></h2>
-          <p className="mt-4 max-w-xl text-base text-white/70">Find your next paddling experience and explore Kerala thoughtfully with Bond Safari.</p>
-        </div>
-        <div className="flex flex-wrap gap-3">
-          <a href={ROUTES.locations} className={gold}>Explore locations <ArrowRight className="ml-2 size-4" aria-hidden /></a>
-          <a href={ROUTES.book} className={ghost}>Book your adventure</a>
+        <div className="mt-12 border-t border-ink/15 pt-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ink/60">Policies · awaiting approval, linked here once published</p>
+          <ul className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-sm text-ink/75">{policies.map((policy) => <li key={policy} className="flex items-center gap-2"><FileText className="size-4" aria-hidden />{policy}</li>)}</ul>
         </div>
       </div>
     </section>
@@ -364,9 +342,9 @@ export function SafetyFinalCTA() {
 
 export function SafetyMobileBar() {
   return (
-    <div className="fixed inset-x-4 bottom-4 z-20 flex gap-2 rounded-2xl border border-white/30 bg-[#06263b]/95 p-2 shadow-xl backdrop-blur-md sm:hidden">
-      <a href={ROUTES.book} className="flex min-h-11 flex-1 items-center justify-center rounded-xl bg-[#f5b82e] text-xs font-extrabold uppercase text-[#06263b]">Book now</a>
-      <a href="#before-you-paddle" className="flex min-h-11 flex-1 items-center justify-center rounded-xl bg-white/10 text-xs font-extrabold uppercase text-white">Checklist</a>
+    <div className="fixed inset-x-4 bottom-4 z-30 flex gap-2 rounded-2xl border border-white/20 bg-ink/95 p-2 shadow-xl backdrop-blur-md sm:hidden">
+      <a href="#before-you-paddle" className="flex min-h-11 flex-1 items-center justify-center rounded-xl bg-sand text-sm font-semibold text-ink">Checklist</a>
+      <a href={ROUTES.book} className="flex min-h-11 flex-1 items-center justify-center rounded-xl bg-white/10 text-sm font-semibold text-white">Book a paddle</a>
     </div>
   )
 }

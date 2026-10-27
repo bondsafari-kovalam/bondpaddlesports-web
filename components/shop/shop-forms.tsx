@@ -40,7 +40,7 @@ export function BulkOrderForm() {
             <TextField label="GST number" name="gst" optional hint="For a GST invoice." error={errors.gst} />
           </div>
           <TextAreaField label="Branding or customisation" name="branding" optional />
-          <CheckboxField name="consent" error={errors.consent}>Contact me about this quote. <span className="text-[#57717b]">Required.</span></CheckboxField>
+          <CheckboxField name="consent" error={errors.consent}>Contact me about this quote. <span className="text-slate">Required.</span></CheckboxField>
         </>
       )}
     </ServiceForm>

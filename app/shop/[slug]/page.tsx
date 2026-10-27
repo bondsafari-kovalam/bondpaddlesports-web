@@ -56,25 +56,25 @@ export default async function ProductPage({ params }: Props) {
   return (
     <ShopShell>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData(item)) }} />
-      <div className="bg-[#06263b] pb-6 pt-28 lg:pt-32" />
+      <div className="bg-ink pb-6 pt-28 lg:pt-32" />
       <div className="mx-auto max-w-7xl px-5 py-10 lg:px-8 lg:py-14">
-        <nav aria-label="Breadcrumb" className="text-xs font-semibold text-[#57717b]">
-          <a href="/" className="hover:text-[#0b7f95]">Home</a> › <a href="/shop" className="hover:text-[#0b7f95]">Shop</a> › <a href={categoryHref(category.id)} className="hover:text-[#0b7f95]">{category.name}</a> › <span aria-current="page" className="text-[#06263b]">{item.name}</span>
+        <nav aria-label="Breadcrumb" className="text-xs font-semibold text-slate">
+          <a href="/" className="hover:text-teal">Home</a> › <a href="/shop" className="hover:text-teal">Shop</a> › <a href={categoryHref(category.id)} className="hover:text-teal">{category.name}</a> › <span aria-current="page" className="text-ink">{item.name}</span>
         </nav>
         <div className="mt-6 grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-14">
           <ProductGallery product={item} />
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#0b7f95]">{category.name} · {item.type}</p>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-teal">{category.name} · {item.type}</p>
             <h1 className="mt-2 font-display text-4xl font-black sm:text-5xl"><RevealLines>{item.name}</RevealLines></h1>
             <div className="mt-6"><ProductPurchasePanel product={item} /></div>
           </div>
         </div>
         <div className="mt-16 grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-14">
           <ProductSpecifications product={item} />
-          <section aria-labelledby="reviews" className="h-fit rounded-3xl bg-white p-6 ring-1 ring-[#06263b]/5">
-            <MessageSquareQuote className="size-7 text-[#00a9c3]" strokeWidth={1.4} aria-hidden />
+          <section aria-labelledby="reviews" className="h-fit rounded-3xl bg-white p-6 ring-1 ring-ink/5">
+            <MessageSquareQuote className="size-7 text-teal" strokeWidth={1.4} aria-hidden />
             <h2 id="reviews" className="mt-4 font-display text-2xl font-bold">Reviews</h2>
-            <p className="mt-2 text-sm leading-6 text-[#57717b]">No reviews yet. Only verified buyers will be able to review this product.</p>
+            <p className="mt-2 text-sm leading-6 text-slate">No reviews yet. Only verified buyers will be able to review this product.</p>
           </section>
         </div>
         {related.length > 0 && (

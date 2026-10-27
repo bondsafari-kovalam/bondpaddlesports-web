@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export default function LocationsPage() {
   return (
     <NotifyMeProvider>
-      <main className="min-h-screen overflow-hidden bg-[#f6f3ec] text-[#06263b]">
+      <main className="min-h-screen overflow-x-clip bg-paper text-ink">
         <SiteHeader />
         <LocationsExplorer />
         <LocationsInfoSections />

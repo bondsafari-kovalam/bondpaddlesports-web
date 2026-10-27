@@ -1,7 +1,7 @@
 'use client'
 
-import { Children, isValidElement, useEffect, useRef, type ComponentPropsWithoutRef, type ReactNode } from 'react'
-import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
+import { Children, isValidElement, useEffect, useRef, useState, type ComponentPropsWithoutRef, type ReactNode } from 'react'
+import { animate, motion, useInView, useReducedMotion, useScroll, useTransform } from 'motion/react'
 
 // Expo-out: fast start, long soft settle. Mirrors --ease-expo in globals.css.
 export const EXPO = [0.19, 1, 0.22, 1] as const
@@ -31,11 +31,13 @@ export function RevealLines({ children, delay = 0, stagger = 0.1 }: { children: 
   return (
     <>
       {lines.map((line, i) => (
-        <span key={i} className="-mb-[0.12em] block overflow-hidden pb-[0.12em]">
-          <motion.span className="block" initial={{ y: '110%' }} whileInView={{ y: '0%' }} viewport={inView} transition={{ duration: 1.3, ease: EXPO, delay: delay + i * stagger }}>
+        // The mask is what gets observed: the text starts fully below it, so observing the text itself
+        // would never register as visible once a line wraps (110% of a tall line clears the mask).
+        <motion.span key={i} className="-mb-[0.12em] block overflow-hidden pb-[0.12em]" initial="hidden" whileInView="shown" viewport={inView}>
+          <motion.span className="block" variants={{ hidden: { y: '110%' }, shown: { y: '0%' } }} transition={{ duration: 1.3, ease: EXPO, delay: delay + i * stagger }}>
             {line}
           </motion.span>
-        </span>
+        </motion.span>
       ))}
     </>
   )
@@ -100,4 +102,21 @@ export function HeroImage({ src, alt }: { src: string; alt: string }) {
       <motion.img src={src} alt={alt} className="size-full object-cover" style={reduce ? undefined : { y }} initial={reduce ? false : { scale: 1.2 }} animate={{ scale: 1 }} transition={{ duration: 2.4, ease: EXPO }} />
     </div>
   )
+}
+
+/** A number that counts up from zero the first time it scrolls into view. Screen readers get the final value. */
+export function CountUp({ value, className }: { value: number; className?: string }) {
+  const ref = useRef<HTMLSpanElement>(null)
+  const seen = useInView(ref, inView)
+  const reduce = useReducedMotion()
+  const [shown, setShown] = useState(0)
+
+  useEffect(() => {
+    if (!seen) return
+    if (reduce) { setShown(value); return }
+    const controls = animate(0, value, { duration: 1.8, ease: EXPO, onUpdate: (v) => setShown(Math.round(v)) })
+    return () => controls.stop()
+  }, [seen, reduce, value])
+
+  return <span ref={ref} className={className}><span aria-hidden>{shown}</span><span className="sr-only">{value}</span></span>
 }

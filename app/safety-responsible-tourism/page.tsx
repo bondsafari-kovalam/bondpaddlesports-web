@@ -3,16 +3,14 @@ import {
   BeforeYouPaddle,
   EquipmentGuidance,
   GroupPreparation,
-  LocalCulture,
-  PolicyLinks,
   ResponsibleTourismSection,
   SafetyApproachSection,
   SafetyByActivity,
   SafetyFAQ,
-  SafetyFinalCTA,
   SafetyHelp,
   SafetyHero,
   SafetyMobileBar,
+  SafetyNav,
   WeatherConditions,
 } from '@/components/safety/safety-sections'
 import { SiteFooter } from '@/components/site/site-footer'
@@ -29,21 +27,19 @@ export const metadata: Metadata = {
 
 export default function SafetyPage() {
   return (
-    <main className="min-h-screen overflow-hidden bg-[#f6f3ec] text-[#06263b]">
+    <main className="min-h-screen overflow-x-clip bg-paper text-ink">
       <SiteHeader />
       <SafetyHero />
+      <SafetyNav />
       <SafetyApproachSection />
       <BeforeYouPaddle />
       <EquipmentGuidance />
       <WeatherConditions />
       <ResponsibleTourismSection />
-      <LocalCulture />
       <GroupPreparation />
       <SafetyByActivity />
       <SafetyFAQ />
-      <PolicyLinks />
       <SafetyHelp />
-      <SafetyFinalCTA />
       <SiteFooter />
       <SafetyMobileBar />
     </main>

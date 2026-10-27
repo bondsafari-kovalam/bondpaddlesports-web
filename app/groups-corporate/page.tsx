@@ -6,11 +6,11 @@ import {
   EnquirySection,
   GroupActivities,
   GroupFAQ,
-  GroupGallery,
   GroupLocations,
   GroupsFinalCTA,
   GroupsHero,
   GroupsMobileBar,
+  GroupsNav,
   HowItWorks,
   SchoolsSection,
 } from '@/components/groups/groups-sections'
@@ -29,9 +29,10 @@ export const metadata: Metadata = {
 export default function GroupsCorporatePage() {
   return (
     <GroupEnquiryProvider>
-      <main className="min-h-screen overflow-hidden bg-[#f6f3ec] text-[#06263b]">
+      <main className="min-h-screen overflow-x-clip bg-paper text-ink">
         <SiteHeader />
         <GroupsHero />
+        <GroupsNav />
         <AudienceCards />
         <CorporateSection />
         <SchoolsSection />
@@ -39,7 +40,6 @@ export default function GroupsCorporatePage() {
         <GroupLocations />
         <HowItWorks />
         <EnquirySection />
-        <GroupGallery />
         <GroupFAQ />
         <GroupsFinalCTA />
         <SiteFooter />

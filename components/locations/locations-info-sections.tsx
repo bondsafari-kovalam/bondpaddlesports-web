@@ -1,47 +1,45 @@
 import { ArrowRight, Compass, LifeBuoy, ShieldCheck } from 'lucide-react'
-import { Eyebrow } from '@/components/locations/primitives'
+import { focusRing } from '@/components/locations/primitives'
+import { Reveal, RevealLines } from '@/components/motion/reveal'
+import { ScrollRevealText } from '@/components/motion/scroll-story'
 import { ROUTES } from '@/lib/site'
-import { RevealLines } from '@/components/motion/reveal'
 
 export function LocationsInfoSections() {
   return (
     <>
-      <section className="bg-[#06263b] px-5 py-20 text-white lg:px-8 lg:py-28">
-        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1fr_1fr] lg:items-end">
-          <div>
-            <Eyebrow tone="cyan">Kerala by paddle</Eyebrow>
-            <h2 className="mt-3 font-display text-4xl font-black sm:text-5xl"><RevealLines>Slow down.<br /><span className="text-[#f5b82e]">See more.</span></RevealLines></h2>
-          </div>
-          <p className="max-w-lg text-base leading-7 text-white/70">A paddle sets the pace of the day. From backwaters to the coast, each Bond Safari location is a different way to meet Kerala’s water—quietly, at your own rhythm, with a guide alongside.</p>
+      <section className="border-t border-line px-5 py-28 lg:px-8 lg:py-40" aria-label="Kerala by paddle">
+        <div className="mx-auto max-w-6xl">
+          <p className="mb-8 text-xs font-extrabold uppercase tracking-[0.2em] text-teal-strong">Kerala by paddle</p>
+          <ScrollRevealText className="font-display text-3xl font-semibold leading-[1.2] tracking-tight sm:text-5xl lg:text-6xl" text="A paddle sets the pace of the day. Each Bond Safari location is a different way to meet Kerala’s water: quietly, at your own rhythm, with a guide alongside." />
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-7xl gap-5 px-5 py-20 lg:grid-cols-2 lg:px-8 lg:py-24">
-        <div className="rounded-3xl bg-white p-8 ring-1 ring-[#06263b]/5 sm:p-10">
-          <ShieldCheck className="size-9 text-[#00a9c3]" strokeWidth={1.4} aria-hidden />
-          <h2 className="mt-10 font-display text-3xl font-black"><RevealLines>Safety & responsible tourism</RevealLines></h2>
-          <p className="mt-3 max-w-md text-sm leading-6 text-[#57717b]">How we look after guests, communities and the waters we paddle on.</p>
-          <a href={ROUTES.safety} className="mt-7 inline-flex items-center text-sm font-bold text-[#0b7f95] hover:text-[#06263b]">Read our safety approach <ArrowRight className="ml-2 size-4" aria-hidden /></a>
-        </div>
-        <div className="relative overflow-hidden rounded-3xl bg-[#0b3850] p-8 text-white sm:p-10">
-          <div className="absolute -right-16 -top-16 size-56 rounded-full border-[24px] border-[#00c8e8]/15" aria-hidden />
-          <LifeBuoy className="relative size-9 text-[#f5b82e]" strokeWidth={1.4} aria-hidden />
-          <p className="relative mt-10 text-xs font-extrabold uppercase tracking-[0.2em] text-[#8fe8f4]">Bond Safari Academy</p>
-          <h2 className="relative mt-2 font-display text-3xl font-black"><RevealLines>From first stroke to future guide.</RevealLines></h2>
-          <a href={ROUTES.academy} className="relative mt-7 inline-flex items-center rounded-full bg-white px-5 py-3 text-sm font-bold text-[#06263b]">Explore the Academy <ArrowRight className="ml-2 size-4" aria-hidden /></a>
-        </div>
-      </section>
+      <div className="px-5 pb-24 lg:px-8 lg:pb-32">
+        <section className="mx-auto grid max-w-7xl gap-px overflow-hidden rounded-3xl bg-line lg:grid-cols-2">
+          <Reveal className="group bg-paper-bright p-8 sm:p-12">
+            <ShieldCheck className="size-8 text-teal" strokeWidth={1.4} aria-hidden />
+            <h2 className="mt-12 font-display text-3xl font-black tracking-tight">Safety & responsible tourism</h2>
+            <p className="mt-3 max-w-md text-sm leading-6 text-slate">How we look after guests, communities and the waters we paddle on.</p>
+            <a href={ROUTES.safety} className={`mt-8 inline-flex items-center gap-2 border-b border-ink/25 pb-1 text-sm font-semibold transition hover:border-ink ${focusRing}`}>Read our safety approach <ArrowRight className="size-4 transition group-hover:translate-x-1" aria-hidden /></a>
+          </Reveal>
+          <Reveal delay={0.1} className="group bg-ink p-8 text-white sm:p-12">
+            <LifeBuoy className="size-8 text-sand" strokeWidth={1.4} aria-hidden />
+            <p className="mt-12 text-xs font-extrabold uppercase tracking-[0.2em] text-teal-pale">Bond Safari Academy</p>
+            <h2 className="mt-2 font-display text-3xl font-black tracking-tight">From first stroke to future guide.</h2>
+            <a href={ROUTES.academy} className={`mt-8 inline-flex items-center gap-2 border-b border-white/30 pb-1 text-sm font-semibold transition hover:border-sand hover:text-sand ${focusRing}`}>Explore the Academy <ArrowRight className="size-4 transition group-hover:translate-x-1" aria-hidden /></a>
+          </Reveal>
+        </section>
+      </div>
 
-      <section className="relative overflow-hidden bg-[#f0783e] px-5 py-20 text-[#06263b] lg:px-8">
-        <div className="absolute -right-20 -top-28 size-96 rounded-full border-[52px] border-white/10" aria-hidden />
-        <div className="relative mx-auto flex max-w-7xl flex-col justify-between gap-8 lg:flex-row lg:items-end">
+      <section className="bg-sand px-5 py-20 text-ink lg:px-8 lg:py-24">
+        <div className="mx-auto flex max-w-7xl flex-col justify-between gap-8 lg:flex-row lg:items-end">
           <div>
-            <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#06263b]/70">Ready when you are</p>
-            <h2 className="mt-3 max-w-2xl font-display text-4xl font-black sm:text-5xl"><RevealLines>Your next paddle<br />starts here.</RevealLines></h2>
+            <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-ink/60">Ready when you are</p>
+            <h2 className="mt-3 max-w-2xl font-display text-4xl font-black tracking-tight sm:text-6xl"><RevealLines>Your next paddle<br />starts here.</RevealLines></h2>
           </div>
           <div className="flex flex-wrap gap-3">
-            <a href="#directory" className="inline-flex items-center rounded-full bg-[#06263b] px-6 py-4 text-sm font-extrabold uppercase tracking-[0.1em] text-white">Book now <ArrowRight className="ml-2 size-4" aria-hidden /></a>
-            <a href={ROUTES.activities} className="inline-flex items-center rounded-full border border-[#06263b]/30 px-6 py-4 text-sm font-bold"><Compass className="mr-2 size-4" aria-hidden /> Explore activities</a>
+            <a href="#paddling-now" className={`inline-flex items-center gap-2 rounded-full bg-ink px-7 py-4 text-sm font-semibold text-white transition hover:bg-ink-soft ${focusRing}`}>Book a session <ArrowRight className="size-4" aria-hidden /></a>
+            <a href={ROUTES.activities} className={`inline-flex items-center gap-2 rounded-full border border-ink/30 px-7 py-4 text-sm font-semibold transition hover:border-ink ${focusRing}`}><Compass className="size-4" aria-hidden /> Explore activities</a>
           </div>
         </div>
       </section>

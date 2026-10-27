@@ -74,10 +74,10 @@ export function ContactForm() {
           {/* Honeypot for basic spam protection; hidden from people and assistive tech. */}
           <div className="absolute -left-[9999px]" aria-hidden><label>Website<input name="website" tabIndex={-1} autoComplete="off" /></label></div>
 
-          <div className="space-y-3 border-t border-[#eef2ed] pt-5">
-            <p className="flex gap-2 text-xs leading-5 text-[#57717b]"><ShieldCheck className="size-4 shrink-0 text-[#14785a]" aria-hidden />We use these details only to respond to your enquiry. Please don’t include payment or health details in your message. Our privacy policy will be linked here once published.</p>
-            <CheckboxField name="consent" error={errors.consent}>I agree that Bond Safari may use my details to respond to this enquiry. <span className="text-[#57717b]">Required.</span></CheckboxField>
-            <CheckboxField name="marketing">Send me occasional Bond Safari news and offers. <span className="text-[#57717b]">Optional.</span></CheckboxField>
+          <div className="space-y-3 border-t border-mist pt-5">
+            <p className="flex gap-2 text-xs leading-5 text-slate"><ShieldCheck className="size-4 shrink-0 text-success" aria-hidden />We use these details only to respond to your enquiry. Please don’t include payment or health details in your message. Our privacy policy will be linked here once published.</p>
+            <CheckboxField name="consent" error={errors.consent}>I agree that Bond Safari may use my details to respond to this enquiry. <span className="text-slate">Required.</span></CheckboxField>
+            <CheckboxField name="marketing">Send me occasional Bond Safari news and offers. <span className="text-slate">Optional.</span></CheckboxField>
           </div>
         </>
       )}

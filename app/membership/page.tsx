@@ -9,6 +9,7 @@ import {
   MembershipFinalCTA,
   MembershipHero,
   MembershipMobileBar,
+  MembershipNav,
   PearlsSection,
   PlanCards,
   TierProgression,
@@ -28,9 +29,10 @@ export const metadata: Metadata = {
 export default function MembershipPage() {
   return (
     <NotifyMeProvider>
-      <main className="min-h-screen overflow-hidden bg-[#f6f3ec] text-[#06263b]">
+      <main className="min-h-screen overflow-x-clip bg-paper text-ink">
         <SiteHeader />
         <MembershipHero />
+        <MembershipNav />
         <PlanCards />
         <ComparisonTable />
         <PearlsSection />
