@@ -37,7 +37,17 @@ export function LocationMap({ locations }: { locations: Location[] }) {
       </div>
 
       <div className="order-1 lg:order-2">
-        {canEmbed && selected?.coordinates ? (
+        {selected?.map ? (
+          <iframe
+            key={selected.slug}
+            title={`Map of ${selected.map.placeName}`}
+            src={selected.map.embedUrl}
+            className="h-[320px] w-full border-0 lg:h-full lg:min-h-[620px]"
+            loading="lazy"
+            allowFullScreen
+            referrerPolicy="strict-origin-when-cross-origin"
+          />
+        ) : canEmbed && selected?.coordinates ? (
           <iframe
             title={`Map of ${selected.name}`}
             src={`https://www.google.com/maps/embed/v1/view?key=${MAPS_EMBED_KEY}&center=${selected.coordinates.lat},${selected.coordinates.lng}&zoom=14`}

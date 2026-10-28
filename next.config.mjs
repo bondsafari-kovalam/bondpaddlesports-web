@@ -20,6 +20,8 @@ const nextConfig = {
   },
   async headers() {
     return [
+      // The investor portal is private: keep it out of search results and shared caches.
+      { source: '/investor/:path*', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }, { key: 'Cache-Control', value: 'private, no-store' }] },
       { source: '/video/:path*', headers: [{ key: 'Cache-Control', value: mediaCache }] },
       { source: '/images/:path*', headers: [{ key: 'Cache-Control', value: mediaCache }] },
       { source: '/logo-288.:ext', headers: [{ key: 'Cache-Control', value: mediaCache }] },

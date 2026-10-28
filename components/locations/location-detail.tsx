@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { ArrowRight, Backpack, CalendarClock, ChevronRight, CloudRain, Compass, FileText, MapPin, MessageSquareQuote, ShieldCheck, Sparkles } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, Backpack, CalendarClock, ChevronRight, CloudRain, Compass, FileText, MapPin, MessageSquareQuote, ShieldCheck, Sparkles } from 'lucide-react'
 import { LocationImageFallback } from '@/components/locations/location-card'
 import { NotifyMeButton } from '@/components/locations/notify-me'
 import { DevNote, Eyebrow, IllustrativeLabel, LocationStatusBadge, Pending, focusRing } from '@/components/locations/primitives'
@@ -115,7 +115,9 @@ export function LocationVisitorInformation({ location }: { location: Location })
   const info = location.visitorInfo
   const groups: InfoGroup[] = [
     { title: 'Before you arrive', icon: Backpack, items: [['Age requirements', 'ageRequirement'], ['Swimming', 'swimmingRequirement'], ['Fitness', 'fitnessRequirement'], ['Health & participation', 'healthRequirements'], ['What to bring', 'whatToBring'], ['What’s included', 'included']] },
-    { title: 'Facilities & meeting point', icon: MapPin, items: [['Meeting point', 'meetingPointAddress'], ['Directions', 'directions'], ['Facilities', 'facilities'], ['Location contact', 'contact']], extra: <p className="text-xs text-slate">Map: shown once verified meeting-point coordinates are supplied.</p> },
+    { title: 'Facilities & meeting point', icon: MapPin, items: [['Meeting point', 'meetingPointAddress'], ['Directions', 'directions'], ['Facilities', 'facilities'], ['Location contact', 'contact']], extra: location.map
+      ? <a href="#getting-there" className="inline-flex items-center text-sm font-bold text-teal">See the map <ArrowRight className="ml-1 size-4" aria-hidden /></a>
+      : <p className="text-xs text-slate">Map: shown once verified meeting-point coordinates are supplied.</p> },
     { title: 'Safety', icon: ShieldCheck, items: [['Guides', 'guides'], ['Equipment & buoyancy aids', 'equipment'], ['Safety requirements', 'safetyRequirements'], ['Weather & session closures', 'weatherClosures']], extra: <a href={ROUTES.safety} className="inline-flex items-center text-sm font-bold text-teal">Safety & Responsible Tourism <ArrowRight className="ml-1 size-4" aria-hidden /></a> },
     { title: 'Seasonal information', icon: CloudRain, items: [['Monsoon, weather & seasonal operations', 'seasonal']] },
     { title: 'Booking policies', icon: FileText, items: [['Cancellation & refunds', 'cancellationPolicy'], ['Weather cancellations', 'weatherCancellation'], ['Rescheduling', 'rescheduling']] },
@@ -140,6 +142,36 @@ export function LocationVisitorInformation({ location }: { location: Location })
           </div>
         ))}
       </RevealGroup>
+    </section>
+  )
+}
+
+/** The meeting point on Google Maps; only for locations with a map supplied by Bond. */
+export function LocationGettingThere({ location }: { location: Location }) {
+  if (!location.map) return null
+  const address = location.visitorInfo.meetingPointAddress
+  return (
+    <section id="getting-there" aria-labelledby="getting-there-title" className="scroll-mt-20">
+      <Eyebrow>Getting there</Eyebrow>
+      <h2 id="getting-there-title" className="mt-3 font-display text-3xl font-black sm:text-4xl"><RevealLines>Find the meeting point</RevealLines></h2>
+      <div className="mt-8 grid overflow-hidden rounded-3xl bg-white ring-1 ring-ink/5 lg:grid-cols-[1fr_340px]">
+        <iframe
+          title={`Map of ${location.map.placeName}`}
+          src={location.map.embedUrl}
+          className="h-[320px] w-full border-0 sm:h-[420px]"
+          loading="lazy"
+          allowFullScreen
+          referrerPolicy="strict-origin-when-cross-origin"
+        />
+        <div className="flex flex-col gap-5 border-t border-mist p-6 sm:p-8 lg:border-l lg:border-t-0">
+          <div>
+            <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate"><MapPin className="size-4 text-teal" aria-hidden />Meeting point</p>
+            <p className="mt-2 font-display text-lg font-bold">{location.map.placeName}</p>
+            {address && <address className="mt-1 text-sm not-italic leading-6 text-slate-strong">{address}</address>}
+          </div>
+          <a href={location.map.directionsUrl} target="_blank" rel="noopener noreferrer" className={`mt-auto inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-ink px-6 text-sm font-semibold text-white transition hover:bg-ink-soft ${focusRing}`}>Open in Google Maps <ArrowUpRight className="size-4" aria-hidden /></a>
+        </div>
+      </div>
     </section>
   )
 }

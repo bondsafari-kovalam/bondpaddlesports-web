@@ -97,6 +97,8 @@ export type Location = {
   hasDetailPage: boolean
   /** Precise coordinates must come from the client; never estimate them. */
   coordinates?: { lat: number; lng: number }
+  /** Google Maps "Share → Embed a map" URL for the meeting point, as supplied by Bond (no API key needed). */
+  map?: { embedUrl: string; directionsUrl: string; placeName: string }
   visitorInfo: VisitorInfo
   relatedExperiences?: RelatedExperience[]
 }
@@ -137,6 +139,11 @@ export const locations: Location[] = [
       illustrative: true,
     },
     hasDetailPage: true,
+    map: {
+      placeName: 'Muziris Heritage Watertrails by Bond Safari',
+      embedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3732.493055370176!2d76.2033723747964!3d10.197928089917845!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b081b610f2b8caf%3A0x57ee3f356bafc031!2sMuziris%20Heritage%20Watertrails%20by%20Bond%20Safari!5e1!3m2!1sen!2sin!4v1793176113819!5m2!1sen!2sin',
+      directionsUrl: 'https://maps.google.com/?cid=6336071224429363249',
+    },
     visitorInfo: {},
   },
   {
@@ -157,7 +164,12 @@ export const locations: Location[] = [
       illustrative: true,
     },
     hasDetailPage: true,
-    visitorInfo: { meetingPointAddress: 'Thattukadavu Jetty, North Paravur, Kerala' },
+    map: {
+      placeName: 'Muziris Heritage Watertrails by Bond Safari',
+      embedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3733.011718315951!2d76.21926737479576!3d10.153573889959837!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b081bb22829ac7b%3A0x2850301a795ee52b!2sMuziris%20Heritage%20Watertrails%20by%20Bond%20Safari!5e1!3m2!1sen!2sin!4v1793175681529!5m2!1sen!2sin',
+      directionsUrl: 'https://maps.google.com/?cid=2904874649917515051',
+    },
+    visitorInfo: { meetingPointAddress: 'North Paravur, Thattukadavu Boat Jetty, Ernakulam, Keralam 683513' },
   },
   {
     slug: 'kovalam',

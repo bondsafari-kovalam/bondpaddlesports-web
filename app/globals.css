@@ -229,6 +229,13 @@
       scroll-behavior: smooth;
     }
   }
+  /* Hide the page scrollbar; wheel, touch, keyboard and Lenis scrolling still work. */
+  html {
+    scrollbar-width: none;
+  }
+  html::-webkit-scrollbar {
+    display: none;
+  }
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-dm-sans), sans-serif;

@@ -1,4 +1,5 @@
-import { Eyebrow } from '@/components/locations/primitives'
+import { ArrowRight, Lock } from 'lucide-react'
+import { Eyebrow, focusRing } from '@/components/locations/primitives'
 import { RevealGroup, RevealLines } from '@/components/motion/reveal'
 import { SmartImage } from '@/components/site/smart-image'
 import { TEAM, type TeamMember } from '@/lib/team'
@@ -37,6 +38,12 @@ export function TeamSection() {
             </li>
           ))}
         </RevealGroup>
+
+        {/* Kept quiet on purpose: the round is not an offer to the public, so no figures and no call to invest. */}
+        <p className="mt-16 flex flex-col items-center gap-2 border-t border-white/10 pt-8 text-sm text-white/60 sm:flex-row sm:justify-between">
+          <span className="flex items-center gap-2"><Lock className="size-4 text-teal-pale" aria-hidden />Invited investor?</span>
+          <a href="/investor/login" className={`inline-flex min-h-11 items-center gap-1.5 font-semibold text-white/80 transition hover:text-sand ${focusRing}`}>Sign in to the Investor Portal <ArrowRight className="size-4" aria-hidden /></a>
+        </p>
       </div>
     </section>
   )
