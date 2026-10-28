@@ -1,14 +1,15 @@
-import { ArrowUp, ShieldCheck } from 'lucide-react'
+import { ArrowUp, Lock, ShieldCheck } from 'lucide-react'
 import { focusRing } from '@/components/locations/primitives'
 import { BrandMark } from '@/components/site/brand-mark'
 import { SocialLinks } from '@/components/site/social-links'
 import { ROUTES } from '@/lib/site'
 
 // Items without an href have no page yet; they show as plain text rather than a dead link.
-const columns: { heading: string; links: { label: string; href?: string }[] }[] = [
+// `highlight` renders the link as a sand pill so it stands out from the plain links.
+const columns: { heading: string; links: { label: string; href?: string; highlight?: boolean }[] }[] = [
   { heading: 'Explore', links: [{ label: 'Locations', href: ROUTES.locations }, { label: 'Activities', href: ROUTES.activities }, { label: 'Academy', href: ROUTES.academy }, { label: 'Groups & Corporate', href: ROUTES.groups }, { label: 'Shop', href: '/shop' }] },
   { heading: 'Plan your visit', links: [{ label: 'Safety', href: ROUTES.safety }, { label: 'Contact', href: ROUTES.contact }, { label: 'Gallery & Reviews', href: ROUTES.gallery }, { label: 'FAQs' }, { label: 'Booking terms' }] },
-  { heading: 'Bond Group', links: [{ label: 'Membership', href: ROUTES.membership }, { label: 'About Bond', href: '/about' }, { label: 'Investor Login', href: '/investor/login' }, { label: 'Privacy' }] },
+  { heading: 'Bond Group', links: [{ label: 'Membership', href: ROUTES.membership }, { label: 'About Bond', href: '/about' }, { label: 'Investor Login', href: '/investor/login', highlight: true }, { label: 'Privacy' }] },
 ]
 
 export function SiteFooter() {
@@ -27,9 +28,11 @@ export function SiteFooter() {
             <div key={heading}>
               <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-teal-pale">{heading}</h3>
               <ul className="mt-5 space-y-3 text-sm">
-                {links.map(({ label, href }) => (
+                {links.map(({ label, href, highlight }) => (
                   <li key={label}>
-                    {href
+                    {href && highlight
+                      ? <a href={href} className={`-ml-0.5 inline-flex items-center gap-1.5 rounded-full border border-sand/60 bg-sand/10 px-3 py-1.5 font-semibold text-sand transition hover:border-sand hover:bg-sand hover:text-ink ${focusRing}`}><Lock className="size-3.5" aria-hidden />{label}</a>
+                      : href
                       ? <a href={href} className={`text-white/70 transition hover:text-sand ${focusRing}`}>{label}</a>
                       : <span className="text-white/35">{label} <span className="text-[10px] uppercase tracking-wider">· soon</span></span>}
                   </li>
