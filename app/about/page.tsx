@@ -8,11 +8,11 @@ import {
   AboutNav,
   OurExperiences,
   OurLocations,
-  OurPeople,
   OurPurpose,
   OurStory,
   SafetyApproach,
 } from '@/components/about/about-sections'
+import { TeamSection } from '@/components/about/team-section'
 import { NotifyMeProvider } from '@/components/locations/notify-me'
 import { SiteFooter } from '@/components/site/site-footer'
 import { SiteHeader } from '@/components/site/site-header'
@@ -39,7 +39,7 @@ export default function AboutPage() {
         <OurLocations />
         <AboutAcademy />
         <SafetyApproach />
-        <OurPeople />
+        <TeamSection />
         <AboutMembership />
         <AboutFinalCTA />
         <SiteFooter />
