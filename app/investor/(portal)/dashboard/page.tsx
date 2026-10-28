@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
-import { ArrowRight, CalendarDays, FileText, Mail, Megaphone, Phone } from 'lucide-react'
+import { ArrowRight, CalendarDays, FileText, Mail, Megaphone, Network, Phone } from 'lucide-react'
 import { PageIntro, PortalCard, SourceBadge, StatGrid } from '@/components/investor/portal-ui'
 import { DOCUMENTS, UPDATES, upcomingMilestones } from '@/lib/investor/content'
+import { NETWORK_KPIS } from '@/lib/investor/network-data'
 import { CONFIDENTIAL_LINE, HEADLINE, INVESTOR_CONTACT, INVITATION, PROJECTIONS, PROJECTION_YEARS } from '@/lib/investor/round-data'
 import { requireInvestorSession } from '@/lib/investor/session'
 
@@ -36,6 +37,23 @@ export default async function InvestorDashboard() {
           <a href="/investor/round" className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-sand underline-offset-4 hover:underline">Round terms, use of funds and exits <ArrowRight className="size-4" aria-hidden /></a>
           <a href="/investor/business-plan" className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-sand underline-offset-4 hover:underline">Business plan and projections <ArrowRight className="size-4" aria-hidden /></a>
         </div>
+      </section>
+
+      <section aria-labelledby="network-title" className="mt-6 rounded-3xl border border-line bg-paper-bright p-6 sm:p-8">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="max-w-2xl">
+            <p className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.2em] text-teal-strong"><Network className="size-4" aria-hidden />Expansion strategy · new</p>
+            <h2 id="network-title" className="mt-2 font-display text-2xl font-black tracking-tight sm:text-3xl">Four hubs, one connected network</h2>
+            <p className="mt-2 text-sm leading-6 text-slate-strong">The plan grows in stages. The investor plan funds 18 sites, and the other 13 potential spokes are an unfunded pipeline.</p>
+          </div>
+          <SourceBadge source="network" />
+        </div>
+        <dl className="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-2xl bg-line sm:grid-cols-5">
+          {NETWORK_KPIS.map((k) => (
+            <div key={k.label} className="flex flex-col bg-paper-bright p-4"><dt className="text-xs leading-5 text-slate">{k.label}</dt><dd className="order-first font-display text-3xl font-black tracking-tight">{k.value}</dd></div>
+          ))}
+        </dl>
+        <a href="/investor/network" className={`${link} mt-4`}>Hubs, destination scores, roadmap and risks <ArrowRight className="size-4" aria-hidden /></a>
       </section>
 
       <div className="mt-6 grid gap-5 md:grid-cols-3">

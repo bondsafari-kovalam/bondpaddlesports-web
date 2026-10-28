@@ -7,6 +7,7 @@ const LINKS = [
   { href: '/investor/dashboard', label: 'Dashboard' },
   { href: '/investor/round', label: 'The round' },
   { href: '/investor/business-plan', label: 'Business plan' },
+  { href: '/investor/network', label: 'Expansion network' },
   { href: '/investor/documents', label: 'Documents' },
   { href: '/investor/updates', label: 'Updates' },
 ]

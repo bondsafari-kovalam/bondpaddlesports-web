@@ -4,6 +4,9 @@ import { focusRing } from '@/components/locations/primitives'
 import { cn } from '@/lib/utils'
 import { COURSE_STATUS_LABELS, categoryName, courseHref, formatRupees, type Course, type CourseStatus, type QualificationLevel } from '@/lib/academy'
 import { SmartImage } from '@/components/site/smart-image'
+import { BOND_PHOTOS } from '@/lib/gallery'
+
+type BondPhoto = (typeof BOND_PHOTOS)[keyof typeof BOND_PHOTOS]
 
 const statusStyles: Record<CourseStatus, string> = {
   'enrolment-open': 'bg-success-soft text-success',
@@ -46,13 +49,28 @@ const categoryVisuals: Record<Course['category'], { src: string; alt: string }> 
   },
 }
 
-/** Category illustrations until approved Bond Safari Academy photography is supplied. */
+/** Bond's own photos for courses they genuinely fit; SUP, canoe, sea kayak and white water have none yet. */
+const coursePhotos: Partial<Record<string, BondPhoto>> = {
+  'paddle-start': BOND_PHOTOS.sharingATandem,
+  'paddle-safer': BOND_PHOTOS.paddlesAndBuoyancyAid,
+  'paddle-discover': BOND_PHOTOS.threeKayaksOnBackwater,
+  'paddle-explore': BOND_PHOTOS.soloPaddler,
+  'paddlesport-instructor': BOND_PHOTOS.briefingBeforeSettingOff,
+  'preparation-day': BOND_PHOTOS.carryingOrangeKayak,
+  'paddlesport-leader': BOND_PHOTOS.guidesCarryingKayak,
+  'bond-paddle-guide-programme': BOND_PHOTOS.teamWithFleet,
+  'schools-paddle-year': BOND_PHOTOS.settingOffFromJetty,
+  'private-coaching': BOND_PHOTOS.tandemByTheBridge,
+}
+
+/** Bond photo where one fits the course, otherwise a category illustration. */
 export function CourseVisual({ course, className = '' }: { course: Course; className?: string }) {
-  const visual = categoryVisuals[course.category]
+  const photo = coursePhotos[course.slug]
+  const visual = photo ?? categoryVisuals[course.category]
   return (
     <div className={`group relative overflow-hidden bg-ink ${className}`} role="img" aria-label={visual.alt}>
       <SmartImage src={visual.src} alt="" fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition duration-700 group-hover:scale-105" />
-      <span className="absolute bottom-3 right-3 rounded-full bg-ink/75 px-3 py-1.5 text-[10px] font-semibold text-white/90 backdrop-blur">Illustrative image</span>
+      {!photo && <span className="absolute bottom-3 right-3 rounded-full bg-ink/75 px-3 py-1.5 text-[10px] font-semibold text-white/90 backdrop-blur">Illustrative image</span>}
     </div>
   )
 }
