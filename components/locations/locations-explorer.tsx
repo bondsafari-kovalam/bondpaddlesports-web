@@ -5,7 +5,6 @@ import { ArrowDown, ArrowRight, CalendarClock, LayoutGrid, Map as MapIcon, Searc
 import { LocationImageFallback } from '@/components/locations/location-card'
 import { ActiveFilterChips, LocationFilters, LocationSearch, emptyFilters, matchesFilters, type Filters } from '@/components/locations/location-filters'
 import { LocationMap } from '@/components/locations/location-map'
-import { LocationRoadmap } from '@/components/locations/location-roadmap'
 import { NotifyMeButton } from '@/components/locations/notify-me'
 import { IllustrativeLabel, LocationStatusBadge, focusRing } from '@/components/locations/primitives'
 import { HeroFilm } from '@/components/motion/ambient-video'
@@ -17,8 +16,10 @@ import { FILMS } from '@/lib/media'
 const SECTIONS = [
   { id: 'paddling-now', label: 'Paddling now', status: 'operating' },
   { id: 'opening-soon', label: 'Opening 2027', status: 'opening-soon' },
-  { id: 'coming-soon', label: 'Coming soon', status: 'coming-soon' },
 ] as const
+
+// Coming-soon (roadmap) locations are hidden from the public directory for now.
+const visibleLocations = locations.filter((location) => location.status !== 'coming-soon')
 
 export function LocationsHero() {
   const operating = locations.filter((location) => location.status === 'operating').length
@@ -62,7 +63,7 @@ function DirectoryToolbar({ filters, setFilters, view, setView, sections }: {
 
         <div className="flex items-center gap-2">
           <div className="min-w-0 flex-1 lg:w-72 lg:flex-none"><LocationSearch value={filters.query} onChange={(query) => setFilters({ ...filters, query })} /></div>
-          <LocationFilters locations={locations} filters={filters} setFilters={setFilters} />
+          <LocationFilters locations={visibleLocations} filters={filters} setFilters={setFilters} />
           <div className="inline-flex h-11 shrink-0 rounded-full border border-line bg-white p-1" role="group" aria-label="View">
             {([['list', 'List', LayoutGrid], ['map', 'Map', MapIcon]] as const).map(([value, label, Icon]) => (
               <button key={value} type="button" onClick={() => setView(value)} aria-pressed={view === value} className={`inline-flex items-center gap-1.5 rounded-full px-3 text-sm font-semibold transition ${view === value ? 'bg-ink text-white' : 'text-slate-strong hover:text-ink'} ${focusRing}`}>
@@ -151,12 +152,11 @@ function UpcomingLocation({ location }: { location: Location }) {
 export function LocationsExplorer() {
   const [filters, setFilters] = useState<Filters>(emptyFilters)
   const [view, setView] = useState<'list' | 'map'>('list')
-  const results = useMemo(() => locations.filter((location) => matchesFilters(location, filters)), [filters])
+  const results = useMemo(() => visibleLocations.filter((location) => matchesFilters(location, filters)), [filters])
 
   const byStatus = (status: Location['status']) => results.filter((location) => location.status === status)
   const operating = byStatus('operating')
   const openingSoon = byStatus('opening-soon')
-  const future = byStatus('coming-soon')
   const sections = SECTIONS.map((section) => ({ ...section, count: byStatus(section.status).length })).filter((section) => section.count > 0)
 
   return (
@@ -168,7 +168,7 @@ export function LocationsExplorer() {
 
         <div className="mx-auto max-w-7xl px-5 pb-24 pt-10 lg:px-8 lg:pb-32">
           <div className="mb-10 flex flex-wrap items-center gap-3">
-            <p className="text-sm text-slate" role="status" aria-live="polite"><span className="font-semibold text-ink">{results.length}</span> of {locations.length} locations</p>
+            <p className="text-sm text-slate" role="status" aria-live="polite"><span className="font-semibold text-ink">{results.length}</span> of {visibleLocations.length} locations</p>
             <ActiveFilterChips filters={filters} setFilters={setFilters} />
           </div>
 
@@ -193,12 +193,6 @@ export function LocationsExplorer() {
                 <section id="opening-soon" aria-labelledby="opening-soon-title" className="scroll-mt-24">
                   <SectionHeading id="opening-soon" index={2} title="Opening January 2027" description="Planned openings, subject to confirmation. Ask to be told the moment bookings open." />
                   <RevealGroup className="grid gap-x-8 gap-y-16 md:grid-cols-2">{openingSoon.map((location) => <UpcomingLocation key={location.slug} location={location} />)}</RevealGroup>
-                </section>
-              )}
-              {future.length > 0 && (
-                <section id="coming-soon" aria-labelledby="coming-soon-title" className="scroll-mt-24">
-                  <SectionHeading id="coming-soon" index={3} title="Coming soon" description="Planned expansion with no confirmed dates yet." />
-                  <LocationRoadmap locations={future} />
                 </section>
               )}
             </div>

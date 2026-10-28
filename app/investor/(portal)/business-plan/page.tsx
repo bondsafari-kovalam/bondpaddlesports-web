@@ -79,6 +79,7 @@ export default async function InvestorBusinessPlan() {
             </li>
           ))}</ol>
           <Note>{HUBS}</Note>
+          <a href="/investor/network" className="mt-4 inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-teal underline-offset-4 hover:underline">The wider hub-and-spoke network: 31 potential spokes, scores and rollout waves <ArrowRight className="size-4" aria-hidden /></a>
         </PortalSection>
 
         <PortalSection id="site-economics" eyebrow="Site economics" title="A strong site repays its kit in one season" source="deck">

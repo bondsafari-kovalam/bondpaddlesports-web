@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { BookOpen, Clock, Lock } from 'lucide-react'
+import { BookOpen, Clock, Lock, Network } from 'lucide-react'
 import type { ContentSource } from '@/lib/investor/content'
 
 const badge = 'inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider'
@@ -7,6 +7,7 @@ const badge = 'inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10p
 /** Every block says where its content comes from, so plan figures can't pass for actual results. */
 export function SourceBadge({ source }: { source: ContentSource }) {
   if (source === 'deck') return <span className={`${badge} bg-teal/10 text-teal-strong`}><Lock className="size-3" aria-hidden />Round deck · Oct 2026</span>
+  if (source === 'network') return <span className={`${badge} bg-sand-soft text-sand-ink`}><Network className="size-3" aria-hidden />Network plan · prelim · 28 Oct 2026</span>
   if (source === 'pathway') return <span className={`${badge} bg-teal/10 text-teal-strong`}><BookOpen className="size-3" aria-hidden />Pathway guide · 2027</span>
   return <span className={`${badge} bg-mist text-slate-strong`}><Clock className="size-3" aria-hidden />Awaiting actuals</span>
 }

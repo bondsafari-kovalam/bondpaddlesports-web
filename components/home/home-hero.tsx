@@ -30,7 +30,7 @@ export function HomeHero() {
 
       <motion.div className="relative mx-auto w-full max-w-7xl px-5 lg:px-8" style={reduce ? undefined : { y: contentY, opacity: contentOpacity }}>
         <div className="max-w-2xl">
-          <Reveal as="p" delay={0.6} className="mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-teal-pale"><span className="h-px w-10 bg-sand" /> Kerala, from the water</Reveal>
+          <Reveal as="p" delay={0.6} className="mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-teal-pale">Kerala, from the water</Reveal>
           <h1 className="font-display text-5xl font-black leading-[.95] tracking-tight sm:text-7xl lg:text-[92px]">
             <RevealLines delay={0.7} stagger={0.12}>Find your<br /><span className="text-sand">wild water.</span></RevealLines>
           </h1>

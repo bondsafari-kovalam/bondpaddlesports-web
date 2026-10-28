@@ -44,7 +44,7 @@ export function SiteFooter() {
       </div>
 
       <div className="mx-auto mt-16 flex max-w-7xl flex-col gap-4 border-t border-white/10 pt-6 text-xs text-white/45 sm:flex-row sm:items-center sm:justify-between">
-        <span>© 2026 Bond Safari Paddle Sports. Demo website preview.</span>
+        <span>© 2026 Bond Safari Paddle Sports.</span>
         <div className="flex items-center gap-6">
           <span className="flex items-center gap-2"><ShieldCheck className="size-4" aria-hidden />Safety first, always.</span>
           <a href="#top" className={`inline-flex items-center gap-1.5 font-semibold text-white/70 transition hover:text-sand ${focusRing}`}>Back to top <ArrowUp className="size-3.5" aria-hidden /></a>
