@@ -24,9 +24,9 @@ export const IS_DEV = process.env.NODE_ENV !== 'production'
  * mailto: or WhatsApp links for values that are set here.
  */
 export const CONTACT: { phone?: string; email?: string; whatsapp?: string } = {
-  phone: undefined,
+  phone: '+91 84484 48846',
   email: undefined,
-  whatsapp: undefined,
+  whatsapp: '+91 84484 48846',
 }
 
 /**
@@ -34,7 +34,7 @@ export const CONTACT: { phone?: string; email?: string; whatsapp?: string } = {
  * Leave undefined until Bond confirms the account; the footer shows those icons as not yet linked.
  */
 export const SOCIAL: { instagram?: string; facebook?: string; youtube?: string; linkedin?: string } = {
-  instagram: undefined,
+  instagram: 'https://www.instagram.com/muziris_by_bondsafari/',
   facebook: undefined,
   youtube: undefined,
   linkedin: undefined,

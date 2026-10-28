@@ -8,7 +8,7 @@ import { ROUTES } from '@/lib/site'
 const columns: { heading: string; links: { label: string; href?: string }[] }[] = [
   { heading: 'Explore', links: [{ label: 'Locations', href: ROUTES.locations }, { label: 'Activities', href: ROUTES.activities }, { label: 'Academy', href: ROUTES.academy }, { label: 'Groups & Corporate', href: ROUTES.groups }, { label: 'Shop', href: '/shop' }] },
   { heading: 'Plan your visit', links: [{ label: 'Safety', href: ROUTES.safety }, { label: 'Contact', href: ROUTES.contact }, { label: 'Gallery & Reviews', href: ROUTES.gallery }, { label: 'FAQs' }, { label: 'Booking terms' }] },
-  { heading: 'Bond Group', links: [{ label: 'Membership', href: ROUTES.membership }, { label: 'About Bond', href: '/about' }, { label: 'Investor login' }, { label: 'Privacy' }] },
+  { heading: 'Bond Group', links: [{ label: 'Membership', href: ROUTES.membership }, { label: 'About Bond', href: '/about' }, { label: 'Investor Login', href: '/investor/login' }, { label: 'Privacy' }] },
 ]
 
 export function SiteFooter() {

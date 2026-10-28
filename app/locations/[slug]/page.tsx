@@ -6,6 +6,7 @@ import {
   LocationActivityList,
   LocationDetailHero,
   LocationGallery,
+  LocationGettingThere,
   LocationMobileCTA,
   LocationOverview,
   LocationRelatedExperiences,
@@ -102,6 +103,7 @@ export default async function LocationPage({ params }: Props) {
 
         <div className="mx-auto max-w-7xl space-y-16 px-5 pb-20 lg:px-8 lg:pb-28">
           <LocationVisitorInformation location={location} />
+          <LocationGettingThere location={location} />
           <LocationGallery location={location} />
           <LocationReviews location={location} />
           <LocationRelatedExperiences location={location} />
