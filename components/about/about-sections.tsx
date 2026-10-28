@@ -19,9 +19,6 @@ const ghost = `inline-flex min-h-12 items-center justify-center rounded-full bor
 const dark = `inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-ink px-7 text-sm font-semibold text-white transition hover:bg-ink-soft ${focusRing}`
 const textLink = `inline-flex min-h-11 w-fit items-center gap-1.5 border-b border-ink/25 text-sm font-semibold text-ink transition hover:border-ink ${focusRing}`
 
-/** Approved team members only; leave empty rather than inventing people. */
-const TEAM: { name: string; role: string; photo?: string; bio?: string }[] = []
-
 /** Shown where a destination page (Safety, Gallery) isn't built yet, instead of a broken link. */
 export function ComingSoonLink({ children, tone = 'light' }: { children: string; tone?: 'light' | 'dark' }) {
   return <p className={`inline-flex min-h-11 items-center rounded-full border px-5 text-sm font-semibold ${tone === 'dark' ? 'border-white/20 text-white/60' : 'border-ink/15 text-slate'}`}>{children} — coming soon</p>
@@ -53,6 +50,7 @@ const NAV = [
   { id: 'locations', label: 'Locations' },
   { id: 'academy', label: 'Academy' },
   { id: 'approach', label: 'Our approach' },
+  { id: 'team', label: 'Team' },
   { id: 'community', label: 'Membership' },
 ]
 
@@ -213,27 +211,6 @@ export function SafetyApproach() {
           </div>
         </div>
       </div>
-    </section>
-  )
-}
-
-/** Renders only once approved team members are added; an empty "coming soon" block isn't useful to visitors. */
-export function OurPeople() {
-  if (!TEAM.length) return null
-  return (
-    <section className="mx-auto max-w-7xl px-5 py-24 lg:px-8 lg:py-32" aria-labelledby="people-title">
-      <div className="max-w-2xl">
-        <Eyebrow>Our people</Eyebrow>
-        <h2 id="people-title" className="mt-3 font-display text-4xl font-black tracking-tight sm:text-5xl"><RevealLines>People who help bring every paddle to life.</RevealLines></h2>
-        <p className="mt-4 text-base leading-7 text-slate-strong">Behind every experience are people who help plan, organise, and support activities on the water.</p>
-      </div>
-      <RevealGroup as="ul" className="mt-12 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">{TEAM.map((member) => (
-          <li key={member.name}>
-            {member.photo && <img src={member.photo} alt={`${member.name}, ${member.role}`} loading="lazy" className="aspect-square w-full rounded-3xl object-cover" />}
-            <p className="mt-4 font-display text-lg font-bold">{member.name}</p><p className="text-sm text-slate">{member.role}</p>{member.bio && <p className="mt-2 text-sm leading-6">{member.bio}</p>}
-          </li>
-        ))}
-      </RevealGroup>
     </section>
   )
 }
