@@ -39,20 +39,61 @@ const memberships = [
   { name: 'Paddle Season Pass', activity: 'Stand-up paddleboarding', image: FILMS.sup.poster, text: 'Make paddling part of your season.', price: 'Launching soon', note: 'With live schedules', href: '/membership#season-pass' },
 ]
 
+// The gold contact chip printed on a bank card.
+function CardChip() {
+  return (
+    <svg viewBox="0 0 44 34" className="h-8 w-11 drop-shadow-sm" aria-hidden>
+      <defs><linearGradient id="chip-gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#f3e2b6" /><stop offset=".5" stopColor="#c9a764" /><stop offset="1" stopColor="#e9d29c" /></linearGradient></defs>
+      <rect x=".5" y=".5" width="43" height="33" rx="6" fill="url(#chip-gold)" stroke="#a88a4c" />
+      <path d="M15 .5v33M29 .5v33M.5 12h14.5M29 12h14.5M.5 22h14.5M29 22h14.5M15 17h14" stroke="#a88a4c" strokeWidth="1" fill="none" />
+    </svg>
+  )
+}
+
+// The contactless "tap" waves.
+function Contactless() {
+  return (
+    <svg viewBox="0 0 24 24" className="size-6 text-white/85" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden>
+      <path d="M8.5 9.5a4 4 0 0 1 0 5M12 7a8 8 0 0 1 0 10M15.5 4.5a12 12 0 0 1 0 15" />
+    </svg>
+  )
+}
+
 function MembershipCard({ tier, delay }: { tier: (typeof memberships)[number]; delay: number }) {
   return (
-    <Reveal as="article" delay={delay} className={`group flex flex-col overflow-hidden rounded-3xl bg-white ${tier.featured ? 'ring-2 ring-sand' : 'ring-1 ring-ink/5'}`}>
-      <a href={tier.href} tabIndex={-1} aria-hidden className="relative block">
-        <ParallaxImage src={tier.image} alt="" className="aspect-[4/3]" imgClassName="transition duration-1000 group-hover:scale-105" strength={5} sizes="(min-width: 768px) 33vw, 100vw" />
-        <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1.5 text-[11px] font-bold text-ink backdrop-blur">{tier.activity}</span>
-      </a>
-      <div className="flex flex-1 flex-col p-7">
-        <h3 className="font-display text-2xl font-bold"><a href={tier.href} className="transition hover:text-teal">{tier.name}</a></h3>
-        <p className="mt-2 text-sm leading-6 text-slate">{tier.text}</p>
-        <div className="mt-auto flex items-end justify-between gap-4 border-t border-line pt-5">
-          <p><span className="block font-display text-2xl font-black">{tier.price}</span><span className="text-xs text-slate">{tier.note}</span></p>
-          <a href={tier.href} className="inline-flex size-11 shrink-0 items-center justify-center rounded-full border border-ink/15 transition group-hover:border-ink group-hover:bg-ink group-hover:text-white" aria-label={`About ${tier.name}`}><ArrowRight className="size-4" aria-hidden /></a>
+    <Reveal as="article" delay={delay} className="group">
+      <a href={tier.href} className={`relative block aspect-[1.586/1] overflow-hidden rounded-[1.25rem] bg-ink text-white shadow-[0_20px_40px_-18px_rgba(16,36,31,.55)] transition duration-500 [transform:perspective(900px)] group-hover:-translate-y-1.5 group-hover:[transform:perspective(900px)_rotateX(4deg)] group-hover:shadow-[0_32px_50px_-20px_rgba(16,36,31,.6)] ${tier.featured ? 'ring-2 ring-sand' : 'ring-1 ring-white/10'}`} aria-label={`${tier.name}: ${tier.price}`}>
+        <div className="absolute inset-0"><ParallaxImage src={tier.image} alt="" className="size-full" imgClassName="transition duration-1000 group-hover:scale-105" strength={5} sizes="(min-width: 768px) 33vw, 100vw" /></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-ink-deep/70 via-ink/25 to-ink-deep/85" />
+        {/* Glossy sheen that sweeps across on hover */}
+        <div className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition duration-1000 group-hover:translate-x-full" />
+
+        <div className="relative flex h-full flex-col justify-between p-5 sm:p-6">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-sand">Bond Safari</p>
+              <h3 className="mt-1 font-display text-xl font-bold leading-tight">{tier.name}</h3>
+            </div>
+            <Contactless />
+          </div>
+
+          <CardChip />
+
+          <div className="flex items-end justify-between gap-3">
+            <div className="min-w-0">
+              <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-white/55">Member</p>
+              <p className="truncate text-xs font-semibold uppercase tracking-[0.12em]">{tier.activity}</p>
+            </div>
+            <div className="text-right">
+              <p className="font-display text-lg font-black leading-none">{tier.price}</p>
+              <p className="mt-1 text-[10px] uppercase tracking-wider text-white/60">{tier.note}</p>
+            </div>
+          </div>
         </div>
+      </a>
+      <div className="mt-5 flex items-center justify-between gap-4 px-1">
+        <p className="text-sm leading-6 text-slate">{tier.text}</p>
+        <a href={tier.href} tabIndex={-1} aria-hidden className="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-ink/15 transition group-hover:border-ink group-hover:bg-ink group-hover:text-white"><ArrowRight className="size-4" /></a>
       </div>
     </Reveal>
   )
