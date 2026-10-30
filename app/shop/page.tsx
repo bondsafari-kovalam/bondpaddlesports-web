@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 export default function ShopPage() {
   return (
     <ShopShell>
-      <PageHero eyebrow="The Bond Safari Shop" title={<>Gear up for your<br /><span className="text-sand">next adventure.</span></>} description="Discover paddling essentials, comfortable waterwear and Bond Safari merchandise designed for life on and around the water.">
+      <PageHero soft eyebrow="The Bond Safari Shop" title={<>Gear up for your<br /><span className="text-sand">next adventure.</span></>} description="Discover paddling essentials, comfortable waterwear and Bond Safari merchandise designed for life on and around the water.">
         <div className="mt-8 flex flex-wrap gap-3">
           <a href="#catalogue" className={gold}>Shop all products <ArrowRight className="ml-2 size-4" aria-hidden /></a>
           <a href="/shop/collections/paddling-equipment" className={ghost}>Explore paddling gear</a>

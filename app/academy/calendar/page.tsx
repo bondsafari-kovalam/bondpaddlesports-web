@@ -17,6 +17,7 @@ export default function CalendarPage() {
     <AcademyShell>
       <AcademyHero
         image={HERO_IMAGES.academyCalendar}
+        soft
         eyebrow="Course calendar"
         title={<>Plan your <span className="text-sand">next course.</span></>}
         description="Browse Academy course dates by month, category and location. Only confirmed dates appear here."

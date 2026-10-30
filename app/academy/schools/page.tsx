@@ -27,6 +27,7 @@ export default function SchoolsPage() {
     <AcademyShell>
       <AcademyHero
         image={HERO_IMAGES.academySchools}
+        soft
         eyebrow="Schools & colleges"
         title={<>Take learning<br /><span className="text-sand">onto the water.</span></>}
         description="Structured paddling experiences for schools, colleges and organised groups, planned around your learners."

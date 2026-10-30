@@ -29,7 +29,7 @@ export function AcademyShell({ children }: { children: ReactNode }) {
   )
 }
 
-export function AcademyHero({ eyebrow, title, description, actions, breadcrumb, image, video, children }: {
+export function AcademyHero({ eyebrow, title, description, actions, breadcrumb, image, soft = false, video, children }: {
   eyebrow: string
   title: ReactNode
   description: string
@@ -37,6 +37,8 @@ export function AcademyHero({ eyebrow, title, description, actions, breadcrumb, 
   breadcrumb?: { label: string; href?: string }[]
   /** Optional background photo; treated as illustrative until approved Bond photography is supplied. */
   image?: string
+  /** Lighter ink wash so more of the photo shows. */
+  soft?: boolean
   /** Optional full-height film hero, used by the Academy overview. Takes precedence over `image`. */
   video?: Film
   children?: ReactNode
@@ -44,7 +46,7 @@ export function AcademyHero({ eyebrow, title, description, actions, breadcrumb, 
   return (
     <>
       <section className={`relative overflow-hidden bg-ink text-white ${video ? 'flex min-h-[88svh] items-end pb-16 pt-40 lg:pb-20' : 'pb-14 pt-32 lg:pb-20 lg:pt-40'}`}>
-        {video ? <HeroFilm film={video} /> : image && <HeroBackdrop src={image} />}
+        {video ? <HeroFilm film={video} /> : image && <HeroBackdrop src={image} soft={soft} />}
         {!video && !image && <div className="absolute -right-24 top-20 size-120 rounded-full border-52 border-teal-bright/6" aria-hidden />}
         <div className="relative mx-auto w-full max-w-7xl px-5 lg:px-8">
           {breadcrumb && (
