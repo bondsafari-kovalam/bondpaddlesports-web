@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { ArrowRight, CalendarDays, FileText, Mail, Megaphone, Network, Phone } from 'lucide-react'
+import { MilestoneFilms } from '@/components/investor/milestone-films'
 import { PageIntro, PortalCard, SourceBadge, StatGrid } from '@/components/investor/portal-ui'
 import { DOCUMENTS, UPDATES, upcomingMilestones } from '@/lib/investor/content'
 import { NETWORK_KPIS } from '@/lib/investor/network-data'
@@ -38,6 +39,8 @@ export default async function InvestorDashboard() {
           <a href="/investor/business-plan" className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-sand underline-offset-4 hover:underline">Business plan and projections <ArrowRight className="size-4" aria-hidden /></a>
         </div>
       </section>
+
+      <MilestoneFilms />
 
       <section aria-labelledby="network-title" className="mt-6 rounded-3xl border border-line bg-paper-bright p-6 sm:p-8">
         <div className="flex flex-wrap items-start justify-between gap-4">

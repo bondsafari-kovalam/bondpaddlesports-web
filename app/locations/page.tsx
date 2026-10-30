@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { MuzirisShowcase } from '@/components/locations/muziris-showcase'
 import { LocationsExplorer } from '@/components/locations/locations-explorer'
 import { LocationsInfoSections } from '@/components/locations/locations-info-sections'
 import { NotifyMeProvider } from '@/components/locations/notify-me'
@@ -20,6 +21,7 @@ export default function LocationsPage() {
       <main className="min-h-screen overflow-x-clip bg-paper text-ink">
         <SiteHeader />
         <LocationsExplorer />
+        <MuzirisShowcase />
         <LocationsInfoSections />
         <SiteFooter />
       </main>

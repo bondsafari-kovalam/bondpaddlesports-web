@@ -11,6 +11,7 @@ import {
   LocationOverview,
   LocationRelatedExperiences,
   LocationReviews,
+  LocationTourFilm,
   LocationVisitorInformation,
 } from '@/components/locations/location-detail'
 import { NotifyMeProvider } from '@/components/locations/notify-me'
@@ -94,6 +95,7 @@ export default async function LocationPage({ params }: Props) {
         <div className="mx-auto grid max-w-7xl gap-12 px-5 py-16 lg:grid-cols-[1fr_400px] lg:gap-14 lg:px-8 lg:py-24">
           <div className="min-w-0 space-y-16">
             <LocationOverview location={location} />
+            <LocationTourFilm location={location} />
             <LocationActivityList location={location} />
           </div>
           <aside className="lg:sticky lg:top-6 lg:self-start" aria-label="Booking">
