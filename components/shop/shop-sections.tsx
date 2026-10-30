@@ -28,10 +28,10 @@ export function ShopShell({ children, bookHref }: { children: ReactNode; bookHre
   )
 }
 
-export function PageHero({ eyebrow, title, description, children, compact = false, image = HERO_IMAGES.shop }: { eyebrow: string; title: ReactNode; description?: string; children?: ReactNode; compact?: boolean; image?: string }) {
+export function PageHero({ eyebrow, title, description, children, compact = false, soft = false, image = HERO_IMAGES.shop }: { eyebrow: string; title: ReactNode; description?: string; children?: ReactNode; compact?: boolean; soft?: boolean; image?: string }) {
   return (
     <section className={`relative overflow-hidden bg-ink text-white ${compact ? 'pb-10 pt-32 lg:pt-36' : 'pb-16 pt-36 lg:pb-24 lg:pt-44'}`}>
-      <HeroBackdrop src={image} />
+      <HeroBackdrop src={image} soft={soft} />
       <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
         <p className="mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-teal-pale"><span className="h-px w-10 bg-sand" /> {eyebrow}</p>
         <h1 className={`font-display font-black leading-[.98] tracking-tight ${compact ? 'text-4xl sm:text-5xl' : 'text-5xl sm:text-7xl'}`}><RevealLines>{title}</RevealLines></h1>

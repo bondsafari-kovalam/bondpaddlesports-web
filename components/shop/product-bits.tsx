@@ -27,8 +27,8 @@ const CATEGORY_IMAGES: Record<ShopCategoryId, { src: string; alt: string }> = {
     alt: 'Model wearing a plain T-shirt and cap outdoors',
   },
   waterwear: {
-    src: 'https://images.unsplash.com/photo-1761279668226-151d09384afb?auto=format&fit=crop&w=1000&q=85',
-    alt: 'Woman in swimwear relaxing on a paddleboard',
+    src: '/images/bond/floating-on-a-sup-in-clear-water.jpg',
+    alt: 'Woman in a swimsuit relaxing on a paddleboard over clear turquoise water',
   },
   'paddling-equipment': {
     src: 'https://images.unsplash.com/photo-1689753423166-d246faaf5a54?auto=format&fit=crop&w=1000&q=85',
@@ -39,8 +39,8 @@ const CATEGORY_IMAGES: Record<ShopCategoryId, { src: string; alt: string }> = {
     alt: 'Kayak and life jackets ready by the water',
   },
   'boards-and-kayaks': {
-    src: 'https://images.unsplash.com/photo-1769852635551-f6a97498e61e?auto=format&fit=crop&w=1000&q=85',
-    alt: 'Kayaks and paddleboards stacked on a beach',
+    src: '/images/bond/touring-kayaks-at-the-waters-edge.jpg',
+    alt: 'Touring kayaks with paddles lined up at the water’s edge',
   },
 }
 

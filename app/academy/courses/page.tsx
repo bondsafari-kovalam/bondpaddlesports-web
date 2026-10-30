@@ -17,6 +17,7 @@ export default function CoursesPage() {
     <AcademyShell>
       <AcademyHero
         image={HERO_IMAGES.academyCourses}
+        soft
         eyebrow="Course catalogue"
         title={<>Find the course that<br /><span className="text-sand">moves you forward.</span></>}
         description="Explore paddlesport learning, personal skills development and professional pathways through the Bond Safari Academy."

@@ -30,6 +30,7 @@ export default function CareersPage() {
     <AcademyShell>
       <AcademyHero
         image={HERO_IMAGES.academyCareers}
+        soft
         eyebrow="Careers"
         title={<>Make the water<br /><span className="text-sand">your workplace.</span></>}
         description="Explore professional paddlesport development with the Bond Safari Academy, from instructor and leader training to the Bond Paddle Guide Programme."

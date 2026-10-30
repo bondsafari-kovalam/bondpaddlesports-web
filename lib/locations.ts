@@ -134,9 +134,8 @@ export const locations: Location[] = [
     activities: [],
     startingPrice: 1200,
     image: {
-      src: 'https://images.unsplash.com/photo-1706724728271-a81750af4b8f?auto=format&fit=crop&w=1600&q=85',
-      alt: 'Illustrative image of a kayaker paddling through Kerala mangrove backwaters',
-      illustrative: true,
+      src: '/images/bond/paddling-under-monsoon-skies.jpg',
+      alt: 'Two paddlers in red and yellow kayaks on the backwater, with coconut palms under monsoon clouds',
     },
     hasDetailPage: true,
     map: {
@@ -182,9 +181,8 @@ export const locations: Location[] = [
     // Opening date and session prices not supplied yet; add operatingSince and startingPrice when confirmed.
     activities: [{ id: 'kayaking' }, { id: 'canoeing' }],
     image: {
-      src: 'https://images.unsplash.com/photo-1722340081727-baae59878e6c?auto=format&fit=crop&w=1600&q=85',
-      alt: 'Illustrative image of a sea kayaker paddling on open ocean',
-      illustrative: true,
+      src: '/images/bond/red-kayak-at-the-shoreline-from-above.jpg',
+      alt: 'A paddler lying back in a red kayak where the waves meet the sand, seen from above',
     },
     hasDetailPage: true,
     visitorInfo: {},

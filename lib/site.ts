@@ -36,6 +36,6 @@ export const CONTACT: { phone?: string; email?: string; whatsapp?: string } = {
 export const SOCIAL: { instagram?: string; facebook?: string; youtube?: string; linkedin?: string } = {
   instagram: 'https://www.instagram.com/muziris_by_bondsafari/',
   facebook: undefined,
-  youtube: undefined,
+  youtube: 'https://www.youtube.com/@bondsafaripaddlesports',
   linkedin: undefined,
 }

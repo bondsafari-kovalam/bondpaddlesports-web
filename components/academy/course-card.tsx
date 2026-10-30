@@ -49,7 +49,7 @@ const categoryVisuals: Record<Course['category'], { src: string; alt: string }> 
   },
 }
 
-/** Bond's own photos for courses they genuinely fit; SUP, canoe, sea kayak and white water have none yet. */
+/** Bond's own photos for courses they fit; white water has none yet, and the canoe course borrows open-water kayaks. */
 const coursePhotos: Partial<Record<string, BondPhoto>> = {
   'paddle-start': BOND_PHOTOS.sharingATandem,
   'paddle-safer': BOND_PHOTOS.paddlesAndBuoyancyAid,
@@ -61,6 +61,13 @@ const coursePhotos: Partial<Record<string, BondPhoto>> = {
   'bond-paddle-guide-programme': BOND_PHOTOS.teamWithFleet,
   'schools-paddle-year': BOND_PHOTOS.settingOffFromJetty,
   'private-coaching': BOND_PHOTOS.tandemByTheBridge,
+  'sup-safer': BOND_PHOTOS.supDeckGrip,
+  'sup-instructor': BOND_PHOTOS.carryingASupToTheWater,
+  'safety-and-rescue': BOND_PHOTOS.swimmerBesideYellowKayak,
+  'open-water-canoe-leader': BOND_PHOTOS.paddlingUnderMonsoonSkies,
+  'sea-kayak-leader': BOND_PHOTOS.shorelineFromAbove,
+  coach: BOND_PHOTOS.supPaddlingAtSunset,
+  'pathway-bundles': BOND_PHOTOS.touringKayaksAtTheWatersEdge,
 }
 
 /** Bond photo where one fits the course, otherwise a category illustration. */

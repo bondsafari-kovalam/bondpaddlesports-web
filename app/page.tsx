@@ -13,7 +13,7 @@ const locations = [
     name: 'Muziris–Kottapuram',
     meta: 'Backwaters · North Paravur',
     price: 'From ₹1,200',
-    image: 'https://images.unsplash.com/photo-1706724728271-a81750af4b8f?auto=format&fit=crop&w=1200&q=85',
+    image: '/images/bond/paddling-under-monsoon-skies.jpg',
     status: 'Operating now',
   },
   {
@@ -27,16 +27,16 @@ const locations = [
     name: 'Kovalam',
     meta: 'Sea · South Kerala',
     price: 'Kayaking · Canoeing',
-    image: 'https://images.unsplash.com/photo-1722340081727-baae59878e6c?auto=format&fit=crop&w=1200&q=85',
+    image: '/images/bond/red-kayak-at-the-shoreline-from-above.jpg',
     status: 'Operating now',
   },
 ]
 
 // A Server Component: only the booking panel, motion wrappers and films hydrate on the client.
 const memberships = [
-  { name: 'Bond Safari Club', activity: 'Canoeing', image: FILMS.canoeing.poster, text: 'Free membership across the Bond Group.', price: 'Free', note: 'No yearly fee', href: '/membership#club' },
-  { name: 'Bond Blue', activity: 'Kayaking', image: FILMS.kayaking.poster, text: '15% off, double Pearls and more.', price: 'From ₹999', note: 'per year', href: '/membership#bond-blue', featured: true },
-  { name: 'Paddle Season Pass', activity: 'Stand-up paddleboarding', image: FILMS.sup.poster, text: 'Make paddling part of your season.', price: 'Launching soon', note: 'With live schedules', href: '/membership#season-pass' },
+  { name: 'Bond Safari Club', activity: 'Canoeing', image: '/images/bond/afternoon-paddle-by-the-reeds.jpg', text: 'Free membership across the Bond Group.', price: 'Free', note: 'No yearly fee', href: '/membership#club' },
+  { name: 'Bond Blue', activity: 'Kayaking', image: '/images/bond/red-kayak-at-the-shoreline-from-above.jpg', text: '15% off, double Pearls and more.', price: 'From ₹999', note: 'per year', href: '/membership#bond-blue', featured: true },
+  { name: 'Paddle Season Pass', activity: 'Stand-up paddleboarding', image: '/images/bond/sup-paddling-at-sunset.jpg', text: 'Make paddling part of your season.', price: 'Launching soon', note: 'With live schedules', href: '/membership#season-pass' },
 ]
 
 // The gold contact chip printed on a bank card.
