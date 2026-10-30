@@ -7,6 +7,8 @@ import { ACTIVITY_LABELS, formatDate, formatPrice, type Location, type VisitorIn
 import { IS_DEV, ROUTES } from '@/lib/site'
 import { HeroImage, RevealGroup, RevealLines } from '@/components/motion/reveal'
 import { SmartImage } from '@/components/site/smart-image'
+import { TourFilmThumb } from '@/components/media/tour-film'
+import { getTourFilm } from '@/lib/muziris-films'
 
 export function LocationDetailHero({ location }: { location: Location }) {
   const isOperating = location.status === 'operating'
@@ -172,6 +174,21 @@ export function LocationGettingThere({ location }: { location: Location }) {
           <a href={location.map.directionsUrl} target="_blank" rel="noopener noreferrer" className={`mt-auto inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-ink px-6 text-sm font-semibold text-white transition hover:bg-ink-soft ${focusRing}`}>Open in Google Maps <ArrowUpRight className="size-4" aria-hidden /></a>
         </div>
       </div>
+    </section>
+  )
+}
+
+/** This location's own boat tour film, when it has one; the Locations page shows both. */
+export function LocationTourFilm({ location }: { location: Location }) {
+  const film = getTourFilm(location.slug)
+  if (!film) return null
+  return (
+    <section aria-labelledby="tour-film-title">
+      <Eyebrow>Watch · {film.place}, {film.district}</Eyebrow>
+      <h2 id="tour-film-title" className="mt-3 font-display text-3xl font-black sm:text-4xl"><RevealLines>See it from the water.</RevealLines></h2>
+      <p className="mt-4 max-w-2xl text-base leading-7 text-slate-strong">{film.description}</p>
+      <TourFilmThumb film={film} locationLink={false} sizes="(min-width: 1280px) 760px, (min-width: 1024px) 60vw, 100vw" className="mt-8" />
+      <p className="mt-3 text-sm font-semibold text-slate">{film.title}</p>
     </section>
   )
 }

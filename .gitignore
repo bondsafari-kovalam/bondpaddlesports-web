@@ -16,3 +16,6 @@ node_modules
 .next/
 .DS_Store
 *.tsbuildinfo
+
+# Full-size master videos (over GitHub's 100 MB limit). The site plays the web encodes in public/video/.
+media-masters/
