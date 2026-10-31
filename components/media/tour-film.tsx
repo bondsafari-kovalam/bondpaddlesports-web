@@ -14,14 +14,23 @@ function prefersLowData() {
   return !!connection && (connection.saveData === true || ['slow-2g', '2g', '3g'].includes(connection.effectiveType ?? ''))
 }
 
+/** How long the 720p encode may sit buffering before the player drops to 480p. */
+const SLOW_START_MS = 8000
+/** Playback time after which a video that has decoded no frames is treated as a failed decode. */
+const NO_FRAMES_AFTER_S = 1.5
+
 /**
  * The player: a native modal dialog (focus trap, Esc to close) around the browser's own video
  * controls, so play/pause, volume, seeking and fullscreen work by keyboard and touch everywhere.
- * Nothing is fetched until it opens. If the 720p encode fails it falls back to 480p once, then
- * shows a retry.
+ * Nothing is fetched until it opens. The 720p encode drops to the 480p one (Constrained Baseline,
+ * the most widely decodable H.264) when it errors, buffers too long to start, or plays sound with
+ * no picture, which is how some phones' hardware decoders fail. Playback resumes where it was;
+ * if 480p fails too the player shows a retry.
  */
 function TourFilmPlayer({ film, locationLink, onClose }: { film: TourFilm; locationLink: boolean; onClose: () => void }) {
   const ref = useRef<HTMLDialogElement>(null)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const resumeAt = useRef(0)
   const [src, setSrc] = useState(() => (prefersLowData() ? film.lowSrc : film.src))
   const [attempt, setAttempt] = useState(0)
   const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading')
@@ -33,10 +42,30 @@ function TourFilmPlayer({ film, locationLink, onClose }: { film: TourFilm; locat
     return () => { document.body.style.overflow = previousOverflow }
   }, [])
 
-  const onError = () => {
+  const fallBack = () => {
+    resumeAt.current = videoRef.current?.currentTime ?? 0
     if (src !== film.lowSrc) { setSrc(film.lowSrc); setState('loading') } else setState('error')
   }
-  const retry = () => { setSrc(film.src); setAttempt((n) => n + 1); setState('loading') }
+
+  // Slow start: still loading the 720p encode after SLOW_START_MS.
+  useEffect(() => {
+    if (state !== 'loading' || src === film.lowSrc) return
+    const timer = window.setTimeout(fallBack, SLOW_START_MS)
+    return () => window.clearTimeout(timer)
+  })
+
+  // Sound but no picture: the clock runs while the decoder has produced no frames.
+  const onTimeUpdate = () => {
+    const video = videoRef.current
+    if (!video || !video.getVideoPlaybackQuality || video.currentTime - resumeAt.current < NO_FRAMES_AFTER_S) return
+    if (video.getVideoPlaybackQuality().totalVideoFrames === 0) fallBack()
+  }
+
+  const onLoadedMetadata = () => {
+    if (videoRef.current && resumeAt.current > 0) videoRef.current.currentTime = resumeAt.current
+  }
+
+  const retry = () => { resumeAt.current = 0; setSrc(film.src); setAttempt((n) => n + 1); setState('loading') }
 
   return (
     <dialog
@@ -44,7 +73,7 @@ function TourFilmPlayer({ film, locationLink, onClose }: { film: TourFilm; locat
       onClose={onClose}
       onClick={(e) => { if (e.target === e.currentTarget) ref.current?.close() }}
       aria-labelledby={`${film.id}-title`}
-      className="m-auto h-dvh max-h-none w-full max-w-none bg-transparent p-0 text-white backdrop:bg-ink-deep/90 backdrop:backdrop-blur-sm lg:h-fit lg:w-fit"
+      className="m-auto h-dvh max-h-none w-full max-w-none bg-transparent p-0 text-white backdrop:bg-ink-deep/95 lg:h-fit lg:w-fit"
     >
       <div className="flex h-full flex-col justify-center gap-4 p-4 lg:flex-row lg:items-end lg:gap-8 lg:p-0">
         <div className="mx-auto flex w-[min(100%,calc(74dvh*9/16))] items-center justify-between lg:hidden">
@@ -61,6 +90,7 @@ function TourFilmPlayer({ film, locationLink, onClose }: { film: TourFilm; locat
             </div>
           ) : (
             <video
+              ref={videoRef}
               key={`${src}#${attempt}`}
               src={src}
               poster={film.poster}
@@ -72,7 +102,9 @@ function TourFilmPlayer({ film, locationLink, onClose }: { film: TourFilm; locat
               onCanPlay={() => setState('ready')}
               onPlaying={() => setState('ready')}
               onWaiting={() => setState('loading')}
-              onError={onError}
+              onLoadedMetadata={onLoadedMetadata}
+              onTimeUpdate={onTimeUpdate}
+              onError={fallBack}
               className="size-full object-cover"
             />
           )}
