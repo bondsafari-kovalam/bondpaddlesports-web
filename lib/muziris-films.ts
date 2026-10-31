@@ -3,8 +3,9 @@
  *
  * `original` is the file Bond supplied, kept locally in media-masters/ (git-ignored: each is
  * ~115 MB, over GitHub's limit) and never served to visitors. Pages play web encodes cut from
- * it with no edits: 720x1280 (~2.5 Mbps) by default and 480x854 (~0.9 Mbps) for data-saver or
- * slow connections. Thumbnails and posters are frames from
+ * it with no edits: 720x1280 H.264 Main@3.1 (~1.9 Mbps) by default and 480x854 H.264 Constrained
+ * Baseline@3.0 (~0.9 Mbps) for data-saver, slow connections and phones whose decoder rejects the
+ * 720p file. Both have a keyframe every 2 s and the index at the front (faststart). Thumbnails and posters are frames from
  * the film itself (Paravur at 0:50, Kottapuram at 0:39).
  *
  * The mapping below is fixed by Bond: the "Reel 01" film is Paravur (Ernakulam) and the
