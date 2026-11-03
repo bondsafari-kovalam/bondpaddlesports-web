@@ -11,6 +11,7 @@ import { SiteHeader } from '@/components/site/site-header'
 const locations = [
   {
     name: 'Muziris–Kottapuram',
+    href: '/locations/muziris-kottapuram',
     meta: 'Backwaters · North Paravur',
     price: 'From ₹1,200',
     image: '/images/bond/paddling-under-monsoon-skies.jpg',
@@ -18,6 +19,7 @@ const locations = [
   },
   {
     name: 'Muziris–North Paravur',
+    href: '/locations/muziris-north-paravur',
     meta: 'Thattukadavu Jetty · Backwaters',
     price: 'From ₹1,200',
     image: 'https://images.unsplash.com/photo-1554200429-bd32416aca62?auto=format&fit=crop&w=1200&q=85',
@@ -25,6 +27,7 @@ const locations = [
   },
   {
     name: 'Kovalam',
+    href: '/locations/kovalam',
     meta: 'Sea · South Kerala',
     price: 'Kayaking · Canoeing',
     image: '/images/bond/red-kayak-at-the-shoreline-from-above.jpg',
@@ -102,7 +105,7 @@ function MembershipCard({ tier, delay }: { tier: (typeof memberships)[number]; d
 export default function Page() {
   return (
     <main className="min-h-screen overflow-x-clip bg-paper text-ink">
-      <SiteHeader bookHref="#book" />
+      <SiteHeader />
 
       <HomeHero />
 
@@ -115,7 +118,7 @@ export default function Page() {
 
       <section id="locations" className="mx-auto max-w-7xl px-5 py-24 lg:px-8 lg:py-32">
         <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end"><div><p className="text-xs font-extrabold uppercase tracking-[0.2em] text-teal-strong">Go somewhere good</p><h2 className="mt-3 max-w-xl font-display text-4xl font-black tracking-tight sm:text-5xl"><RevealLines>Water has a way<br />of changing everything.</RevealLines></h2></div><a href="/locations" className="text-sm font-bold text-teal">View all locations <ArrowRight className="ml-1 inline size-4" /></a></div>
-        <div className="mt-12 grid gap-5 md:grid-cols-3">{locations.map((location, i) => <Reveal as="article" key={location.name} delay={i * 0.1} className="group overflow-hidden rounded-3xl bg-white shadow-sm"><div className="relative h-72 overflow-hidden"><ParallaxImage src={location.image} alt="Scenic water landscape" className="size-full" sizes="(min-width: 768px) 33vw, 100vw" imgClassName="transition duration-1000 group-hover:scale-105" /><span className={`absolute left-4 top-4 rounded-full px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider ${location.status === 'Operating now' ? 'bg-success-soft text-success' : 'bg-white/90 text-slate'}`}>{location.status}</span></div><div className="p-5"><h3 className="font-display text-xl font-bold">{location.name}</h3><p className="mt-1 text-sm text-slate-light">{location.meta}</p><div className="mt-6 flex items-center justify-between"><span className="text-sm font-bold text-teal-strong">{location.price}</span><button className="flex items-center gap-1 text-sm font-bold text-ink">{location.status === 'Operating now' ? 'Book now' : 'Notify me'} <ArrowRight className="size-4" /></button></div></div></Reveal>)}</div>
+        <div className="mt-12 grid gap-5 md:grid-cols-3">{locations.map((location, i) => <Reveal as="article" key={location.name} delay={i * 0.1} className="group overflow-hidden rounded-3xl bg-white shadow-sm"><div className="relative h-72 overflow-hidden"><ParallaxImage src={location.image} alt="Scenic water landscape" className="size-full" sizes="(min-width: 768px) 33vw, 100vw" imgClassName="transition duration-1000 group-hover:scale-105" /><span className={`absolute left-4 top-4 rounded-full px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider ${location.status === 'Operating now' ? 'bg-success-soft text-success' : 'bg-white/90 text-slate'}`}>{location.status}</span></div><div className="p-5"><h3 className="font-display text-xl font-bold">{location.name}</h3><p className="mt-1 text-sm text-slate-light">{location.meta}</p><div className="mt-6 flex items-center justify-between"><span className="text-sm font-bold text-teal-strong">{location.price}</span><a href={location.href} aria-label={`Book ${location.name}`} className="flex min-h-11 items-center gap-1 text-sm font-bold text-ink transition hover:text-teal">{location.status === 'Operating now' ? 'Book now' : 'Notify me'} <ArrowRight className="size-4" aria-hidden /></a></div></div></Reveal>)}</div>
       </section>
 
       <ExpandingFilm film={FILMS.kayaking}>
@@ -133,7 +136,7 @@ export default function Page() {
       <section id="groups-corporate" className="relative overflow-hidden bg-sand px-5 py-20 text-ink lg:px-8"><div className="absolute -right-20 -top-28 size-96 rounded-full border-[52px] border-white/10" /><div className="relative mx-auto flex max-w-7xl flex-col justify-between gap-8 lg:flex-row lg:items-end"><div><p className="text-xs font-extrabold uppercase tracking-[0.2em] text-ink/60">For groups, schools & teams</p><h2 className="mt-3 max-w-2xl font-display text-4xl font-black sm:text-5xl"><RevealLines>Take the whole team<br />somewhere different.</RevealLines></h2></div><a href="/groups-corporate" className="inline-flex w-fit items-center rounded-full bg-ink px-6 py-4 text-sm font-extrabold uppercase tracking-[0.1em] text-white">Start an enquiry <ArrowRight className="ml-2 size-4" /></a></div></section>
 
       <SiteFooter />
-      <div className="fixed inset-x-4 bottom-4 z-20 flex gap-2 rounded-2xl border border-white/30 bg-ink/95 p-2 shadow-xl backdrop-blur-md sm:hidden"><a href="#book" className="flex flex-1 items-center justify-center rounded-xl bg-sand py-3 text-xs font-extrabold uppercase text-ink">Book now</a><a href="#locations" className="flex flex-1 items-center justify-center rounded-xl bg-white/10 py-3 text-xs font-extrabold uppercase text-white">Locations</a><a href="#contact" className="flex flex-1 items-center justify-center rounded-xl bg-white/10 py-3 text-xs font-extrabold uppercase text-white">WhatsApp</a></div>
+      <div className="fixed inset-x-4 bottom-4 z-20 flex gap-2 rounded-2xl border border-white/30 bg-ink/95 p-2 shadow-xl backdrop-blur-md sm:hidden"><a href="/book" className="flex flex-1 items-center justify-center rounded-xl bg-sand py-3 text-xs font-extrabold uppercase text-ink">Book now</a><a href="#locations" className="flex flex-1 items-center justify-center rounded-xl bg-white/10 py-3 text-xs font-extrabold uppercase text-white">Locations</a><a href="#contact" className="flex flex-1 items-center justify-center rounded-xl bg-white/10 py-3 text-xs font-extrabold uppercase text-white">WhatsApp</a></div>
     </main>
   )
 }

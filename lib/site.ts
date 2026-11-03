@@ -13,7 +13,7 @@ export const ROUTES = {
   activities: '/activities',
   groups: '/groups-corporate',
   gallery: '/gallery-reviews',
-  book: '/#book',
+  book: '/book',
   contact: '/contact',
 }
 

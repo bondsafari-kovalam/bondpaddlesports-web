@@ -105,7 +105,7 @@ function useHeaderScroll(ref: React.RefObject<HTMLElement | null>) {
   return { light, hidden }
 }
 
-export function SiteHeader({ bookHref = '/#book' }: { bookHref?: string }) {
+export function SiteHeader({ bookHref = '/book' }: { bookHref?: string }) {
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
   const ref = useRef<HTMLElement>(null)

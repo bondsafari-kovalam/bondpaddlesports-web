@@ -240,6 +240,12 @@ export function offeringsFor(activity: Activity): ResolvedOffering[] {
   })
 }
 
+/** Per-person price for an offering. Demo pairings borrow the location's homepage price so previews can show totals. */
+export function offeringPrice(offering: Offering) {
+  if (offering.pricePerParticipant) return offering.pricePerParticipant
+  return offering.source === 'demo' ? locations.find((item) => item.slug === offering.locationSlug)?.startingPrice : undefined
+}
+
 /** Names of activities a location offers (confirmed or demo), used by the booking adapter. */
 export function activitiesAt(locationSlug: string) {
   return activities.filter((activity) => activity.offerings.some((offering) => offering.locationSlug === locationSlug && offering.source !== 'planned'))

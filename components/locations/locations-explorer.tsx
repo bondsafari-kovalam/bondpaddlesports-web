@@ -115,7 +115,7 @@ function FeaturedLocation({ location, flip }: { location: Location; flip: boolea
           </dl>
         )}
         <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
-          <a href={`${href}#book`} className={`inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-teal-strong ${focusRing}`} aria-label={`Book ${location.name}`}>Book a session <ArrowRight className="size-4" aria-hidden /></a>
+          <a href="/book" className={`inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-teal-strong ${focusRing}`} aria-label={`Book ${location.name}`}>Book a session <ArrowRight className="size-4" aria-hidden /></a>
           <a href={href} className={`inline-flex items-center gap-2 border-b border-ink/25 pb-1 text-sm font-semibold transition hover:border-ink ${focusRing}`}>View location <ArrowRight className="size-4 transition group-hover:translate-x-1" aria-hidden /></a>
         </div>
       </Reveal>

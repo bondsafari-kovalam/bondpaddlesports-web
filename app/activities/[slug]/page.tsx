@@ -73,7 +73,7 @@ export default async function ActivityPage({ params }: Props) {
     <NotifyMeProvider>
       <main className="min-h-screen overflow-hidden bg-paper text-ink">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs(activity)) }} />
-        <SiteHeader bookHref="#book" />
+        <SiteHeader />
         <ActivityDetailHero activity={activity} />
 
         <div className="mx-auto grid max-w-7xl gap-12 px-5 py-16 lg:grid-cols-[1fr_400px] lg:gap-14 lg:px-8 lg:py-24">
