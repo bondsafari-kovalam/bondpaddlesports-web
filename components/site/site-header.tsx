@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { usePathname } from 'next/navigation'
-import { ChevronDown, Menu, X } from 'lucide-react'
+import { ChevronDown, LockKeyhole, Menu, X } from 'lucide-react'
 import { BrandMark } from '@/components/site/brand-mark'
 
 const navItems = [
@@ -125,11 +125,12 @@ export function SiteHeader({ bookHref = '/#book' }: { bookHref?: string }) {
           <MoreMenu pathname={pathname} light={light} />
         </nav>
         <div className="flex items-center gap-3">
+          <a href="/investor/login" aria-label="Investor login" className={`hidden h-10 items-center gap-2 rounded-full border px-3.5 text-sm font-semibold transition sm:inline-flex xl:px-4 ${light ? 'border-ink/20 text-ink/75 hover:border-teal hover:text-teal' : 'border-white/25 text-white/85 hover:border-sand hover:text-sand'}`}><LockKeyhole className="size-4" aria-hidden /><span className="hidden xl:inline">Investor login</span></a>
           <a href={bookHref} className={`hidden rounded-full bg-sand px-5 py-2.5 text-sm font-semibold text-ink transition sm:block ${light ? 'hover:bg-ink hover:text-white' : 'hover:bg-white'}`}>Book now</a>
           <button className={`flex size-10 items-center justify-center rounded-full border lg:hidden ${light ? 'border-ink/20' : 'border-white/20'}`} onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label={menuOpen ? 'Close menu' : 'Open menu'}>{menuOpen ? <X className="size-5" /> : <Menu className="size-5" />}</button>
         </div>
       </div>
-      {menuOpen && <div className="border-t border-white/10 bg-ink px-5 py-5 lg:hidden"><nav className="flex flex-col gap-4 text-sm font-semibold" aria-label="Mobile">{navItems.map(({ label, href }) => <a onClick={() => setMenuOpen(false)} key={label} href={href} aria-current={isActive(pathname, href) ? 'page' : undefined} className={isActive(pathname, href) ? 'text-sand' : undefined}>{label}</a>)}<p className="mt-2 border-t border-white/10 pt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-white/50">More</p>{moreItems.map(({ label, href }) => <a onClick={() => setMenuOpen(false)} key={href} href={href} aria-current={isActive(pathname, href) ? 'page' : undefined} className={isActive(pathname, href) ? 'text-sand' : undefined}>{label}</a>)}</nav></div>}
+      {menuOpen && <div className="border-t border-white/10 bg-ink px-5 py-5 lg:hidden"><nav className="flex flex-col gap-4 text-sm font-semibold" aria-label="Mobile">{navItems.map(({ label, href }) => <a onClick={() => setMenuOpen(false)} key={label} href={href} aria-current={isActive(pathname, href) ? 'page' : undefined} className={isActive(pathname, href) ? 'text-sand' : undefined}>{label}</a>)}<p className="mt-2 border-t border-white/10 pt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-white/50">More</p>{moreItems.map(({ label, href }) => <a onClick={() => setMenuOpen(false)} key={href} href={href} aria-current={isActive(pathname, href) ? 'page' : undefined} className={isActive(pathname, href) ? 'text-sand' : undefined}>{label}</a>)}<a onClick={() => setMenuOpen(false)} href="/investor/login" className="mt-2 inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-white/25 px-5 text-white/90 hover:border-sand hover:text-sand"><LockKeyhole className="size-4" aria-hidden />Investor login</a></nav></div>}
     </header>
   )
 }

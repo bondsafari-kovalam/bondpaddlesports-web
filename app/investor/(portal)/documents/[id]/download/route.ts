@@ -1,3 +1,5 @@
+import { readFile } from 'node:fs/promises'
+import path from 'node:path'
 import { findDocument } from '@/lib/investor/content'
 import { CAPITAL_TIMELINE, CASH_NOTE, CONFIDENTIAL_LINE, GATE_1, PROJECTIONS, PROJECTIONS_NOTE, PROJECTION_YEARS, ROUND_SOURCE, TERMS, TERMS_NOTE, USE_OF_FUNDS, USE_OF_FUNDS_TOTAL } from '@/lib/investor/round-data'
 import { getInvestorSession } from '@/lib/investor/session'
@@ -7,8 +9,20 @@ const privateHeaders = { 'Cache-Control': 'private, no-store', 'X-Robots-Tag': '
 // Quote every cell; prefix a leading = + @ so spreadsheets never evaluate a cell as a formula.
 const csvCell = (v: string) => `"${(/^[=+@]/.test(v) ? `'${v}` : v).replaceAll('"', '""')}"`
 
-/** Built from round-data on each request. Real files must come from private storage, never public/. */
-const GENERATORS: Record<string, () => { body: string; type: string; filename: string }> = {
+type DocumentFile = { body: BodyInit; type: string; filename: string }
+
+/** Real files live in private/investor-documents/ (traced into this route by next.config), never public/. */
+const privateFile = (name: string, type: string, filename: string) => async (): Promise<DocumentFile> => ({
+  type,
+  filename,
+  body: new Uint8Array(await readFile(path.join(process.cwd(), 'private', 'investor-documents', name))),
+})
+
+/** Built from round-data, or read from private storage, on each request. */
+const GENERATORS: Record<string, () => DocumentFile | Promise<DocumentFile>> = {
+  'round-deck': privateFile('friends-and-family-round-deck.pdf', 'application/pdf', 'Bond_Safari_Friends_and_Family_Round.pdf'),
+  'network-plan': privateFile('hub-and-spoke-network-plan.pdf', 'application/pdf', 'Bond_Paddle_Sports_Hub_and_Spoke_Network.pdf'),
+  'pathway-guide': privateFile('paddle-uk-qualification-pathway-2027.pdf', 'application/pdf', 'Paddle_UK_Qualification_Pathway_2027.pdf'),
   'key-terms': () => ({
     type: 'text/plain; charset=utf-8',
     filename: 'bond-safari-key-terms.txt',
@@ -52,6 +66,6 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
   const generate = doc?.status === 'Download' ? GENERATORS[doc.id] : undefined
   if (!generate) return new Response('Not found', { status: 404, headers: privateHeaders })
 
-  const { body, type, filename } = generate()
+  const { body, type, filename } = await generate()
   return new Response(body, { headers: { ...privateHeaders, 'Content-Type': type, 'Content-Disposition': `attachment; filename="${filename}"` } })
 }

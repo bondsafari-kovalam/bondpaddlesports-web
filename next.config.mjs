@@ -8,6 +8,10 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  // Investor files are read from disk by the signed-in download route, so ship them with that function only.
+  outputFileTracingIncludes: {
+    '/investor/**/download': ['./private/investor-documents/**/*'],
+  },
   images: {
     // Responsive AVIF/WebP via next/image. Unsplash stand-ins are optimised too until Bond photography replaces them.
     formats: ['image/avif', 'image/webp'],
