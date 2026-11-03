@@ -20,7 +20,7 @@ import {
   Waves,
   type LucideIcon,
 } from 'lucide-react'
-import { BookingForm } from '@/components/booking/booking-form'
+import { BookCta } from '@/components/booking/book-cta'
 import { ActivityCard, ActivityVisual } from '@/components/activities/activity-card'
 import { LocationImageFallback } from '@/components/locations/location-card'
 import { NotifyMeButton } from '@/components/locations/notify-me'
@@ -29,6 +29,7 @@ import {
   activityStatus,
   formatDuration,
   getActivity,
+  offeringPrice,
   offeringsFor,
   waterTypesFor,
   type Activity,
@@ -69,7 +70,7 @@ export function ActivityDetailHero({ activity }: { activity: Activity }) {
           <h1 className="mt-5 font-display text-5xl font-black leading-[.95] tracking-tight sm:text-6xl lg:text-7xl"><RevealLines>{activity.name}</RevealLines></h1>
           <p className="mt-5 max-w-lg text-base leading-7 text-white/80 sm:text-lg">{activity.summary}</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <a href="#book" className={`inline-flex min-h-12 items-center rounded-full bg-sand px-6 text-sm font-extrabold uppercase tracking-[0.12em] text-ink transition hover:bg-white ${focusRing}`}>{canPreviewBooking ? 'Book this experience' : 'Check availability'} <ArrowRight className="ml-2 size-4" aria-hidden /></a>
+            <a href={ROUTES.book} className={`inline-flex min-h-12 items-center rounded-full bg-sand px-6 text-sm font-extrabold uppercase tracking-[0.12em] text-ink transition hover:bg-white ${focusRing}`}>{canPreviewBooking ? 'Book this experience' : 'Check availability'} <ArrowRight className="ml-2 size-4" aria-hidden /></a>
             <a href="#locations" className={`inline-flex min-h-12 items-center rounded-full border border-white/40 px-6 text-sm font-bold text-white transition hover:bg-white/10 ${focusRing}`}>Explore locations</a>
           </div>
         </div>
@@ -217,7 +218,7 @@ function ActivityLocationCard({ offering, activity }: { offering: ResolvedOfferi
         <div className="mt-auto flex flex-wrap items-center gap-3 pt-5">
           <a href={location.hasDetailPage ? locationHref(location) : ROUTES.locations} className={`inline-flex min-h-11 items-center text-sm font-bold text-ink hover:text-teal ${focusRing}`}>View location <ArrowRight className="ml-1 size-4" aria-hidden /></a>
           {isOperating
-            ? <a href="#book" className={`ml-auto inline-flex min-h-11 items-center rounded-full bg-sand px-5 text-xs font-extrabold uppercase tracking-[0.1em] text-ink ${focusRing}`} aria-label={`Book ${activity.name} at ${location.name}`}>Book this experience</a>
+            ? <a href={ROUTES.book} className={`ml-auto inline-flex min-h-11 items-center rounded-full bg-sand px-5 text-xs font-extrabold uppercase tracking-[0.1em] text-ink ${focusRing}`} aria-label={`Book ${activity.name} at ${location.name}`}>Book this experience</a>
             : <NotifyMeButton name={location.name} slug={location.slug} className="ml-auto min-h-11" />}
         </div>
       </div>
@@ -248,18 +249,8 @@ export function ActivityLocationList({ activity }: { activity: Activity }) {
 export function ActivityBookingPanel({ activity }: { activity: Activity }) {
   const bookable = bookableOfferings(activity)
   if (bookable.length > 0) {
-    return (
-      <BookingForm
-        title={`Book ${activity.name.toLowerCase()}`}
-        fixedActivity={activity.name}
-        locations={bookable.map((offering) => ({
-          slug: offering.location.slug,
-          name: offering.location.name,
-          // Demo pairings borrow the location's homepage price so the preview can show totals.
-          pricePerParticipant: offering.pricePerParticipant ?? (offering.source === 'demo' ? offering.location.startingPrice : undefined),
-        }))}
-      />
-    )
+    const prices = bookable.flatMap((offering) => offeringPrice(offering) ?? [])
+    return <BookCta title={`Book ${activity.name.toLowerCase()}`} fromPrice={prices.length ? Math.min(...prices) : undefined} />
   }
   const planned = offeringsFor(activity).find((offering) => offering.location.status !== 'operating')
   return (
@@ -363,7 +354,7 @@ export function ActivityFAQ({ activity }: { activity: Activity }) {
   )
 }
 
-export function ActivityFinalCTA({ bookHref = '#book' }: { bookHref?: string }) {
+export function ActivityFinalCTA({ bookHref = ROUTES.book }: { bookHref?: string }) {
   return (
     <section className="bg-sand px-5 py-20 text-ink lg:px-8 lg:py-24">
       <div className="mx-auto flex max-w-7xl flex-col justify-between gap-8 lg:flex-row lg:items-end">
@@ -388,7 +379,7 @@ export function ActivityMobileCTA({ activity }: { activity: Activity }) {
         <p className="truncate text-sm font-bold">{activity.name}</p>
         <p className="truncate text-xs text-white/70">{status === 'available' ? 'Sessions available' : 'Price to be confirmed'}</p>
       </div>
-      <a href="#book" className={`inline-flex min-h-11 items-center rounded-xl bg-sand px-5 text-xs font-extrabold uppercase text-ink ${focusRing}`}>{bookableOfferings(activity).length ? 'Book now' : 'Details'}</a>
+      <a href={ROUTES.book} className={`inline-flex min-h-11 items-center rounded-xl bg-sand px-5 text-xs font-extrabold uppercase text-ink ${focusRing}`}>{bookableOfferings(activity).length ? 'Book now' : 'Details'}</a>
     </div>
   )
 }

@@ -3,6 +3,9 @@
 import { useEffect, useState } from 'react'
 import { ArrowRight, CalendarDays } from 'lucide-react'
 import { DatePicker } from '@/components/booking/date-picker'
+import { activities } from '@/lib/activities'
+import { bookingHref } from '@/lib/group-booking'
+import { locations } from '@/lib/locations'
 
 const LOCATIONS = ['Muziris–Kottapuram', 'Muziris–North Paravur', 'Kovalam']
 const ACTIVITIES = ['Any activity', 'Kayaking', 'Canoeing', 'Stand-up paddleboarding']
@@ -21,7 +24,6 @@ export function HomeBooking() {
   const [location, setLocation] = useState(LOCATIONS[0])
   const [activity, setActivity] = useState(ACTIVITIES[0])
   const [date, setDate] = useState<Date | null>(null)
-  const [submitted, setSubmitted] = useState(false)
   const [restored, setRestored] = useState(false)
 
   useEffect(() => {
@@ -39,6 +41,9 @@ export function HomeBooking() {
     try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ location, activity, date: date?.toISOString() ?? null } satisfies Saved)) } catch {}
   }, [restored, location, activity, date])
 
+  const isoDate = date ? `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}` : undefined
+  // Hands the search to the booking flow, where each person then chooses their own activities.
+  const href = bookingHref({ location: locations.find((item) => item.name === location)?.slug, activity: activities.find((item) => item.name === activity)?.slug, date: isoDate })
   const select = 'mt-2 block w-full bg-transparent text-sm font-semibold normal-case tracking-normal text-ink outline-none'
   const field = 'rounded-2xl border border-line bg-paper-bright px-4 py-3 text-xs font-bold uppercase tracking-wider text-slate'
 
@@ -50,9 +55,9 @@ export function HomeBooking() {
           <label className={field}>Location<select value={location} onChange={(e) => setLocation(e.target.value)} className={select}>{LOCATIONS.map((name) => <option key={name}>{name}</option>)}</select></label>
           <label className={field}>Activity<select value={activity} onChange={(e) => setActivity(e.target.value)} className={select}>{ACTIVITIES.map((name) => <option key={name}>{name}</option>)}</select></label>
           <DatePicker value={date} onChange={setDate} />
-          <button type="button" onClick={() => setSubmitted(true)} className="rounded-2xl bg-ink px-5 py-4 text-sm font-extrabold uppercase tracking-[0.1em] text-white transition hover:bg-ink-soft">{submitted ? 'Request received' : 'Find sessions'} <ArrowRight className="ml-2 inline size-4" aria-hidden /></button>
+          <a href={href} className="flex items-center justify-center rounded-2xl bg-ink px-5 py-4 text-sm font-extrabold uppercase tracking-[0.1em] text-white transition hover:bg-ink-soft">Find sessions <ArrowRight className="ml-2 inline size-4" aria-hidden /></a>
         </div>
-        <p className="mt-4 text-xs text-slate-light">Live availability and payment will appear here once the booking engine is connected. This preview uses demonstration data.</p>
+        <p className="mt-4 text-xs text-slate-light">Booking for a group? Everyone can choose their own activity on the next step. Sessions and prices are demonstration data until the booking engine is connected.</p>
       </div>
     </section>
   )

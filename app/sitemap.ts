@@ -17,6 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/gallery-reviews`, changeFrequency: 'monthly' as const, priority: 0.6 },
     { url: `${SITE_URL}/about`, changeFrequency: 'monthly' as const, priority: 0.7 },
     { url: `${SITE_URL}/groups-corporate`, changeFrequency: 'monthly' as const, priority: 0.8 },
+    { url: `${SITE_URL}/book`, changeFrequency: 'monthly' as const, priority: 0.8 },
     { url: `${SITE_URL}/membership`, changeFrequency: 'monthly' as const, priority: 0.8 },
     { url: `${SITE_URL}/shop`, changeFrequency: 'weekly' as const, priority: 0.8 },
     ...SHOP_CATEGORIES.map((category) => ({ url: `${SITE_URL}${categoryHref(category.id)}`, changeFrequency: 'weekly' as const, priority: 0.6 })),

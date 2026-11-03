@@ -35,7 +35,7 @@ export function HomeHero() {
             <RevealLines delay={0.7} stagger={0.12}>Find your<br /><span className="text-sand">wild water.</span></RevealLines>
           </h1>
           <Reveal as="p" delay={1} className="mt-7 max-w-lg text-base leading-7 text-white/80 sm:text-lg">Guided paddles, peaceful backwaters and a new way to experience Kerala—one stroke at a time.</Reveal>
-          <Reveal delay={1.1} className="mt-9 flex flex-wrap gap-3"><a href="#book" className="rounded-full bg-sand px-7 py-4 text-sm font-semibold text-ink transition hover:bg-white">Book an experience <ArrowRight className="ml-2 inline size-4" /></a><a href="#locations" className="rounded-full border border-white/40 px-7 py-4 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white hover:text-ink">Explore locations</a></Reveal>
+          <Reveal delay={1.1} className="mt-9 flex flex-wrap gap-3"><a href="/book" className="rounded-full bg-sand px-7 py-4 text-sm font-semibold text-ink transition hover:bg-white">Book an experience <ArrowRight className="ml-2 inline size-4" /></a><a href="#locations" className="rounded-full border border-white/40 px-7 py-4 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white hover:text-ink">Explore locations</a></Reveal>
         </div>
       </motion.div>
 

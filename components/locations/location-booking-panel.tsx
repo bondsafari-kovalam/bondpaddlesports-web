@@ -1,4 +1,4 @@
-import { BookingForm } from '@/components/booking/booking-form'
+import { BookCta } from '@/components/booking/book-cta'
 import { NotifyMeButton } from '@/components/locations/notify-me'
 import type { Location } from '@/lib/locations'
 
@@ -13,5 +13,5 @@ export function LocationBookingPanel({ location }: { location: Location }) {
       </div>
     )
   }
-  return <BookingForm title={`Book ${location.name}`} locations={[{ slug: location.slug, name: location.name, pricePerParticipant: location.startingPrice }]} />
+  return <BookCta title={`Book ${location.name}`} fromPrice={location.startingPrice} />
 }

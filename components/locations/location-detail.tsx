@@ -38,7 +38,7 @@ export function LocationDetailHero({ location }: { location: Location }) {
           {location.summary && <p className="mt-5 max-w-lg text-base leading-7 text-white/80 sm:text-lg">{location.summary}</p>}
           <div className="mt-8 flex flex-wrap gap-3">
             {isOperating
-              ? <a href="#book" className={`rounded-full bg-sand px-6 py-4 text-sm font-extrabold uppercase tracking-[0.12em] text-ink transition hover:bg-white ${focusRing}`}>Book now <ArrowRight className="ml-2 inline size-4" aria-hidden /></a>
+              ? <a href={ROUTES.book} className={`rounded-full bg-sand px-6 py-4 text-sm font-extrabold uppercase tracking-[0.12em] text-ink transition hover:bg-white ${focusRing}`}>Book now <ArrowRight className="ml-2 inline size-4" aria-hidden /></a>
               : <NotifyMeButton name={location.name} slug={location.slug} variant="solid" className="px-6 py-4 text-sm" />}
             <a href="#activities" className={`rounded-full border border-white/40 px-6 py-4 text-sm font-bold text-white transition hover:bg-white/10 ${focusRing}`}>Explore activities</a>
           </div>
@@ -92,7 +92,7 @@ export function LocationActivityList({ location }: { location: Location }) {
                   {activity.skillLevel && <div><dt className="inline font-bold">Level </dt><dd className="inline">{activity.skillLevel}</dd></div>}
                   {activity.startingPrice && <div><dt className="inline font-bold">From </dt><dd className="inline">{formatPrice(activity.startingPrice)}</dd></div>}
                 </dl>
-                {location.status === 'operating' && <a href="#book" className="mt-5 inline-flex items-center text-sm font-bold text-teal">Book this activity <ArrowRight className="ml-1 size-4" aria-hidden /></a>}
+                {location.status === 'operating' && <a href={ROUTES.book} className="mt-5 inline-flex items-center text-sm font-bold text-teal">Book this activity <ArrowRight className="ml-1 size-4" aria-hidden /></a>}
               </div>
             </article>
           ))}
@@ -267,7 +267,7 @@ export function LocationMobileCTA({ location }: { location: Location }) {
         </p>
       </div>
       {isOperating
-        ? <a href="#book" className={`rounded-xl bg-sand px-5 py-3 text-xs font-extrabold uppercase text-ink ${focusRing}`}>Book now</a>
+        ? <a href={ROUTES.book} className={`rounded-xl bg-sand px-5 py-3 text-xs font-extrabold uppercase text-ink ${focusRing}`}>Book now</a>
         : <NotifyMeButton name={location.name} slug={location.slug} variant="solid" className="rounded-xl px-4" />}
     </div>
   )
