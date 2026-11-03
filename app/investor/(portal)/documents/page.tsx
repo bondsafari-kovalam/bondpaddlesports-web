@@ -16,7 +16,7 @@ export default async function InvestorDocuments() {
   return (
     <>
       <PageIntro eyebrow="Document library" title="Investor documents">
-        <p>Summaries generated from the round deck can be downloaded here, and are only served to a signed-in session. Full documents such as the deck and the financial model are shared on request until secure document storage is set up.</p>
+        <p>The round deck, summaries generated from it, the hub-and-spoke network plan and the 2027 Academy pathway guide can be downloaded here, and are only served to a signed-in session. The financial model is shared on request.</p>
       </PageIntro>
 
       <div className="mt-10 space-y-10">

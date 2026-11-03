@@ -20,18 +20,18 @@ export type InvestorDocument = {
   published?: string
   period?: string
   version: string
-  /** Generated: built on the server from round-data and served to a signed-in session.
-   *  On request / Forthcoming: not stored here; real files need private storage, never public/. */
+  /** Download: generated from round-data, or a file in private/investor-documents/, served only to a signed-in session.
+   *  On request / Forthcoming: not stored here; real files go in private/, never public/. */
   status: 'Download' | 'On request' | 'Forthcoming'
 }
 
 export const DOCUMENTS: InvestorDocument[] = [
   { id: 'key-terms', title: 'Key terms and use of funds', category: 'Investment Round', description: 'Round terms, use of the ₹5.25 Cr, capital calls and Gate 1, generated from the round deck.', published: '2026-10-01', version: '1.0', status: 'Download' },
   { id: 'projections', title: 'Base-case projections, FY27–FY33', category: 'Business Plan', description: 'Sites, paddlers, learners, revenue, EBITDA, profit and cash by year, as a spreadsheet (CSV).', published: '2026-10-01', period: 'FY27–FY33', version: '1.0', status: 'Download' },
-  { id: 'round-deck', title: 'Friends & Family Round deck', category: 'Investment Round', description: 'The full presentation (19 slides). Shared by the Bond team with named recipients.', published: '2026-10-01', version: '1.0', status: 'On request' },
+  { id: 'round-deck', title: 'Friends & Family Round deck', category: 'Investment Round', description: 'The full presentation for named recipients (PDF, 21 pages).', published: '2026-10-01', version: '1.0', status: 'Download' },
   { id: 'financial-model', title: 'Bond Safari financial model', category: 'Business Plan', description: 'Base case and capacity scenarios behind the projections.', period: 'FY27–FY33', version: '—', status: 'On request' },
-  { id: 'network-plan', title: 'Hub-and-Spoke Network plan', category: 'Business Plan', description: 'Four regional hubs, 31 potential spokes, preliminary site scores and the proposed rollout waves.', published: '2026-10-28', version: '1.0', status: 'On request' },
-  { id: 'pathway-guide', title: 'Paddle UK Qualification Pathway 2027', category: 'Academy', description: 'Academy course ladder, prices and group programmes for 2027.', period: '2027', version: '1.0', status: 'On request' },
+  { id: 'network-plan', title: 'Hub-and-Spoke Network plan', category: 'Business Plan', description: 'Four regional hubs, 31 potential spokes ranked within each hub, and the proposed rollout waves (PDF, 17 pages).', published: '2026-10-28', version: '1.0', status: 'Download' },
+  { id: 'pathway-guide', title: 'Paddle UK Qualification Pathway 2027', category: 'Academy', description: 'Academy course ladder, prices and group programmes for 2027 (PDF, 15 slides).', published: '2026-11-03', period: '2027', version: '1.0', status: 'Download' },
   { id: 'offer-letter', title: 'Offer letter (PAS-4)', category: 'Legal', description: 'Private placement offer letter with the full risk factors.', version: '—', status: 'Forthcoming' },
   { id: 'shareholders-agreement', title: 'Shareholders’ agreement', category: 'Legal', description: 'Includes the dividend policy and yearly exit windows (routes 1 and 2).', version: '—', status: 'Forthcoming' },
 ]
