@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Lock } from 'lucide-react'
 import { DataTable, PageIntro, PortalSection } from '@/components/investor/portal-ui'
 import { ProtectedContent } from '@/components/investor/protected-content'
-import { Bullets, Heading, Numbered, Para, SectionLinks, StudyTable, body } from '@/components/investor/study-ui'
+import { BackToStudies, Bullets, Heading, Numbered, Para, SectionLinks, StudyTable, body } from '@/components/investor/study-ui'
 import * as study from '@/lib/investor/feasibility-alappuzha-data'
 import { PREPARED_BY } from '@/lib/investor/feasibility-data'
 import { requireInvestorSession } from '@/lib/investor/session'
@@ -18,6 +18,8 @@ export default async function AlappuzhaFeasibility() {
   await requireInvestorSession()
   return (
     <ProtectedContent>
+      <BackToStudies className="mb-8" />
+
       <PageIntro eyebrow="Feasibility study · Alappuzha" title="Alappuzha Paddle Sports Centre: Feasibility Study">
         <p>{PREPARED_BY}</p>
       </PageIntro>
@@ -177,6 +179,8 @@ export default async function AlappuzhaFeasibility() {
           <p className="mt-6 text-sm italic leading-6 text-slate">{study.CLOSING_NOTE}</p>
         </PortalSection>
       </div>
+
+      <BackToStudies className="mt-12" />
     </ProtectedContent>
   )
 }

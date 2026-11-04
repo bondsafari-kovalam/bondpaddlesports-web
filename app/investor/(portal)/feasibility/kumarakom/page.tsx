@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { AlertTriangle, Lock } from 'lucide-react'
 import { DataTable, PageIntro, PortalSection } from '@/components/investor/portal-ui'
 import { ProtectedContent } from '@/components/investor/protected-content'
-import { Bullets, Heading, Lead, Numbered, Para, SectionLinks, StudyTable, body } from '@/components/investor/study-ui'
+import { BackToStudies, Bullets, Heading, Lead, Numbered, Para, SectionLinks, StudyTable, body } from '@/components/investor/study-ui'
 import {
   ASSUMPTIONS, BASE_REVENUE, BID_CONDITIONS, BID_CONDITIONS_INTRO, BID_KNOWN, BID_UNVERIFIED, CAPACITY, CAPEX, CAPTURE, CAPTURE_INTRO, CLOSING_NOTE,
   COMPANY_INTRO, COMPANY_NOTE, COMPANY_POINTS, COMPARISON, COMPARISON_INTRO, COMPARISON_RESULT, COMPETITION_CONCLUSIONS, CONTRACT_LAYERS, DEMAND_CHECK,
@@ -26,6 +26,8 @@ export default async function KumarakomFeasibility() {
   await requireInvestorSession()
   return (
     <ProtectedContent>
+      <BackToStudies className="mb-8" />
+
       <PageIntro eyebrow="Feasibility study · Kumarakom" title="Kumarakom Paddle Sports Centre: Feasibility Study">
         <p>{PREPARED_BY}</p>
       </PageIntro>
@@ -160,6 +162,8 @@ export default async function KumarakomFeasibility() {
           <p className="mt-6 text-sm italic leading-6 text-slate">{CLOSING_NOTE}</p>
         </PortalSection>
       </div>
+
+      <BackToStudies className="mt-12" />
     </ProtectedContent>
   )
 }

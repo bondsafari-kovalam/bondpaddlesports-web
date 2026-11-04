@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Lock } from 'lucide-react'
 import { DataTable, Note, PageIntro, PortalSection } from '@/components/investor/portal-ui'
 import { ProtectedContent } from '@/components/investor/protected-content'
-import { Bullets, LinkedSources, Numbered, Para, SectionLinks, StudyCover, StudyTable, Verdict } from '@/components/investor/study-ui'
+import { BackToStudies, Bullets, LinkedSources, Numbered, Para, SectionLinks, StudyCover, StudyTable, Verdict } from '@/components/investor/study-ui'
 import { PREPARED_BY } from '@/lib/investor/feasibility-data'
 import {
   ACADEMY, BASE_INTRO, BASE_OPTIONS, BASE_POINTS, CLOSING_NOTE, CONFLICTS, COVER_FACTS, COVER_NOTE, ECONOMICS_CLOSING, ECONOMICS_INTRO, FUNDED_SITES, HOW_TO_READ,
@@ -22,6 +22,8 @@ export default async function TrivandrumHubFeasibility() {
   await requireInvestorSession()
   return (
     <ProtectedContent>
+      <BackToStudies className="mb-8" />
+
       <PageIntro eyebrow="Bond Safari Paddle Sports Pvt Ltd" title="Trivandrum Hub">
         <p className="font-semibold text-teal-strong">Hub Feasibility Study</p>
         <p>{PREPARED_BY}</p>
@@ -95,6 +97,8 @@ export default async function TrivandrumHubFeasibility() {
           <p className="mt-6 text-sm italic leading-6 text-slate">{CLOSING_NOTE}</p>
         </PortalSection>
       </div>
+
+      <BackToStudies className="mt-12" />
     </ProtectedContent>
   )
 }
