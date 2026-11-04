@@ -21,8 +21,10 @@ export type InvestorDocument = {
   period?: string
   version: string
   /** Download: generated from round-data, or a file in private/investor-documents/, served only to a signed-in session.
+   *  View only: read on the portal page at `href`; there is no file to download.
    *  On request / Forthcoming: not stored here; real files go in private/, never public/. */
-  status: 'Download' | 'On request' | 'Forthcoming'
+  status: 'Download' | 'View only' | 'On request' | 'Forthcoming'
+  href?: string
 }
 
 export const DOCUMENTS: InvestorDocument[] = [
@@ -31,6 +33,10 @@ export const DOCUMENTS: InvestorDocument[] = [
   { id: 'round-deck', title: 'Friends & Family Round deck', category: 'Investment Round', description: 'The full presentation for named recipients (PDF, 21 pages).', published: '2026-10-01', version: '1.0', status: 'Download' },
   { id: 'financial-model', title: 'Bond Safari financial model', category: 'Business Plan', description: 'Base case and capacity scenarios behind the projections.', period: 'FY27–FY33', version: '—', status: 'On request' },
   { id: 'network-plan', title: 'Hub-and-Spoke Network plan', category: 'Business Plan', description: 'Four regional hubs, 31 potential spokes ranked within each hub, and the proposed rollout waves (PDF, 17 pages).', published: '2026-10-28', version: '1.0', status: 'Download' },
+  { id: 'trivandrum-hub-feasibility', title: 'Trivandrum hub feasibility study', category: 'Business Plan', description: 'Hub base, the eight spokes it serves, hub economics, the Academy campus, risks and the launch plan. Read online only.', published: '2026-11-04', version: '1.0', status: 'View only', href: '/investor/feasibility/trivandrum-hub' },
+  { id: 'kovalam-feasibility', title: 'Kovalam feasibility study', category: 'Business Plan', description: 'Demand, customers, competition, locations, operating models, financials, related-party terms, permits and the launch plan for Kovalam. Read online only.', published: '2026-11-04', version: '1.0', status: 'View only', href: '/investor/feasibility/kovalam' },
+  { id: 'alappuzha-feasibility', title: 'Alappuzha feasibility study', category: 'Business Plan', description: 'Demand, customers, competition, ten locations, four operating models, financials, permits and the launch plan for Alappuzha. Read online only.', published: '2026-11-04', version: '1.0', status: 'View only', href: '/investor/feasibility/alappuzha' },
+  { id: 'kumarakom-feasibility', title: 'Kumarakom feasibility study', category: 'Business Plan', description: 'Demand, competition, three operating models, financials, permits and the launch plan for Kumarakom. Read online only.', published: '2026-11-04', version: '1.0', status: 'View only', href: '/investor/feasibility/kumarakom' },
   { id: 'pathway-guide', title: 'Paddle UK Qualification Pathway 2027', category: 'Academy', description: 'Academy course ladder, prices and group programmes for 2027 (PDF, 15 slides).', published: '2026-11-03', period: '2027', version: '1.0', status: 'Download' },
   { id: 'offer-letter', title: 'Offer letter (PAS-4)', category: 'Legal', description: 'Private placement offer letter with the full risk factors.', version: '—', status: 'Forthcoming' },
   { id: 'shareholders-agreement', title: 'Shareholders’ agreement', category: 'Legal', description: 'Includes the dividend policy and yearly exit windows (routes 1 and 2).', version: '—', status: 'Forthcoming' },
@@ -40,6 +46,10 @@ export type InvestorUpdate = { id: string; kind: 'Company update' | 'Location de
 
 /** Only events stated in the round deck; newest first. */
 export const UPDATES: InvestorUpdate[] = ([
+  { id: 'kovalam-feasibility', kind: 'Location development', title: 'Kovalam feasibility study added', date: '2026-11-04', when: '4 Nov 2026', summary: 'The study recommends opening Kovalam in January 2027 as the Trivandrum hub’s home spoke, run from the Bond campus. Read it under Feasibility studies.' },
+  { id: 'alappuzha-feasibility', kind: 'Location development', title: 'Alappuzha feasibility study added', date: '2026-11-04', when: '4 Nov 2026', summary: 'The study recommends opening Alappuzha as a two-site cluster, starting with a Punnamada–Kuttanad spoke in FY28. Read it under Feasibility studies.' },
+  { id: 'trivandrum-hub-feasibility', kind: 'Location development', title: 'Trivandrum hub feasibility study added', date: '2026-11-04', when: '4 Nov 2026', summary: 'The study recommends opening the Trivandrum hub at the Bond Kovalam campus in January 2027. Read it under Feasibility studies.' },
+  { id: 'kumarakom-feasibility', kind: 'Location development', title: 'Kumarakom feasibility study added', date: '2026-11-04', when: '4 Nov 2026', summary: 'The study recommends opening Kumarakom as a standalone spoke. Read it under Feasibility studies.' },
   { id: 'portal', kind: 'Company update', title: 'Investor portal opened for the Friends & Family round', date: '2026-10-28', when: '28 Oct 2026', summary: 'Round terms, the business plan and projections are now available here for named recipients.' },
   { id: 'network-plan', kind: 'Expansion', title: 'Hub-and-spoke network plan added', date: '2026-10-28', when: '28 Oct 2026', summary: 'Four regional hubs and 31 potential spokes. The investor plan still covers 18 sites; the rest is an unfunded pipeline.' },
   { id: 'round-open', kind: 'Investment round', title: 'Friends & Family round opened', date: '2026-10-01', when: 'Oct 2026', summary: '₹5.25 Cr from up to 100 friends and family, at least ₹5 lakh each, for 34.4% of Bond Safari Paddle Sports Pvt Ltd at a ₹10 Cr pre-money valuation.' },

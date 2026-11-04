@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Clock, Download, FileText, Mail } from 'lucide-react'
+import { BookOpen, Clock, Download, FileText, Mail } from 'lucide-react'
 import { PageIntro } from '@/components/investor/portal-ui'
 import { focusRing } from '@/components/locations/primitives'
 import { DOCUMENTS, DOCUMENT_CATEGORIES } from '@/lib/investor/content'
@@ -8,7 +8,7 @@ import { requireInvestorSession } from '@/lib/investor/session'
 
 export const metadata: Metadata = { title: 'Documents' }
 
-const statusStyle = { Download: 'bg-success-soft text-success', 'On request': 'bg-sand-soft text-sand-ink', Forthcoming: 'bg-mist text-slate-strong' }
+const statusStyle = { Download: 'bg-success-soft text-success', 'View only': 'bg-teal/10 text-teal-strong', 'On request': 'bg-sand-soft text-sand-ink', Forthcoming: 'bg-mist text-slate-strong' }
 const monthYear = (iso: string) => new Date(`${iso}T00:00:00`).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })
 
 export default async function InvestorDocuments() {
@@ -16,7 +16,7 @@ export default async function InvestorDocuments() {
   return (
     <>
       <PageIntro eyebrow="Document library" title="Investor documents">
-        <p>The round deck, summaries generated from it, the hub-and-spoke network plan and the 2027 Academy pathway guide can be downloaded here, and are only served to a signed-in session. The financial model is shared on request.</p>
+        <p>The round deck, summaries generated from it, the hub-and-spoke network plan and the 2027 Academy pathway guide can be downloaded here, and are only served to a signed-in session. Feasibility studies are view only. The financial model is shared on request.</p>
       </PageIntro>
 
       <div className="mt-10 space-y-10">
@@ -40,6 +40,7 @@ export default async function InvestorDocuments() {
                   </dl>
                   <div className="mt-auto pt-5">
                     {doc.status === 'Download' && <a href={`/investor/documents/${doc.id}/download`} className={`inline-flex min-h-10 items-center gap-2 rounded-full bg-ink px-4 text-sm font-semibold text-white transition hover:bg-ink-soft ${focusRing}`}><Download className="size-4" aria-hidden />Download</a>}
+                    {doc.status === 'View only' && <a href={doc.href} className={`inline-flex min-h-10 items-center gap-2 rounded-full bg-ink px-4 text-sm font-semibold text-white transition hover:bg-ink-soft ${focusRing}`}><BookOpen className="size-4" aria-hidden />Read online</a>}
                     {doc.status === 'On request' && <a href={`mailto:${INVESTOR_CONTACT.email}?subject=${encodeURIComponent(`Request: ${doc.title}`)}`} className={`inline-flex min-h-10 items-center gap-2 text-sm font-semibold text-teal hover:underline ${focusRing}`}><Mail className="size-4" aria-hidden />Request from the Bond team</a>}
                     {doc.status === 'Forthcoming' && <p className="inline-flex min-h-10 items-center gap-2 text-sm font-semibold text-slate"><Clock className="size-4" aria-hidden />Shared when the legal documents are ready</p>}
                   </div>
