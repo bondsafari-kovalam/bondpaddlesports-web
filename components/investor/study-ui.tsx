@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react'
+import { ArrowLeft } from 'lucide-react'
 import { DataTable, Note } from '@/components/investor/portal-ui'
+import { focusRing } from '@/components/locations/primitives'
 import type { Point, Table } from '@/lib/investor/feasibility-data'
 
 export const body = 'text-sm leading-6 text-slate-strong'
@@ -84,3 +86,5 @@ export function LinkedSources({ sources }: { sources: { title: string; url?: str
     </ul>
   )
 }
+
+export const BackToStudies = ({ className = '' }: { className?: string }) => <a href="/investor/feasibility" className={`inline-flex min-h-11 items-center gap-2 rounded-full border border-line bg-paper-bright px-4 text-sm font-semibold text-ink transition hover:border-ink ${focusRing} ${className}`}><ArrowLeft className="size-4" aria-hidden />Back to feasibility studies</a>

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Lock } from 'lucide-react'
 import { DataTable, Note, PageIntro, PortalSection } from '@/components/investor/portal-ui'
 import { ProtectedContent } from '@/components/investor/protected-content'
-import { Bullets, Heading, LinkedSources, Numbered, Para, SectionLinks, StudyCover, StudyTable, Verdict } from '@/components/investor/study-ui'
+import { BackToStudies, Bullets, Heading, LinkedSources, Numbered, Para, SectionLinks, StudyCover, StudyTable, Verdict } from '@/components/investor/study-ui'
 import { PREPARED_BY } from '@/lib/investor/feasibility-data'
 import * as study from '@/lib/investor/feasibility-kovalam-data'
 import { requireInvestorSession } from '@/lib/investor/session'
@@ -18,6 +18,8 @@ export default async function KovalamFeasibility() {
   await requireInvestorSession()
   return (
     <ProtectedContent>
+      <BackToStudies className="mb-8" />
+
       <PageIntro eyebrow="Bond Safari Paddle Sports Pvt Ltd" title="Kovalam Paddle Sports Centre">
         <p className="font-semibold text-teal-strong">Paddle Sports Feasibility Study</p>
         <p>{PREPARED_BY}</p>
@@ -144,6 +146,8 @@ export default async function KovalamFeasibility() {
           <p className="mt-6 text-sm italic leading-6 text-slate">{study.CLOSING_NOTE}</p>
         </PortalSection>
       </div>
+
+      <BackToStudies className="mt-12" />
     </ProtectedContent>
   )
 }
