@@ -65,16 +65,16 @@ export function StatGrid({ stats, tone = 'light' }: { stats: { value: string; la
 
 /**
  * Scrolls sideways inside its own box on small screens, so wide financial tables never push the page.
- * `numeric` columns are right-aligned with tabular figures.
+ * `numeric` columns are right-aligned with tabular figures; `wrapHead` lets long headings wrap in tables with many columns.
  */
-export function DataTable({ caption, head, rows, numeric = [], highlight = [] }: { caption: string; head: string[]; rows: string[][]; numeric?: number[]; highlight?: number[] }) {
+export function DataTable({ caption, head, rows, numeric = [], highlight = [], wrapHead = false }: { caption: string; head: string[]; rows: string[][]; numeric?: number[]; highlight?: number[]; wrapHead?: boolean }) {
   const align = (i: number) => (numeric.includes(i) ? 'text-right tabular-nums' : 'text-left')
   return (
     <div className="overflow-x-auto rounded-2xl border border-line bg-paper-bright" role="region" aria-label={caption} tabIndex={0}>
       <table className="w-full min-w-[36rem] border-collapse text-sm">
         <caption className="sr-only">{caption}</caption>
         <thead className="bg-mist text-xs uppercase tracking-wider text-slate-strong">
-          <tr>{head.map((h, i) => <th key={h} scope="col" className={`whitespace-nowrap px-4 py-3 font-bold ${align(i)}`}>{h}</th>)}</tr>
+          <tr>{head.map((h, i) => <th key={h} scope="col" className={`${wrapHead ? 'align-bottom' : 'whitespace-nowrap'} px-4 py-3 font-bold ${align(i)}`}>{h}</th>)}</tr>
         </thead>
         <tbody className="divide-y divide-line">
           {rows.map((row, r) => (
