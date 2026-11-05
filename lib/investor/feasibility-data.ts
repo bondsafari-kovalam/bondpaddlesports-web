@@ -11,12 +11,26 @@ import 'server-only'
 export type Point = { lead?: string; text?: string; sub?: string[] }
 export type Table = { caption: string; head: string[]; rows: string[][]; numeric?: number[]; highlight?: number[]; wrapHead?: boolean }
 
-/** One entry per location; a new study adds a card here and its own page under /investor/feasibility/. */
-export const FEASIBILITY_STUDIES = [
-  { id: 'trivandrum-hub', location: 'Trivandrum hub', hub: 'Thiruvananthapuram and Kollam', title: 'Trivandrum Hub: Hub Feasibility Study', verdict: 'Go, at the Bond Kovalam campus in January 2027, with a leased workshop near Kovalam.', stats: [['₹120 lakh', 'Hub capex'], ['₹72 lakh', 'Hub overhead a year'], ['₹3.43 Cr', 'Mature revenue, 5 spokes'], ['₹1.79 Cr', 'Mature EBITDA, 5 spokes']] },
-  { id: 'kovalam', location: 'Kovalam', hub: 'Trivandrum hub', title: 'Kovalam Paddle Sports Centre: Paddle Sports Feasibility Study', verdict: 'Go, in January 2027 as the hub’s home spoke, run from the Bond campus with Vellayani as the flat-water partner.', stats: [['₹41 lakh', 'Capex, Model B'], ['₹1.44 Cr', 'Mature revenue, Model B'], ['₹86 lakh', 'Mature EBITDA, Model B'], ['1.0 years', 'Payback, Model B']] },
-  { id: 'alappuzha', location: 'Alappuzha', hub: 'Ernakulam hub', title: 'Alappuzha Paddle Sports Centre: Feasibility Study', verdict: 'Go, as a two-site cluster: a Punnamada–Kuttanad spoke in FY28 and a Marari satellite in FY29.', stats: [['₹47 lakh', 'Capex, Model B'], ['₹1.17 Cr', 'Mature revenue, Model B'], ['₹60 lakh', 'Mature EBITDA, Model B'], ['1.5 years', 'Payback, Model B']] },
-  { id: 'kumarakom', location: 'Kumarakom', hub: 'Ernakulam hub', title: 'Kumarakom Paddle Sports Centre: Feasibility Study', verdict: 'Go, as a standalone spoke with its own launch point and resort sales partnerships.', stats: [['₹47 lakh', 'Capex'], ['₹1.31 Cr', 'Mature revenue'], ['₹70 lakh', 'Mature EBITDA'], ['1.4 years', 'Payback']] },
+export type StudyStage = 'Hub' | 'Live' | 'Wave 1' | 'Wave 2' | 'Deferred'
+
+export const FEASIBILITY_HUBS = [
+  { name: 'Trivandrum hub', area: 'Thiruvananthapuram and Kollam districts' },
+  { name: 'Ernakulam hub', area: 'Ernakulam, Thrissur, Alappuzha and Kottayam districts' },
+]
+
+/**
+ * One entry per location; a new study adds a card here and its own page under /investor/feasibility/.
+ * The page groups them by hub and keeps this order: the hub report first, then its spokes in opening order.
+ */
+export const FEASIBILITY_STUDIES: { id: string; location: string; hub: string; stage: StudyStage; title: string; verdict: string; stats: string[][] }[] = [
+  { id: 'trivandrum-hub', location: 'Trivandrum hub', hub: 'Trivandrum hub', stage: 'Hub', title: 'Trivandrum Hub: Hub Feasibility Study', verdict: 'Go, at the Bond Kovalam campus in January 2027, with a leased workshop near Kovalam.', stats: [['₹120 lakh', 'Hub capex'], ['₹72 lakh', 'Hub overhead a year'], ['₹3.43 Cr', 'Mature revenue, 5 spokes'], ['₹1.79 Cr', 'Mature EBITDA, 5 spokes']] },
+  { id: 'kovalam', location: 'Kovalam', hub: 'Trivandrum hub', stage: 'Wave 1', title: 'Kovalam Paddle Sports Centre: Paddle Sports Feasibility Study', verdict: 'Go, in January 2027 as the hub’s home spoke, run from the Bond campus with Vellayani as the flat-water partner.', stats: [['₹41 lakh', 'Capex, Model B'], ['₹1.44 Cr', 'Mature revenue, Model B'], ['₹86 lakh', 'Mature EBITDA, Model B'], ['1.0 years', 'Payback, Model B']] },
+  { id: 'ernakulam-hub', location: 'Ernakulam hub', hub: 'Ernakulam hub', stage: 'Hub', title: 'Ernakulam Hub: Hub Feasibility Study', verdict: 'Go: the strongest hub in the network, based on the Goshree corridor at Mulavukad or south Vypin.', stats: [['₹120 lakh', 'Hub capex'], ['₹72 lakh', 'Hub overhead a year'], ['₹5.9 Cr', 'Mature revenue of its spokes'], ['₹2.7 Cr', 'Mature EBITDA of its spokes']] },
+  { id: 'muziris-kottapuram', location: 'Muziris–Kottapuram', hub: 'Ernakulam hub', stage: 'Live', title: 'Muziris–Kottapuram Paddle Centre: Operating Review and Feasibility Study', verdict: 'Operate and optimise; move the concession into the right company.', stats: [['₹24 lakh', 'Capex, Model C'], ['₹65.2 lakh', 'Mature revenue, Model C'], ['₹21.8 lakh', 'Mature EBITDA, Model C'], ['2.1 years', 'Payback, Model C']] },
+  { id: 'kumbalangi', location: 'Kumbalangi', hub: 'Ernakulam hub', stage: 'Wave 1', title: 'Kumbalangi Paddle Sports Centre: Paddle Sports Feasibility Study', verdict: 'Go, with a community partnership, from a shared jetty near Kallanchery.', stats: [['₹40 lakh', 'Capex, Model C'], ['₹65.0 lakh', 'Mature revenue, Model C'], ['₹28.1 lakh', 'Mature EBITDA, Model C'], ['2.3 years', 'Payback, Model C']] },
+  { id: 'kumarakom', location: 'Kumarakom', hub: 'Ernakulam hub', stage: 'Wave 2', title: 'Kumarakom Paddle Sports Centre: Feasibility Study', verdict: 'Go, as a standalone spoke with its own launch point and resort sales partnerships.', stats: [['₹47 lakh', 'Capex'], ['₹1.31 Cr', 'Mature revenue'], ['₹70 lakh', 'Mature EBITDA'], ['1.4 years', 'Payback']] },
+  { id: 'alappuzha', location: 'Alappuzha', hub: 'Ernakulam hub', stage: 'Wave 2', title: 'Alappuzha Paddle Sports Centre: Feasibility Study', verdict: 'Go, as a two-site cluster: a Punnamada–Kuttanad spoke in FY28 and a Marari satellite in FY29.', stats: [['₹47 lakh', 'Capex, Model B'], ['₹1.17 Cr', 'Mature revenue, Model B'], ['₹60 lakh', 'Mature EBITDA, Model B'], ['1.5 years', 'Payback, Model B']] },
+  { id: 'marari-coastal-blueway', location: 'Marari Coastal Blueway', hub: 'Ernakulam hub', stage: 'Deferred', title: 'Marari Coastal Blueway Paddle Centre: Paddle Sports Feasibility Study', verdict: 'Defer to FY29; go only on two conditions.', stats: [['₹30 lakh', 'Capex, Model C'], ['₹64.4 lakh', 'Mature revenue, Model C'], ['₹28.8 lakh', 'Mature EBITDA, Model C'], ['1.8 years', 'Payback, Model C']] },
 ]
 
 export const PREPARED_BY = 'Prepared By : Jackson Peter, Managing Director – Bond Group of Companies'
