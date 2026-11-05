@@ -22,7 +22,7 @@ export function ActivitiesHero() {
       <HeroFilm film={FILMS.kayaking} />
 
       <div className="relative mx-auto w-full max-w-7xl px-5 lg:px-8">
-        <p className="mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-teal-pale"><span className="h-px w-10 bg-sand" /> Explore our experiences</p>
+        <p className="mb-5 text-xs font-bold uppercase tracking-[0.25em] text-teal-pale">Explore our experiences</p>
         <h1 className="max-w-3xl font-display text-5xl font-black leading-[.95] tracking-tight sm:text-7xl lg:text-8xl"><RevealLines delay={0.3}>Find your rhythm<br /><span className="text-sand">on the water.</span></RevealLines></h1>
         <Reveal as="p" delay={0.6} className="mt-6 max-w-lg text-base leading-7 text-white/80 sm:text-lg">Discover Kerala from a different perspective. Paddle peaceful backwaters, explore beautiful waterways and find an experience that matches your pace.</Reveal>
         <Reveal delay={0.8} className="mt-10 flex flex-wrap gap-3">

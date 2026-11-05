@@ -23,7 +23,7 @@ export function GalleryHero() {
       <HeroBackdrop src={HERO_IMAGES.gallery} />
       <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
         <div className="max-w-3xl">
-          <p className="mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-teal-pale"><span className="h-px w-10 bg-sand" /> Gallery & Reviews</p>
+          <p className="mb-5 text-xs font-bold uppercase tracking-[0.25em] text-teal-pale">Gallery & Reviews</p>
           <h1 className="font-display text-5xl font-black leading-[.95] tracking-tight sm:text-7xl"><RevealLines>Life looks different<br /><span className="text-sand">from the water.</span></RevealLines></h1>
           <p className="mt-7 max-w-xl text-base leading-7 text-white/80 sm:text-lg">Explore the moments, places, and paddling experiences that make every adventure memorable, and share your own.</p>
           <div className="mt-9 flex flex-wrap gap-3">

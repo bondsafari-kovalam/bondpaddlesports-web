@@ -30,7 +30,7 @@ export function AboutHero() {
       <HeroBackdrop src={HERO_IMAGES.about} />
       <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
         <div className="max-w-3xl">
-          <p className="mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-teal-pale"><span className="h-px w-10 bg-sand" /> About Bond Safari</p>
+          <p className="mb-5 text-xs font-bold uppercase tracking-[0.25em] text-teal-pale">About Bond Safari</p>
           <h1 className="font-display text-6xl font-black leading-[.92] tracking-tight sm:text-8xl"><RevealLines>Kerala,<br /><span className="text-sand">from the water.</span></RevealLines></h1>
           <p className="mt-7 max-w-xl text-base leading-7 text-white/80 sm:text-lg">Discover a different side of Kerala through paddling, outdoor adventure, and meaningful experiences on the water.</p>
           <div className="mt-9 flex flex-wrap gap-3">

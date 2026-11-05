@@ -62,7 +62,7 @@ export function AcademyHero({ eyebrow, title, description, actions, breadcrumb, 
             </nav>
           )}
           <div className={video ? 'max-w-5xl' : 'max-w-3xl'}>
-            <p className="mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-teal-pale"><span className="h-px w-10 bg-sand" /> {eyebrow}</p>
+            <p className="mb-5 text-xs font-bold uppercase tracking-[0.25em] text-teal-pale">{eyebrow}</p>
             <h1 className="font-display text-5xl font-black leading-[.95] tracking-tight sm:text-6xl lg:text-7xl"><RevealLines delay={0.2}>{title}</RevealLines></h1>
             <p className="mt-6 max-w-xl text-base leading-7 text-white/80 sm:text-lg">{description}</p>
             {actions && <div className="mt-8 flex flex-wrap gap-3">{actions}</div>}

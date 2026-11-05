@@ -33,7 +33,7 @@ export function PageHero({ eyebrow, title, description, children, compact = fals
     <section className={`relative overflow-hidden bg-ink text-white ${compact ? 'pb-10 pt-32 lg:pt-36' : 'pb-16 pt-36 lg:pb-24 lg:pt-44'}`}>
       <HeroBackdrop src={image} soft={soft} />
       <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
-        <p className="mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-teal-pale"><span className="h-px w-10 bg-sand" /> {eyebrow}</p>
+        <p className="mb-5 text-xs font-bold uppercase tracking-[0.25em] text-teal-pale">{eyebrow}</p>
         <h1 className={`font-display font-black leading-[.98] tracking-tight ${compact ? 'text-4xl sm:text-5xl' : 'text-5xl sm:text-7xl'}`}><RevealLines>{title}</RevealLines></h1>
         {description && <p className="mt-6 max-w-xl text-base leading-7 text-white/80 sm:text-lg">{description}</p>}
         {children}

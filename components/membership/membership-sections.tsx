@@ -44,7 +44,7 @@ export function MembershipHero() {
       <HeroBackdrop src={HERO_IMAGES.membership} soft />
       <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
         <div className="max-w-3xl">
-          <p className="mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-teal-pale"><span className="h-px w-10 bg-sand" /> Bond Safari Membership</p>
+          <p className="mb-5 text-xs font-bold uppercase tracking-[0.25em] text-teal-pale">Bond Safari Membership</p>
           <h1 className="font-display text-5xl font-black leading-[.95] tracking-tight sm:text-7xl"><RevealLines>More time on the water.<br /><span className="text-sand">More ways to belong.</span></RevealLines></h1>
           <p className="mt-7 max-w-xl text-base leading-7 text-white/80 sm:text-lg">Join the Bond Safari community, earn rewards, unlock member benefits and make every adventure count.</p>
         </div>

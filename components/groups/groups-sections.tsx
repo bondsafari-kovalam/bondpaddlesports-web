@@ -46,7 +46,7 @@ export function GroupsHero() {
       <HeroBackdrop src={HERO_IMAGES.groups} />
       <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
         <div className="max-w-3xl">
-          <p className="mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-teal-pale"><span className="h-px w-10 bg-sand" /> Groups & Corporate</p>
+          <p className="mb-5 text-xs font-bold uppercase tracking-[0.25em] text-teal-pale">Groups & Corporate</p>
           <h1 className="font-display text-6xl font-black leading-[.92] tracking-tight sm:text-8xl"><RevealLines>Better together.<br /><span className="text-sand">Out there.</span></RevealLines></h1>
           <p className="mt-7 max-w-xl text-base leading-7 text-white/80 sm:text-lg">Bring your team, classmates, friends, or community together on the water. Guided paddling experiences planned around your group, your goals, and your adventure.</p>
           <div className="mt-9 flex flex-wrap gap-3">

@@ -37,7 +37,7 @@ export function ContactHero() {
       <HeroBackdrop src={HERO_IMAGES.contact} />
       <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
         <div className="max-w-3xl">
-          <p className="mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-teal-pale"><span className="h-px w-10 bg-sand" /> Get in touch</p>
+          <p className="mb-5 text-xs font-bold uppercase tracking-[0.25em] text-teal-pale">Get in touch</p>
           <h1 className="font-display text-5xl font-black leading-[.95] tracking-tight sm:text-7xl"><RevealLines>Let’s get you<br /><span className="text-sand">on the water.</span></RevealLines></h1>
           <p className="mt-7 max-w-xl text-base leading-7 text-white/80 sm:text-lg">Have a question about a paddling experience, a location, an Academy course, or a group booking? Pick a topic and we’ll take you straight to the right form.</p>
         </div>

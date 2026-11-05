@@ -24,7 +24,7 @@ export default async function BookPage({ searchParams }: { searchParams: Promise
       <section className="relative overflow-hidden bg-ink pb-14 pt-36 text-white lg:pb-16 lg:pt-44">
         <HeroBackdrop src={HERO_IMAGES.groups} />
         <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
-          <p className="mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-teal-pale"><span className="h-px w-10 bg-sand" /> Book</p>
+          <p className="mb-5 text-xs font-bold uppercase tracking-[0.25em] text-teal-pale">Book</p>
           <h1 className="max-w-3xl font-display text-5xl font-black leading-[.95] tracking-tight sm:text-7xl">Book your paddle. <span className="text-sand">Solo or together.</span></h1>
           <p className="mt-6 max-w-xl text-base leading-7 text-white/80">Come on your own or bring the whole group. Add activities, choose who joins each one, and book it all at once.</p>
         </div>

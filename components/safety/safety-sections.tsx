@@ -31,7 +31,7 @@ export function SafetyHero() {
       <HeroBackdrop src={HERO_IMAGES.safety} />
       <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
         <div className="max-w-3xl">
-          <p className="mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-teal-pale"><span className="h-px w-10 bg-sand" /> Safety & Responsible Tourism</p>
+          <p className="mb-5 text-xs font-bold uppercase tracking-[0.25em] text-teal-pale">Safety & Responsible Tourism</p>
           <h1 className="font-display text-5xl font-black leading-[.95] tracking-tight sm:text-7xl"><RevealLines>Adventure is better<br /><span className="text-sand">when we care.</span></RevealLines></h1>
           <p className="mt-7 max-w-xl text-base leading-7 text-white/80 sm:text-lg">Enjoy Kerala’s waterways with thoughtful preparation, responsible paddling, and respect for the places and people that make every experience special.</p>
         </div>
