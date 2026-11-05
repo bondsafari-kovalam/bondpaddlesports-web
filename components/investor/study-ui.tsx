@@ -46,9 +46,9 @@ export function SectionLinks({ label, sections }: { label: string; sections: str
   )
 }
 
-export const Verdict = ({ text }: { text: string }) => (
+export const Verdict = ({ text, title = 'The answer: Go' }: { text: string; title?: string }) => (
   <div className="rounded-2xl border-l-4 border-sand bg-sand-soft p-5">
-    <p className="font-display text-lg font-bold">The answer: Go</p>
+    <p className="font-display text-lg font-bold">{title}</p>
     <p className="mt-1 text-sm leading-6 text-ink">{text}</p>
   </div>
 )
