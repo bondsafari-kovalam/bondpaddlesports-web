@@ -32,9 +32,11 @@ export const NEEDS_BOOKING_REFERENCE: ContactEnquiryType[] = ['Existing Booking'
 
 export const WHATSAPP_MESSAGE = 'Hello Bond Safari, I have a question about your paddling experiences.'
 
-export function whatsappHref() {
+/** `note` is appended to the prefilled message, e.g. the partner code on a booking enquiry. */
+export function whatsappHref(note?: string) {
   if (!CONTACT.whatsapp) return undefined
-  return `https://wa.me/${CONTACT.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`
+  const message = note ? `${WHATSAPP_MESSAGE}\n\n${note}` : WHATSAPP_MESSAGE
+  return `https://wa.me/${CONTACT.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`
 }
 
 export function contactChannels() {

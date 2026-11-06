@@ -83,8 +83,8 @@ const muzirisDemo: Offering[] = [
   { locationSlug: 'muziris-north-paravur', source: 'demo', meetingPoint: 'Thattukadavu Jetty' },
 ]
 
-// Confirmed by Bond: kayaking and canoeing are running at Kovalam. Price and duration still to be supplied.
-const kovalamConfirmed: Offering = { locationSlug: 'kovalam', source: 'confirmed' }
+// Preview until Bond confirms Kovalam's activities and prices before launch. Then set source: 'confirmed' and add them.
+const kovalamDemo: Offering = { locationSlug: 'kovalam', source: 'demo' }
 
 export const activities: Activity[] = [
   {
@@ -98,7 +98,7 @@ export const activities: Activity[] = [
       alt: 'A paddler in a sun hat resting in an orange kayak beside the reeds in afternoon light',
     },
     ambientVideo: FILMS.kayaking,
-    offerings: [...muzirisDemo, kovalamConfirmed],
+    offerings: [...muzirisDemo, kovalamDemo],
     related: ['canoeing', 'guided-trails'],
     nextSteps: ['academy', 'longer-experience', 'membership'],
     faqs: defaultFaqs('Kayaking'),
@@ -116,7 +116,7 @@ export const activities: Activity[] = [
       illustrative: true,
     },
     ambientVideo: FILMS.canoeing,
-    offerings: [...muzirisDemo, kovalamConfirmed],
+    offerings: [...muzirisDemo, kovalamDemo],
     related: ['kayaking', 'private-sessions'],
     nextSteps: ['academy', 'membership'],
     faqs: defaultFaqs('Canoeing'),
@@ -246,9 +246,21 @@ export function offeringPrice(offering: Offering) {
   return offering.source === 'demo' ? locations.find((item) => item.slug === offering.locationSlug)?.startingPrice : undefined
 }
 
-/** Names of activities a location offers (confirmed or demo), used by the booking adapter. */
+export type LocationOffer = { activity: Activity; offering: Offering; price?: number; duration?: string }
+
+/** What a location offers (confirmed or demo). Location pages and the booking flow both read this, so they can't disagree. */
+export function offersAt(locationSlug: string): LocationOffer[] {
+  return activities.flatMap((activity) => {
+    const offering = activity.offerings.find((item) => item.locationSlug === locationSlug && item.source !== 'planned')
+    if (!offering) return []
+    const duration = offering.duration ?? (activity.durationMinutes ? `${activity.durationMinutes} min` : undefined)
+    return [{ activity, offering, price: offeringPrice(offering), duration }]
+  })
+}
+
+/** Activities a location offers, used by the booking adapter. */
 export function activitiesAt(locationSlug: string) {
-  return activities.filter((activity) => activity.offerings.some((offering) => offering.locationSlug === locationSlug && offering.source !== 'planned'))
+  return offersAt(locationSlug).map((offer) => offer.activity)
 }
 
 /**
