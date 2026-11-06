@@ -17,6 +17,7 @@ import {
 import { NotifyMeProvider } from '@/components/locations/notify-me'
 import { SiteFooter } from '@/components/site/site-footer'
 import { SiteHeader } from '@/components/site/site-header'
+import { bookingHref } from '@/lib/group-booking'
 import { STATUS_LABELS, getLocation, locationHref, locations, type Location } from '@/lib/locations'
 import { SITE_NAME, SITE_URL } from '@/lib/site'
 import { RevealGroup, RevealLines } from '@/components/motion/reveal'
@@ -89,7 +90,7 @@ export default async function LocationPage({ params }: Props) {
     <NotifyMeProvider>
       <main className="min-h-screen overflow-hidden bg-paper text-ink">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData(location)) }} />
-        <SiteHeader />
+        <SiteHeader bookHref={location.status === 'operating' ? bookingHref({ location: location.slug }) : undefined} />
         <LocationDetailHero location={location} />
 
         <div className="mx-auto grid max-w-7xl gap-12 px-5 py-16 lg:grid-cols-[1fr_400px] lg:gap-14 lg:px-8 lg:py-24">

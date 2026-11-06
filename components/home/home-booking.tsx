@@ -4,10 +4,10 @@ import { useEffect, useState } from 'react'
 import { ArrowRight, CalendarDays } from 'lucide-react'
 import { DatePicker } from '@/components/booking/date-picker'
 import { activities } from '@/lib/activities'
-import { bookingHref } from '@/lib/group-booking'
+import { bookingHref, groupLocations } from '@/lib/group-booking'
 import { locations } from '@/lib/locations'
 
-const LOCATIONS = ['Muziris–Kottapuram', 'Muziris–North Paravur', 'Kovalam']
+const LOCATIONS = groupLocations().map((item) => item.name)
 const ACTIVITIES = ['Any activity', 'Kayaking', 'Canoeing', 'Stand-up paddleboarding']
 // Only non-personal search choices are kept, and only for this tab, so a reload on a flaky
 // connection doesn't wipe them. Names, contact details and payment data are never stored here.

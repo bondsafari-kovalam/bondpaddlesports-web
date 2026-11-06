@@ -6,7 +6,7 @@
  * activity catalogue; sessions, seats, tax and charges come from the booking adapter.
  */
 
-import { getActivity, offeringPrice } from '@/lib/activities'
+import { offersAt } from '@/lib/activities'
 import type { Availability, Session } from '@/lib/booking'
 import { locations, type LocationImage } from '@/lib/locations'
 
@@ -42,12 +42,10 @@ export const BOOKING_STEPS: { id: BookingStep; label: string }[] = [
 
 /** The bookable activities offered at a location, priced from the catalogue (undefined = not configured). */
 export function groupActivitiesAt(locationSlug: string): GroupActivityOption[] {
+  const offers = offersAt(locationSlug)
   return GROUP_ACTIVITY_SLUGS.flatMap((slug) => {
-    const activity = getActivity(slug)
-    const offering = activity?.offerings.find((item) => item.locationSlug === locationSlug && item.source !== 'planned')
-    if (!activity || !offering) return []
-    const duration = offering.duration ?? (activity.durationMinutes ? `${activity.durationMinutes} min` : undefined)
-    return [{ slug, name: activity.name, price: offeringPrice(offering), duration, image: activity.image }]
+    const offer = offers.find((item) => item.activity.slug === slug)
+    return offer ? [{ slug, name: offer.activity.name, price: offer.price, duration: offer.duration, image: offer.activity.image }] : []
   })
 }
 

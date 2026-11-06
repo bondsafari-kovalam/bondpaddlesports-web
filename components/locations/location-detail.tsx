@@ -3,7 +3,9 @@ import { ArrowRight, ArrowUpRight, Backpack, CalendarClock, ChevronRight, CloudR
 import { LocationImageFallback } from '@/components/locations/location-card'
 import { NotifyMeButton } from '@/components/locations/notify-me'
 import { DevNote, Eyebrow, IllustrativeLabel, LocationStatusBadge, Pending, focusRing } from '@/components/locations/primitives'
-import { ACTIVITY_LABELS, formatDate, formatPrice, type Location, type VisitorInfo } from '@/lib/locations'
+import { activityHref, offersAt } from '@/lib/activities'
+import { bookingHref } from '@/lib/group-booking'
+import { formatDate, formatPrice, type Location, type VisitorInfo } from '@/lib/locations'
 import { IS_DEV, ROUTES } from '@/lib/site'
 import { HeroImage, RevealGroup, RevealLines } from '@/components/motion/reveal'
 import { SmartImage } from '@/components/site/smart-image'
@@ -38,7 +40,7 @@ export function LocationDetailHero({ location }: { location: Location }) {
           {location.summary && <p className="mt-5 max-w-lg text-base leading-7 text-white/80 sm:text-lg">{location.summary}</p>}
           <div className="mt-8 flex flex-wrap gap-3">
             {isOperating
-              ? <a href={ROUTES.book} className={`rounded-full bg-sand px-6 py-4 text-sm font-extrabold uppercase tracking-[0.12em] text-ink transition hover:bg-white ${focusRing}`}>Book now <ArrowRight className="ml-2 inline size-4" aria-hidden /></a>
+              ? <a href={bookingHref({ location: location.slug })} className={`rounded-full bg-sand px-6 py-4 text-sm font-extrabold uppercase tracking-[0.12em] text-ink transition hover:bg-white ${focusRing}`}>Book now <ArrowRight className="ml-2 inline size-4" aria-hidden /></a>
               : <NotifyMeButton name={location.name} slug={location.slug} variant="solid" className="px-6 py-4 text-sm" />}
             <a href="#activities" className={`rounded-full border border-white/40 px-6 py-4 text-sm font-bold text-white transition hover:bg-white/10 ${focusRing}`}>Explore activities</a>
           </div>
@@ -76,23 +78,28 @@ export function LocationOverview({ location }: { location: Location }) {
 }
 
 export function LocationActivityList({ location }: { location: Location }) {
+  const offers = offersAt(location.slug)
   return (
     <section id="activities" aria-labelledby="activities-title" className="scroll-mt-6">
       <Eyebrow>Activities available here</Eyebrow>
       <h2 id="activities-title" className="mt-3 font-display text-3xl font-black"><RevealLines>Choose your rhythm</RevealLines></h2>
-      {location.activities.length > 0 ? (
-        <RevealGroup className="mt-8 grid gap-4 sm:grid-cols-2">{location.activities.map((activity) => (
-            <article key={activity.id} className="overflow-hidden rounded-3xl bg-white ring-1 ring-ink/5">
-              <div className="relative aspect-[16/9]">{activity.image ? <SmartImage src={activity.image.src} alt={activity.image.alt} fill sizes="(min-width: 640px) 50vw, 100vw" className="object-cover" /> : <LocationImageFallback label="" />}</div>
-              <div className="p-6">
-                <h3 className="font-display text-xl font-bold">{ACTIVITY_LABELS[activity.id]}</h3>
-                {activity.description && <p className="mt-2 text-sm leading-6 text-slate">{activity.description}</p>}
+      {offers.length > 0 ? (
+        <RevealGroup className="mt-8 grid gap-4 sm:grid-cols-2">{offers.map(({ activity, offering, price, duration }) => (
+            <article key={activity.slug} className="flex flex-col overflow-hidden rounded-3xl bg-white ring-1 ring-ink/5">
+              <div className="relative aspect-[16/9]">
+                {activity.image ? <SmartImage src={activity.image.src} alt={activity.image.alt} fill sizes="(min-width: 640px) 50vw, 100vw" className="object-cover" /> : <LocationImageFallback label="" />}
+                {activity.image?.illustrative && <IllustrativeLabel className="absolute bottom-3 right-3" />}
+              </div>
+              <div className="flex flex-1 flex-col p-6">
+                {offering.source === 'demo' && <span className="mb-3 self-start rounded-full bg-sand-soft px-2.5 py-1 text-[10px] font-extrabold uppercase text-sand-ink">Preview pairing</span>}
+                <h3 className="font-display text-xl font-bold"><a href={activityHref(activity)} className={`hover:text-teal ${focusRing}`}>{activity.name}</a></h3>
+                <p className="mt-2 text-sm leading-6 text-slate">{activity.summary}</p>
                 <dl className="mt-4 flex flex-wrap gap-x-5 gap-y-1 text-xs text-slate-strong">
-                  {activity.duration && <div><dt className="inline font-bold">Duration </dt><dd className="inline">{activity.duration}</dd></div>}
+                  {duration && <div><dt className="inline font-bold">Duration </dt><dd className="inline">{duration}</dd></div>}
                   {activity.skillLevel && <div><dt className="inline font-bold">Level </dt><dd className="inline">{activity.skillLevel}</dd></div>}
-                  {activity.startingPrice && <div><dt className="inline font-bold">From </dt><dd className="inline">{formatPrice(activity.startingPrice)}</dd></div>}
+                  <div><dt className="inline font-bold">Price </dt><dd className="inline">{price ? `From ${formatPrice(price)} per person` : 'On request'}</dd></div>
                 </dl>
-                {location.status === 'operating' && <a href={ROUTES.book} className="mt-5 inline-flex items-center text-sm font-bold text-teal">Book this activity <ArrowRight className="ml-1 size-4" aria-hidden /></a>}
+                {location.status === 'operating' && <a href={bookingHref({ location: location.slug, activity: activity.slug })} className={`mt-auto inline-flex min-h-11 items-center pt-4 text-sm font-bold text-teal ${focusRing}`}>Book this activity <ArrowRight className="ml-1 size-4" aria-hidden /></a>}
               </div>
             </article>
           ))}
@@ -104,7 +111,7 @@ export function LocationActivityList({ location }: { location: Location }) {
             <p className="mt-4 text-sm leading-6 text-slate-strong">The confirmed activity line-up for {location.name} will be published here soon.{location.status === 'operating' && ' Use the booking panel to see what’s on.'}</p>
             <a href={ROUTES.activities} className="mt-4 inline-flex min-h-11 items-center text-sm font-bold text-teal hover:text-ink">Browse all activities <ArrowRight className="ml-1 size-4" aria-hidden /></a>
           </div>
-          <DevNote title="Activities">No activities are configured for this location in <code>lib/locations.ts</code>. Add each confirmed activity with its duration, skill level and price; nothing is assumed.</DevNote>
+          <DevNote title="Activities">No activities are offered at this location yet. Add an offering for it to each activity in <code>lib/activities.ts</code>, with its duration and price; nothing is assumed.</DevNote>
         </div>
       )}
     </section>
@@ -267,7 +274,7 @@ export function LocationMobileCTA({ location }: { location: Location }) {
         </p>
       </div>
       {isOperating
-        ? <a href={ROUTES.book} className={`rounded-xl bg-sand px-5 py-3 text-xs font-extrabold uppercase text-ink ${focusRing}`}>Book now</a>
+        ? <a href={bookingHref({ location: location.slug })} className={`rounded-xl bg-sand px-5 py-3 text-xs font-extrabold uppercase text-ink ${focusRing}`}>Book now</a>
         : <NotifyMeButton name={location.name} slug={location.slug} variant="solid" className="rounded-xl px-4" />}
     </div>
   )

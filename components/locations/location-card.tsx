@@ -3,7 +3,7 @@ import { IllustrativeLabel, LocationStatusBadge, focusRing } from '@/components/
 import { NotifyMeButton } from '@/components/locations/notify-me'
 import { ACTIVITY_LABELS, formatDate, formatPrice, locationHref, type Location } from '@/lib/locations'
 import { SmartImage } from '@/components/site/smart-image'
-import { ROUTES } from '@/lib/site'
+import { bookingHref } from '@/lib/group-booking'
 
 export function LocationImageFallback({ label = 'Approved photography coming soon' }: { label?: string }) {
   return (
@@ -62,7 +62,7 @@ export function LocationCard({ location }: { location: Location }) {
           <div className="flex items-center justify-between gap-3 border-t border-mist pt-4">
             <a href={href} className={`inline-flex items-center gap-1 rounded text-sm font-bold text-ink hover:text-teal ${focusRing}`} aria-label={`View ${location.name}`}>View location <ArrowRight className="size-4" aria-hidden /></a>
             {isOperating
-              ? <a href={ROUTES.book} className={`rounded-full bg-sand px-4 py-2.5 text-xs font-extrabold uppercase tracking-[0.1em] text-ink transition hover:bg-ink hover:text-white ${focusRing}`} aria-label={`Book ${location.name}`}>Book now</a>
+              ? <a href={bookingHref({ location: location.slug })} className={`rounded-full bg-sand px-4 py-2.5 text-xs font-extrabold uppercase tracking-[0.1em] text-ink transition hover:bg-ink hover:text-white ${focusRing}`} aria-label={`Book ${location.name}`}>Book now</a>
               : <NotifyMeButton name={location.name} slug={location.slug} />}
           </div>
         </div>

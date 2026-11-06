@@ -6,7 +6,9 @@ import { AlertCircle, ArrowLeft, ArrowRight, Check, Clock, Info, Loader2, MapPin
 import { Stepper, openPicker } from '@/components/booking/stepper'
 import { DemoBanner, TextField } from '@/components/academy/form-kit'
 import { focusRing } from '@/components/locations/primitives'
+import { EMPTY_ATTRIBUTION, attributionNote, captureAttribution, readAttribution } from '@/lib/attribution'
 import { getAvailability, type Session } from '@/lib/booking'
+import { trackBookingEvent } from '@/lib/booking-analytics'
 import { whatsappHref } from '@/lib/contact'
 import {
   BOOKING_STEPS,
@@ -121,6 +123,7 @@ export function GroupBooking({ start }: { start?: BookingStart }) {
   const [attempt, setAttempt] = useState(0)
   const [notice, setNotice] = useState('')
   const [submitState, setSubmitState] = useState<'idle' | 'sending' | 'not-connected' | 'error'>('idle')
+  const [attribution, setAttribution] = useState(EMPTY_ATTRIBUTION)
   const panelRef = useRef<HTMLElement>(null)
   const headingRef = useRef<HTMLHeadingElement>(null)
   const inFlight = useRef(false)
@@ -131,13 +134,24 @@ export function GroupBooking({ start }: { start?: BookingStart }) {
     setToday(now)
     const slugs = allLocations.map((location) => location.slug)
     const fromLink = start && Object.values(start).some((value) => value !== undefined)
-    const stored = fromLink ? null : readStored(slugs)
-    const next = fromLink ? draftFromStart(start, slugs, allLocations[0]?.slug ?? '') : stored?.draft
+    const saved = readStored(slugs)
+    // A plain "Book now" for the location already in progress resumes it, so a look back at the location page costs nothing.
+    const sameTrip = saved?.draft.locationSlug === start?.location && Object.entries(start ?? {}).every(([key, value]) => key === 'location' || value === undefined)
+    const stored = !fromLink || sameTrip ? saved : null
+    const next = stored?.draft ?? (fromLink ? draftFromStart(start, slugs, allLocations[0]?.slug ?? '') : undefined)
     if (next) dispatch({ type: 'restore', draft: { ...next, date: next.date && next.date >= now ? next.date : now } })
     else dispatch({ type: 'date', date: now })
     if (stored) setStepIndex(stored.step)
-    // Drop the query once applied, so a refresh restores the saved draft instead of starting over.
-    if (fromLink) window.history.replaceState(null, '', window.location.pathname)
+    // Captured here too: this effect runs before the layout's, and the link's parameters may be all there is.
+    const held = captureAttribution(window.location.search)
+    setAttribution(held)
+    trackBookingEvent('booking_started', next?.locationSlug ?? allLocations[0]?.slug ?? '', held)
+    // Drop only the booking choices once applied, so a refresh restores the saved draft; tracking parameters stay.
+    if (fromLink) {
+      const url = new URL(window.location.href)
+      for (const key of Object.keys(start)) url.searchParams.delete(key)
+      window.history.replaceState(null, '', url)
+    }
     setHydrated(true)
   }, [allLocations, start])
 
@@ -154,7 +168,7 @@ export function GroupBooking({ start }: { start?: BookingStart }) {
   const context = { today, sessions: availability.sessions, options }
   const errors: BookingErrors = showErrors ? validateStep(step, draft, context) : {}
   const isDemo = availability.source === 'demo'
-  const contactHref = whatsappHref() ?? (CONTACT.phone ? `tel:${CONTACT.phone.replace(/\s/g, '')}` : ROUTES.contact)
+  const contactHref = whatsappHref(attributionNote(attribution)) ?? (CONTACT.phone ? `tel:${CONTACT.phone.replace(/\s/g, '')}` : ROUTES.contact)
 
   useEffect(() => {
     if (!attempt) return
@@ -205,8 +219,10 @@ export function GroupBooking({ start }: { start?: BookingStart }) {
     inFlight.current = true
     setSubmitState('sending')
     try {
-      const result = await submitGroupBooking(toGroupBookingPayload(draft, quote))
+      const held = readAttribution()
+      const result = await submitGroupBooking(toGroupBookingPayload(draft, quote, held))
       // A real reference would move to a confirmation page; until the engine is connected this never succeeds.
+      if (result.ok) trackBookingEvent('booking_confirmed', draft.locationSlug, held)
       setSubmitState(result.ok ? 'idle' : result.reason === 'not-connected' ? 'not-connected' : 'error')
     } catch {
       setSubmitState('error')
@@ -233,6 +249,7 @@ export function GroupBooking({ start }: { start?: BookingStart }) {
 
   return (
     <section ref={panelRef} aria-labelledby="booking-step-heading" className="mx-auto max-w-3xl scroll-mt-28">
+      <button type="button" onClick={goBack} aria-label={stepIndex > 0 ? `Back to ${BOOKING_STEPS[stepIndex - 1].label}` : 'Back to the previous page'} className={`mb-6 inline-flex min-h-11 items-center gap-2 rounded-full border border-line px-4 text-xs font-bold uppercase tracking-widest text-ink transition hover:border-ink ${focusRing}`}><ArrowLeft className="size-4" aria-hidden />Back</button>
       <Progress current={stepIndex} onSelect={goTo} />
 
       {isDemo && <div className="mt-6"><DemoBanner><strong>Demonstration data.</strong> Times, places and prices are examples until the Bond booking engine is connected. No booking is created and no payment is taken.</DemoBanner></div>}
@@ -257,7 +274,7 @@ export function GroupBooking({ start }: { start?: BookingStart }) {
                   </ul>
                 )}
                 {allLocations.length > 1 && (
-                  <fieldset aria-invalid={!!errors.location}>
+                  <fieldset className="min-w-0" aria-invalid={!!errors.location}>
                     <legend className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate"><MapPin className="size-3.5" aria-hidden />Where</legend>
                     <div className="mt-2 flex flex-wrap gap-2">
                       {allLocations.map((item) => (
@@ -405,7 +422,7 @@ function Progress({ current, onSelect }: { current: number; onSelect: (index: nu
                   <span className={cn('flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-bold transition', active ? 'bg-ink text-white' : done ? 'bg-teal text-white' : 'bg-sand-soft text-ink group-hover:bg-mist')}>
                     {done ? <Check className="size-4" aria-hidden /> : index + 1}
                   </span>
-                  <span className={cn('truncate text-[0.7rem] font-bold uppercase tracking-wider', active ? 'text-ink' : 'hidden text-slate sm:inline')}>{item.label}<span className="sr-only">{done ? ' (completed)' : ''}</span></span>
+                  <span className={cn('relative truncate text-[0.7rem] font-bold uppercase tracking-wider', active ? 'text-ink' : 'hidden text-slate sm:inline')}>{item.label}<span className="sr-only">{done ? ' (completed)' : ''}</span></span>
                 </span>
               </button>
             </li>
@@ -421,9 +438,9 @@ function DateChoice({ today, value, error, onChange }: { today: string; value: s
   const days = today ? Array.from({ length: DATE_CHIPS }, (_, i) => addDays(today, i)) : []
   const later = value && !days.includes(value) ? value : ''
   return (
-    <fieldset aria-invalid={!!error}>
+    <fieldset className="min-w-0" aria-invalid={!!error}>
       <legend className="sr-only">Date</legend>
-      <div className="-mx-5 flex snap-x gap-2.5 overflow-x-auto px-5 pb-1 [scrollbar-width:none] lg:mx-0 lg:px-0">
+      <div className="relative -mx-5 flex snap-x gap-2.5 overflow-x-auto px-5 pb-1 [scrollbar-width:none] lg:mx-0 lg:px-0">
         {days.map((iso, i) => {
           const date = fromISO(iso)
           const selected = iso === value

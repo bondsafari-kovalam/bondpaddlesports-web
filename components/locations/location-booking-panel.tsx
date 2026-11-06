@@ -1,5 +1,6 @@
 import { BookCta } from '@/components/booking/book-cta'
 import { NotifyMeButton } from '@/components/locations/notify-me'
+import { bookingHref } from '@/lib/group-booking'
 import type { Location } from '@/lib/locations'
 
 export function LocationBookingPanel({ location }: { location: Location }) {
@@ -13,5 +14,5 @@ export function LocationBookingPanel({ location }: { location: Location }) {
       </div>
     )
   }
-  return <BookCta title={`Book ${location.name}`} fromPrice={location.startingPrice} />
+  return <BookCta title={`Book ${location.name}`} fromPrice={location.startingPrice} href={bookingHref({ location: location.slug })} />
 }
