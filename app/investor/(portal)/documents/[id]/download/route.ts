@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 import { findDocument } from '@/lib/investor/content'
-import { CAPITAL_TIMELINE, CASH_NOTE, CONFIDENTIAL_LINE, GATE_1, PROJECTIONS, PROJECTIONS_NOTE, PROJECTION_YEARS, ROUND_SOURCE, TERMS, TERMS_NOTE, USE_OF_FUNDS, USE_OF_FUNDS_TOTAL } from '@/lib/investor/round-data'
+import { CONFIDENTIAL_LINE, PROJECTIONS, PROJECTIONS_NOTE, PROJECTION_YEARS, ROUND_SOURCE } from '@/lib/investor/round-data'
 import { getInvestorSession } from '@/lib/investor/session'
 
 const privateHeaders = { 'Cache-Control': 'private, no-store', 'X-Robots-Tag': 'noindex, nofollow' }
@@ -21,30 +21,8 @@ const privateFile = (name: string, type: string, filename: string) => async (): 
 /** Built from round-data, or read from private storage, on each request. */
 const GENERATORS: Record<string, () => DocumentFile | Promise<DocumentFile>> = {
   'round-deck': privateFile('friends-and-family-round-deck.pdf', 'application/pdf', 'Bond_Safari_Friends_and_Family_Round.pdf'),
-  'network-plan': privateFile('hub-and-spoke-network-plan.pdf', 'application/pdf', 'Bond_Paddle_Sports_Hub_and_Spoke_Network.pdf'),
+  'network-plan': privateFile('hub-and-spoke-network-plan-web.pdf', 'application/pdf', 'Bond_Paddle_Sports_Hub_and_Spoke_Network.pdf'),
   'pathway-guide': privateFile('paddle-uk-qualification-pathway-2027.pdf', 'application/pdf', 'Paddle_UK_Qualification_Pathway_2027.pdf'),
-  'key-terms': () => ({
-    type: 'text/plain; charset=utf-8',
-    filename: 'bond-safari-key-terms.txt',
-    body: [
-      'BOND SAFARI PADDLE SPORTS: KEY TERMS AND USE OF FUNDS',
-      CONFIDENTIAL_LINE,
-      `Source: ${ROUND_SOURCE}`,
-      '',
-      'PROPOSED TERMS',
-      ...TERMS.map(([term, text]) => `${term}: ${text}`),
-      TERMS_NOTE,
-      '',
-      'WHERE THE ₹5.25 CR GOES (₹ Cr)',
-      ...USE_OF_FUNDS.map(([item, n]) => `${item}: ${n.toFixed(2)}`),
-      `Total: ${USE_OF_FUNDS_TOTAL.toFixed(2)}`,
-      '',
-      'WHEN MONEY COMES IN',
-      ...CAPITAL_TIMELINE.map((c) => `${c.when}: ${c.amount}, ${c.text}`),
-      GATE_1,
-      CASH_NOTE,
-    ].join('\n'),
-  }),
   projections: () => ({
     type: 'text/csv; charset=utf-8',
     filename: 'bond-safari-projections-fy27-fy33.csv',

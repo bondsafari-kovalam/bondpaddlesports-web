@@ -30,7 +30,7 @@ export type InvestorDocument = {
 }
 
 export const DOCUMENTS: InvestorDocument[] = [
-  { id: 'key-terms', title: 'Key terms and use of funds', category: 'Investment Round', description: 'Round terms, use of the ₹5.25 Cr, capital calls and Gate 1, generated from the round deck.', published: '2026-10-01', version: '1.0', status: 'Download' },
+  { id: 'key-terms', title: 'Key terms and use of funds', category: 'Investment Round', description: 'Terms, ownership, where the ₹5.25 Cr goes, capital calls, Gate 1, rights, valuation, related parties and risks, on financial model V03. Read online only (21 pages).', published: '2026-11-09', version: '2.0', status: 'View only', href: '/investor/documents/key-terms', readerFile: 'key-terms-and-use-of-funds.pdf' },
   { id: 'marketing-strategy', title: 'Marketing Strategy and Plan', category: 'Strategy & Business Plans', description: 'Audiences, positioning, channels, the launch playbook, budget, measurement and the first 90 days, aligned to financial model V03. Read online only (29 pages).', published: '2026-11-05', version: '1.0', status: 'View only', href: '/investor/documents/marketing-strategy', readerFile: 'marketing-strategy-and-plan.pdf' },
   { id: 'projections', title: 'Base-case projections, FY27–FY33', category: 'Strategy & Business Plans', description: 'Sites, paddlers, learners, revenue, EBITDA, profit and cash by year, as a spreadsheet (CSV).', published: '2026-10-01', period: 'FY27–FY33', version: '1.0', status: 'Download' },
   { id: 'round-deck', title: 'Friends & Family Round deck', category: 'Investment Round', description: 'The full presentation for named recipients (PDF, 21 pages).', published: '2026-10-01', version: '1.0', status: 'Download' },
@@ -53,6 +53,7 @@ export type InvestorUpdate = { id: string; kind: 'Company update' | 'Location de
 
 /** Only events stated in the round deck; newest first. */
 export const UPDATES: InvestorUpdate[] = ([
+  { id: 'key-terms', kind: 'Company update', title: 'Key terms and use of funds updated', date: '2026-11-09', when: '9 Nov 2026', summary: 'The investor portal edition sets out the terms, use of funds, capital calls, Gate 1, rights and risks on financial model V03. Read it under Documents.' },
   { id: 'marketing-strategy', kind: 'Company update', title: 'Marketing strategy and plan added', date: '2026-11-06', when: '6 Nov 2026', summary: 'The plan covers audiences, channels, budget and the first 90 days, aligned to financial model V03. Read it under Documents.' },
   { id: 'marari-coastal-blueway-feasibility', kind: 'Location development', title: 'Marari Coastal Blueway feasibility study added', date: '2026-11-05', when: '5 Nov 2026', summary: 'The study recommends deferring Marari to FY29, and opening only once the canals are cleared and the operating company is settled. Read it under Feasibility studies.' },
   { id: 'ernakulam-hub-feasibility', kind: 'Location development', title: 'Ernakulam hub feasibility study added', date: '2026-11-05', when: '5 Nov 2026', summary: 'The study recommends basing the hub on the Goshree corridor at Mulavukad or south Vypin, with the Muziris–Kochi Academy campus in FY28. Read it under Feasibility studies.' },
