@@ -36,6 +36,8 @@ export function DocumentReader({ src, title }: { src: string; title: string }) {
   const [pdf, setPdf] = useState<PDFDocumentProxy | null>(null)
   const [pages, setPages] = useState<PageInfo[]>([])
   const [status, setStatus] = useState<Status>('loading')
+  /** Share of the file downloaded, 0–1; null until the size is known, or if the server didn't send one. */
+  const [progress, setProgress] = useState<number | null>(null)
   const [attempt, setAttempt] = useState(0)
   const [current, setCurrent] = useState(1)
   const [zoom, setZoom] = useState(1)
@@ -45,16 +47,25 @@ export function DocumentReader({ src, title }: { src: string; title: string }) {
   useEffect(() => {
     let stale = false
     let release: (() => void) | undefined
+    // Cancels the download when the reader unmounts or retries, so an abandoned copy doesn't keep using the connection.
+    const abort = new AbortController()
     async function load() {
       setStatus('loading')
+      setProgress(null)
       try {
-        const response = await fetch(src, { cache: 'no-store' })
+        // Imported alongside the download because pdf.js needs browser globals, and only this page should pay for it.
+        const pdfjsReady = import('pdfjs-dist/legacy/build/pdf.mjs')
+        pdfjsReady.catch(() => {}) // still awaited below; this only stops an early return leaving it unhandled
+        // `no-cache` revalidates: the session is checked every time, and an unchanged file comes back as a 304 from this browser's cache.
+        const response = await fetch(src, { cache: 'no-cache', signal: abort.signal })
         if (response.status === 401) return setStatus('expired')
         if (!response.ok) throw new Error(`Document request failed: ${response.status}`)
-        // Imported here because pdf.js needs browser globals, and only this page should pay for it.
-        const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs')
+        const data = await readWithProgress(response, (share) => { if (!stale) setProgress(share) })
+        if (stale) return
+        setProgress(1)
+        const pdfjs = await pdfjsReady
         pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/legacy/build/pdf.worker.min.mjs', import.meta.url).toString()
-        const task = pdfjs.getDocument({ data: await response.arrayBuffer() })
+        const task = pdfjs.getDocument({ data })
         release = () => { void task.destroy() }
         const loaded = await task.promise
         const info = await Promise.all(Array.from({ length: loaded.numPages }, async (_, index): Promise<PageInfo> => {
@@ -85,6 +96,7 @@ export function DocumentReader({ src, title }: { src: string; title: string }) {
     void load()
     return () => {
       stale = true
+      abort.abort()
       release?.()
     }
   }, [src, attempt])
@@ -170,7 +182,7 @@ export function DocumentReader({ src, title }: { src: string; title: string }) {
         </div>
 
         <div ref={scrollerRef} onScroll={onScroll} tabIndex={0} role="region" aria-label={title} className={`relative overflow-auto bg-mist outline-none ${full ? 'h-[calc(100dvh-3.5rem)]' : 'h-[80dvh] min-h-112'}`}>
-          {status === 'loading' && <p className="flex h-full items-center justify-center gap-2 text-sm font-semibold text-slate-strong" role="status"><Loader2 className="size-5 animate-spin text-teal motion-reduce:animate-none" aria-hidden />Opening the document</p>}
+          {status === 'loading' && <LoadingState progress={progress} />}
           {status === 'expired' && <Notice text="Your session has ended. Sign in again to keep reading."><a href="/investor/login" className={`mt-4 inline-flex min-h-11 items-center rounded-full bg-ink px-5 text-sm font-semibold text-white transition hover:bg-ink-soft ${focusRing}`}>Sign in</a></Notice>}
           {status === 'error' && <Notice text="The document couldn’t be opened."><button type="button" onClick={() => setAttempt((n) => n + 1)} className={`mt-4 inline-flex min-h-11 items-center rounded-full bg-ink px-5 text-sm font-semibold text-white transition hover:bg-ink-soft ${focusRing}`}>Try again</button></Notice>}
           {ready && pdf && pageWidth > 0 && (
@@ -184,6 +196,56 @@ export function DocumentReader({ src, title }: { src: string; title: string }) {
           )}
         </div>
       </ProtectedContent>
+    </div>
+  )
+}
+
+/**
+ * Reads the body chunk by chunk so the reader can show how much has arrived. The share is measured
+ * against Content-Length; without one (or if it is wrong) it reports null and the bar shows activity only.
+ */
+async function readWithProgress(response: Response, onProgress: (share: number | null) => void) {
+  const total = Number(response.headers.get('Content-Length')) || 0
+  if (!response.body) return new Uint8Array(await response.arrayBuffer())
+  const reader = response.body.getReader()
+  const chunks: Uint8Array[] = []
+  let loaded = 0
+  onProgress(total ? 0 : null)
+  for (;;) {
+    const { done, value } = await reader.read()
+    if (done) break
+    chunks.push(value)
+    loaded += value.byteLength
+    onProgress(total && loaded <= total ? loaded / total : null)
+  }
+  const data = new Uint8Array(loaded)
+  let offset = 0
+  for (const chunk of chunks) {
+    data.set(chunk, offset)
+    offset += chunk.byteLength
+  }
+  return data
+}
+
+/** Download share while bytes arrive, then "Preparing pages" while pdf.js reads the file. */
+function LoadingState({ progress }: { progress: number | null }) {
+  const percent = progress === null ? null : Math.floor(progress * 100)
+  const preparing = progress === 1
+  const label = preparing ? 'Preparing pages' : percent === null ? 'Opening the document' : `Downloading the document · ${percent}%`
+  return (
+    <div className="flex h-full flex-col items-center justify-center gap-3 px-6" role="status">
+      <p className="flex items-center gap-2 text-sm font-semibold tabular-nums text-slate-strong"><Loader2 className="size-5 animate-spin text-teal motion-reduce:animate-none" aria-hidden />{label}</p>
+      <div
+        role="progressbar"
+        aria-label="Document download"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={percent ?? undefined}
+        aria-valuetext={preparing ? 'Downloaded, preparing pages' : percent === null ? 'Downloading' : `${percent}% downloaded`}
+        className="h-1.5 w-full max-w-64 overflow-hidden rounded-full bg-line"
+      >
+        <div className={`h-full rounded-full bg-teal transition-[width] duration-200 motion-reduce:transition-none ${percent === null ? 'w-1/3 animate-pulse' : ''}`} style={percent === null ? undefined : { width: `${percent}%` }} />
+      </div>
     </div>
   )
 }
