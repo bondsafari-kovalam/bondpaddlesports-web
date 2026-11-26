@@ -1,13 +1,17 @@
 /**
- * Bond Safari Academy catalogue: courses, categories, pathway, water environments, campuses.
+ * Bond Safari Academy: courses, categories and course dates come from the Bond backend (public API → scripts/
+ * sync-catalogue.mjs → lib/generated/catalogue.json); manage them in the admin panel (Academy). Pathway, water
+ * environments, campuses and partner wording below are website content.
  *
- * Source: the client brief (course names, 2027 source prices, campus plan, partner wording, deposit
- * rule). The Paddle UK Qualification Pathway document has not been supplied yet, so qualification
- * scope, entry requirements, prerequisites and water-environment definitions are left undefined;
- * the UI shows them as "pending confirmation" rather than inventing them.
+ * The Paddle UK Qualification Pathway document has not been supplied yet, so qualification scope, entry
+ * requirements, prerequisites and water-environment definitions are left undefined; the UI shows them as
+ * "pending confirmation" rather than inventing them.
  */
 
-export type CourseCategoryId = 'start-paddling' | 'become-an-instructor' | 'lead-and-coach' | 'programmes'
+import catalogue from '@/lib/generated/catalogue.json'
+
+/** Category slug from the backend, e.g. 'start-paddling'. */
+export type CourseCategoryId = string
 export type CourseStatus = 'enrolment-open' | 'dates-coming-soon' | 'launching-2027' | 'fully-booked' | 'enquiry'
 export type QualificationLevel = 'Personal award' | 'Safety' | 'Preparation' | 'Instructor' | 'Leader' | 'Coach' | 'Programme'
 export type Discipline = 'SUP' | 'Canoe' | 'Sea kayak' | 'White water' | 'Multi-discipline'
@@ -25,12 +29,7 @@ export const COURSE_STATUS_LABELS: Record<CourseStatus, string> = {
 
 export type CourseCategory = { id: CourseCategoryId; name: string; summary: string }
 
-export const COURSE_CATEGORIES: CourseCategory[] = [
-  { id: 'start-paddling', name: 'Start Paddling', summary: 'First paddles, personal skills and safety awards for new and improving paddlers.' },
-  { id: 'become-an-instructor', name: 'Become an Instructor', summary: 'Training for people interested in teaching paddlesport, subject to entry requirements.' },
-  { id: 'lead-and-coach', name: 'Lead and Coach', summary: 'Progression routes for people taking on greater responsibility on the water.' },
-  { id: 'programmes', name: 'Programmes', summary: 'Longer programmes, bundles, schools and private coaching.' },
-]
+export const COURSE_CATEGORIES: CourseCategory[] = (catalogue as { academy?: { categories: CourseCategory[] } }).academy?.categories ?? []
 
 export type Course = {
   slug: string
@@ -73,48 +72,11 @@ export type Course = {
 export const DEPOSIT_THRESHOLD = 25000
 export const BALANCE_DUE_DAYS_BEFORE = 14
 
-const courseFaqs: Faq[] = [
-  { question: 'Who is this course for?' },
-  { question: 'What are the entry requirements?' },
-  { question: 'What equipment do I need?' },
-]
+type AcademySnapshot = { categories: CourseCategory[]; courses: Course[]; sessions: CourseSession[] }
+const academy = (catalogue as { academy?: AcademySnapshot }).academy
 
-type Seed = Pick<Course, 'slug' | 'name' | 'level' | 'summary' | 'price'> & Partial<Course>
-
-function seed(category: CourseCategoryId, status: CourseStatus, professional: boolean, items: Seed[]): Course[] {
-  return items.map((item) => ({ category, status, professional, faqs: courseFaqs, ...item }))
-}
-
-export const courses: Course[] = [
-  ...seed('start-paddling', 'dates-coming-soon', false, [
-    { slug: 'paddle-start', name: 'Paddle Start', level: 'Personal award', summary: 'A first step into paddlesport.', price: 1200, featured: true },
-    { slug: 'paddle-safer', name: 'Paddle Safer', level: 'Personal award', summary: 'Safety skills for paddlers.', price: 1500 },
-    { slug: 'sup-safer', name: 'SUP Safer', level: 'Personal award', discipline: 'SUP', summary: 'Safety skills for stand-up paddleboarders.', price: 2500 },
-    { slug: 'paddle-discover', name: 'Paddle Discover', level: 'Personal award', summary: 'Build on your first paddles and develop personal skills.', price: 9500, featured: true },
-    { slug: 'paddle-explore', name: 'Paddle Explore', level: 'Personal award', summary: 'Develop your personal paddling further.', price: 11000 },
-    { slug: 'safety-and-rescue', name: 'Safety and Rescue', level: 'Safety', summary: 'Safety and rescue skills on the water.', price: 7500 },
-  ]),
-  ...seed('become-an-instructor', 'launching-2027', true, [
-    { slug: 'sup-instructor', name: 'SUP Instructor', level: 'Instructor', discipline: 'SUP', summary: 'Instructor training for stand-up paddleboarding.', price: 42500, featured: true },
-    { slug: 'paddlesport-instructor', name: 'Paddlesport Instructor', level: 'Instructor', discipline: 'Multi-discipline', summary: 'Instructor training for paddlesport.', price: 42500 },
-    { slug: 'preparation-day', name: 'Preparation Day', level: 'Preparation', summary: 'A day of preparation before instructor training.', price: 6500 },
-  ]),
-  ...seed('lead-and-coach', 'launching-2027', true, [
-    { slug: 'paddlesport-leader', name: 'Paddlesport Leader', level: 'Leader', discipline: 'Multi-discipline', summary: 'Leader training for paddlesport.', price: 49000, featured: true },
-    { slug: 'open-water-canoe-leader', name: 'Open Water Canoe Leader', level: 'Leader', discipline: 'Canoe', summary: 'Leader training for open-water canoeing.', price: 54500 },
-    { slug: 'sea-kayak-leader', name: 'Sea Kayak Leader', level: 'Leader', discipline: 'Sea kayak', summary: 'Leader training for sea kayaking.', price: 64500 },
-    { slug: 'coach', name: 'Coach', level: 'Coach', summary: 'Coach training for paddlesport.', price: 83000 },
-    { slug: 'white-water-safety', name: 'White Water Safety', level: 'Safety', discipline: 'White water', summary: 'Safety training for white water.', price: 28000 },
-  ]),
-  ...seed('programmes', 'dates-coming-soon', true, [
-    { slug: 'bond-paddle-guide-programme', name: 'Bond Paddle Guide Programme', level: 'Programme', summary: 'Bond’s professional guide-training programme.', price: 136000, featured: true, enquiryHref: '/academy/careers' },
-  ]),
-  ...seed('programmes', 'enquiry', false, [
-    { slug: 'pathway-bundles', name: 'Pathway bundles', level: 'Programme', summary: 'Combine courses along your pathway.' },
-    { slug: 'schools-paddle-year', name: 'Schools Paddle Year', level: 'Programme', summary: 'A structured paddling programme for schools and colleges.', enquiryHref: '/academy/schools', groupEnrolment: true },
-    { slug: 'private-coaching', name: 'Private coaching', level: 'Programme', summary: 'One-to-one or small-group coaching.' },
-  ]),
-]
+/** Published courses, in the admin panel's order. */
+export const courses: Course[] = academy?.courses ?? []
 
 export function getCourse(slug: string) {
   return courses.find((course) => course.slug === slug)
@@ -196,5 +158,5 @@ export type Testimonial = { name: string; course: string; quote: string; consent
 export const testimonials: Testimonial[] = []
 
 export type CourseSession = { id: string; courseSlug: string; startDate: string; endDate?: string; campus: CampusId; capacity?: number; remaining?: number }
-/** Real, confirmed course dates only. Empty until the Academy publishes its schedule. */
-export const courseSessions: CourseSession[] = []
+/** Real, confirmed upcoming course dates (admin panel → Academy → Course dates). */
+export const courseSessions: CourseSession[] = academy?.sessions ?? []

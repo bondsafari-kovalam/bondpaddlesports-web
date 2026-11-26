@@ -8,12 +8,11 @@ import { ActiveActivityChips, ActivityFilters, ActivitySearch, emptyActivityFilt
 import { IllustrativeLabel, LocationStatusBadge, focusRing } from '@/components/locations/primitives'
 import { AmbientVideo, HeroFilm } from '@/components/motion/ambient-video'
 import { Reveal, RevealGroup, RevealLines } from '@/components/motion/reveal'
-import { activities, activitiesAt, activityHref, formatDuration, type Activity } from '@/lib/activities'
-import { locationHref, locations } from '@/lib/locations'
+import { activities as snapshotActivities, activityHref, formatDuration, type Activity } from '@/lib/activities'
+import { locationHref, locations as snapshotLocations, type Location } from '@/lib/locations'
 import { ROUTES } from '@/lib/site'
 import { FILMS } from '@/lib/media'
 
-const featured = activities.filter((activity) => activity.featured)
 const shortName = (activity: Activity) => (activity.slug === 'stand-up-paddleboarding' ? 'SUP' : activity.name)
 
 export function ActivitiesHero() {
@@ -106,7 +105,7 @@ function ActivityShowcase({ items }: { items: Activity[] }) {
   )
 }
 
-function LocationAvailabilityOverview() {
+function LocationAvailabilityOverview({ activities, locations }: { activities: Activity[]; locations: Location[] }) {
   const shown = locations.filter((location) => location.hasDetailPage)
   return (
     <section className="px-5 py-24 lg:px-8 lg:py-32" aria-labelledby="by-location">
@@ -119,7 +118,7 @@ function LocationAvailabilityOverview() {
           <p className="flex max-w-md gap-2 text-sm leading-6 text-slate"><Info className="mt-1 size-4 shrink-0 text-teal-strong" aria-hidden />Line-ups marked “preview” are demonstration pairings until Bond confirms what runs at each location.</p>
         </div>
         <RevealGroup as="ul">{shown.map((location) => {
-            const offered = activitiesAt(location.slug)
+            const offered = activities.filter((activity) => activity.offerings.some((offering) => offering.locationSlug === location.slug && offering.source !== 'planned'))
             return (
               <li key={location.slug} className="group grid gap-4 border-b border-line py-7 transition-colors hover:bg-paper-bright md:grid-cols-[minmax(0,1.1fr)_minmax(0,1.6fr)_auto] md:items-center md:gap-8 md:px-4">
                 <div>
@@ -145,7 +144,9 @@ function LocationAvailabilityOverview() {
   )
 }
 
-export function ActivitiesExplorer() {
+/** `activities` / `locations`: live data from the page (lib/catalogue-live.ts); the build snapshot otherwise. */
+export function ActivitiesExplorer({ activities = snapshotActivities, locations = snapshotLocations }: { activities?: Activity[]; locations?: Location[] }) {
+  const featured = activities.filter((activity) => activity.featured)
   const [filters, setFilters] = useState<ActivityFilterState>(emptyActivityFilters)
   const [sort, setSort] = useState<SortKey>('recommended')
   const sorts = sortOptions(activities)
@@ -155,7 +156,7 @@ export function ActivitiesExplorer() {
     if (sort === 'price') return [...filtered].sort(startingPriceSort)
     if (sort === 'duration') return [...filtered].sort((a, b) => (a.durationMinutes ?? Infinity) - (b.durationMinutes ?? Infinity))
     return filtered
-  }, [filters, sort])
+  }, [activities, filters, sort])
 
   return (
     <>
@@ -199,7 +200,7 @@ export function ActivitiesExplorer() {
         </div>
       </section>
 
-      <LocationAvailabilityOverview />
+      <LocationAvailabilityOverview activities={activities} locations={locations} />
     </>
   )
 }

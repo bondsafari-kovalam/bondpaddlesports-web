@@ -1,5 +1,5 @@
 /**
- * Booking submission boundary.
+ * Booking submission boundary — connected to the Bond backend (POST /booking-requests).
  *
  * Integration still required (not connected):
  * 1. A server route (e.g. app/api/bookings/route.ts) that re-runs `validateStep('details', …)` and
@@ -23,6 +23,7 @@
  */
 
 import type { ServiceResult } from '@/lib/academy-service'
+import { bondApi, compact, newIdempotencyKey, text, toE164 } from '@/lib/bond-api'
 import type { BookingAttribution } from '@/lib/attribution'
 import type { BookingDraft, BookingQuote } from '@/lib/group-booking'
 
@@ -49,6 +50,30 @@ export function toGroupBookingPayload(draft: BookingDraft, quote: BookingQuote, 
   }
 }
 
-export async function submitGroupBooking(_payload: GroupBookingPayload): Promise<ServiceResult<{ groupBookingId: string }>> {
-  return { ok: false, reason: 'not-connected', message: 'Bookings are not connected to the booking engine yet.' }
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
+/**
+ * POST /booking-requests on the Bond backend: one request for the group (no payment, no seats held; the team
+ * confirms on WhatsApp). The server re-validates activities and sessions and computes its own price estimate.
+ * `idempotencyKey` makes a retried submission (double click, flaky network) return the same request.
+ */
+export async function submitGroupBooking(payload: GroupBookingPayload, idempotencyKey?: string): Promise<ServiceResult<{ groupBookingId: string }>> {
+  const attribution = compact(
+    Object.fromEntries(Object.entries(payload.attribution).map(([key, value]) => [key, typeof value === 'string' && value ? value : undefined])),
+  )
+  const result = await bondApi<{ reference: string }>('/booking-requests', {
+    idempotencyKey: idempotencyKey ?? newIdempotencyKey(),
+    body: {
+      locationSlug: payload.locationSlug,
+      date: payload.date,
+      people: payload.people,
+      items: payload.activities.map((item) =>
+        compact({ activitySlug: item.slug, people: item.people, sessionId: item.sessionId && UUID.test(item.sessionId) ? item.sessionId : undefined }),
+      ),
+      lead: compact({ name: payload.lead.name, phone: toE164(payload.lead.phone), email: text(payload.lead.email) }),
+      termsAccepted: true,
+      ...(Object.keys(attribution).length ? { attribution } : {}),
+    },
+  })
+  return result.ok ? { ok: true, data: { groupBookingId: result.data.reference } } : result
 }

@@ -8,7 +8,7 @@ import { HeroFilm } from '@/components/motion/ambient-video'
 import { HeroBackdrop } from '@/components/site/hero-backdrop'
 import { SiteFooter } from '@/components/site/site-footer'
 import { SiteHeader } from '@/components/site/site-header'
-import { CAMPUSES, COURSE_CATEGORIES, PARTNER_STATEMENT, courses, formatRupees, getCourse, type CourseCategoryId } from '@/lib/academy'
+import { CAMPUSES, COURSE_CATEGORIES, COURSE_STATUS_LABELS, PARTNER_STATEMENT, courses, formatRupees, getCourse, type CourseCategoryId } from '@/lib/academy'
 import { RevealGroup, RevealLines } from '@/components/motion/reveal'
 import type { Film } from '@/lib/media'
 
@@ -161,7 +161,8 @@ export function CampusCards() {
 }
 
 export function GuideProgrammeFeature({ ctaHref = '/academy/careers' }: { ctaHref?: string }) {
-  const programme = getCourse('bond-paddle-guide-programme')!
+  // From the backend; the section still renders (price "To be confirmed") if the course is unpublished.
+  const programme = getCourse('bond-paddle-guide-programme')
   return (
     <div className="overflow-hidden rounded-3xl bg-ink text-white">
       <div className="grid gap-10 p-8 sm:p-12 lg:grid-cols-[1.3fr_1fr] lg:items-end lg:p-16">
@@ -172,8 +173,8 @@ export function GuideProgrammeFeature({ ctaHref = '/academy/careers' }: { ctaHre
           <a href={ctaHref} className={`mt-8 ${goldButton}`}>Explore the guide programme <ArrowRight className="ml-2 size-4" aria-hidden /></a>
         </div>
         <dl className="divide-y divide-white/10 border-y border-white/10">
-          <div className="py-5"><dt className="text-xs text-white/60">Programme fee (2027 rate)</dt><dd className="mt-1 font-display text-5xl font-bold text-sand">{formatRupees(programme.price!)}</dd></div>
-          <div className="py-5"><dt className="text-xs text-white/60">Status</dt><dd className="mt-1 font-semibold">Dates coming soon</dd></div>
+          <div className="py-5"><dt className="text-xs text-white/60">Programme fee (2027 rate)</dt><dd className="mt-1 font-display text-5xl font-bold text-sand">{programme?.price ? formatRupees(programme.price) : 'To be confirmed'}</dd></div>
+          <div className="py-5"><dt className="text-xs text-white/60">Status</dt><dd className="mt-1 font-semibold">{COURSE_STATUS_LABELS[programme?.status ?? 'dates-coming-soon']}</dd></div>
         </dl>
       </div>
     </div>

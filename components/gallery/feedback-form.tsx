@@ -5,14 +5,22 @@ import { Star } from 'lucide-react'
 import { CheckboxField, SelectField, ServiceForm, TextAreaField, TextField, isEmail } from '@/components/academy/form-kit'
 import { activities } from '@/lib/activities'
 import { locations } from '@/lib/locations'
+import { checked, submitEnquiryTo, text } from '@/lib/bond-api'
 
 /**
  * Feedback goes to the team, not straight onto the site. Integration still required: a server
  * route that validates and stores feedback (shared Bond `POST /enquiries`, kind "feedback") and a
  * moderation step before anything is published as a public review.
  */
-async function submitFeedback(_payload: Record<string, unknown>) {
-  return { ok: false as const, reason: 'not-connected' as const, message: 'Feedback submission is not connected yet.' }
+async function submitFeedback(payload: Record<string, unknown>) {
+  return submitEnquiryTo('/enquiries/feedback', {
+    name: text(payload.name),
+    email: text(payload.email),
+    experience: text(payload.experience),
+    rating: typeof payload.rating === 'number' ? payload.rating : undefined,
+    message: text(payload.message),
+    consent: checked(payload.consent),
+  })
 }
 
 const experienceOptions = [

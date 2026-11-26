@@ -13,6 +13,7 @@ import {
   MapPin,
   MessageSquareQuote,
   PackageCheck,
+  PackageX,
   ShieldCheck,
   Sparkles,
   Star,
@@ -41,11 +42,20 @@ import { formatPrice, locationHref } from '@/lib/locations'
 import { IS_DEV, ROUTES } from '@/lib/site'
 import { RevealGroup, RevealLines } from '@/components/motion/reveal'
 import { SmartImage } from '@/components/site/smart-image'
+import { LiveGallery } from '@/components/site/live-gallery'
 
 /** Missing values: hidden for guests, flagged in development so the team can fill them in. */
 function valueOrPending(value: ReactNode | undefined) {
   if (value) return value
   return IS_DEV ? <Pending>Details to be confirmed</Pending> : null
+}
+
+/** "Fri 27 Nov · 07:00 (10 places left)" from live sessions; the old wording when sessions are not known. */
+function nextSessionText(offering: ResolvedOffering, activity: Activity) {
+  const next = offering.nextSession
+  if (!next) return activity.sessionsKnown ? 'None scheduled yet. Book a request and we’ll confirm a time.' : 'Shown once the booking engine is connected'
+  const day = new Date(`${next.date}T00:00:00Z`).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' })
+  return `${day} · ${next.time} (${next.seatsRemaining} ${next.seatsRemaining === 1 ? 'place' : 'places'} left)`
 }
 
 function bookableOfferings(activity: Activity) {
@@ -160,6 +170,7 @@ export function ActivityInclusions({ activity }: { activity: Activity }) {
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
         <BulletBlock title="What’s included" icon={PackageCheck} items={activity.inclusions} empty="Verified inclusions to be added. Nothing is assumed to be included." />
         <BulletBlock title="What to bring" icon={Backpack} items={activity.whatToBring} empty="Approved packing guidance to be added." />
+        {activity.exclusions?.length ? <BulletBlock title="Not included" icon={PackageX} items={activity.exclusions} empty="" /> : null}
       </div>
     </section>
   )
@@ -176,7 +187,7 @@ export function ActivitySafetySection({ activity }: { activity: Activity }) {
     <section id="safety" aria-labelledby="safety-title" className="scroll-mt-6 rounded-3xl bg-ink-soft p-6 text-white sm:p-8">
       <ShieldCheck className="size-8 text-teal-bright" strokeWidth={1.4} aria-hidden />
       <h2 id="safety-title" className="mt-4 font-display text-3xl font-black"><RevealLines>Safety & preparation</RevealLines></h2>
-      <p className="mt-2 max-w-xl text-sm leading-6 text-white/70">Everything you need to know before you get on the water.</p>
+      <p className="mt-2 max-w-xl whitespace-pre-line text-sm leading-6 text-white/70">{activity.safetyInformation ?? 'Everything you need to know before you get on the water.'}</p>
       <dl className="mt-6 grid gap-5 sm:grid-cols-2">
         {rows.map(([label, value]) => (
           <div key={label}>
@@ -189,6 +200,7 @@ export function ActivitySafetySection({ activity }: { activity: Activity }) {
         <a href={ROUTES.safety} className="inline-flex min-h-11 items-center text-sand hover:text-white">Safety & Responsible Tourism <ArrowRight className="ml-1 size-4" aria-hidden /></a>
         <span className="inline-flex min-h-11 items-center gap-2 text-white/60"><FileText className="size-4" aria-hidden /> Booking terms & digital waiver: awaiting approved wording</span>
       </div>
+      {activity.cancellationPolicy && <p className="mt-2 max-w-2xl whitespace-pre-line text-sm leading-6 text-white/70"><strong className="text-white">Cancellation & refunds: </strong>{activity.cancellationPolicy}</p>}
     </section>
   )
 }
@@ -214,7 +226,7 @@ function ActivityLocationCard({ offering, activity }: { offering: ResolvedOfferi
           {(offering.meetingPoint ?? location.meetingPoint) && <div><dt className="inline font-bold">Meeting point: </dt><dd className="inline">{offering.meetingPoint ?? location.meetingPoint}</dd></div>}
           {offering.duration && <div><dt className="inline font-bold">Duration: </dt><dd className="inline">{offering.duration}</dd></div>}
           <div><dt className="inline font-bold">Price: </dt><dd className="inline">{price ? `${formatPrice(price)} incl. GST & charges` : 'Price to be confirmed'}</dd></div>
-          <div><dt className="inline font-bold">Next sessions: </dt><dd className="inline">{isOperating ? 'Shown once the booking engine is connected' : location.plannedOpening ?? location.phase ?? 'Dates to be confirmed'}</dd></div>
+          <div><dt className="inline font-bold">Next sessions: </dt><dd className="inline">{isOperating ? nextSessionText(offering, activity) : location.plannedOpening ?? location.phase ?? 'Dates to be confirmed'}</dd></div>
         </dl>
         <div className="mt-auto flex flex-wrap items-center gap-3 pt-5">
           <a href={location.hasDetailPage ? locationHref(location) : ROUTES.locations} className={`inline-flex min-h-11 items-center text-sm font-bold text-ink hover:text-teal ${focusRing}`}>View location <ArrowRight className="ml-1 size-4" aria-hidden /></a>
@@ -278,8 +290,8 @@ export function ActivityCrossSell({ activity }: { activity: Activity }) {
   )
 }
 
-export function RelatedActivities({ activity }: { activity: Activity }) {
-  const related = activity.related.map(getActivity).filter((item): item is Activity => !!item)
+export function RelatedActivities({ activity, all }: { activity: Activity; all?: Activity[] }) {
+  const related = activity.related.map((slug) => (all ? all.find((item) => item.slug === slug) : getActivity(slug))).filter((item): item is Activity => !!item)
   if (!related.length) return null
   return (
     <section aria-labelledby="related-title">
@@ -331,8 +343,8 @@ export function ActivityReviews({ activity }: { activity: Activity }) {
 }
 
 export function ActivityGallery({ activity }: { activity: Activity }) {
-  if (!IS_DEV) return null
-  return <DevNote title="Gallery">No approved {activity.name.toLowerCase()} photos or videos yet. Add media with location and activity tags; videos need captions and must not autoplay. Guest images need written permission (and parent/guardian consent for identifiable children). Hidden in production until media exists.</DevNote>
+  // Activity images from the admin panel, loaded live (signed URLs); hidden in production while there are none.
+  return <LiveGallery path={`/activities/${activity.slug}`} name={activity.name} media={[]} fallback={<DevNote title="Gallery">No approved {activity.name.toLowerCase()} photos or videos yet. Add media with location and activity tags; videos need captions and must not autoplay. Guest images need written permission (and parent/guardian consent for identifiable children). Hidden in production until media exists.</DevNote>} />
 }
 
 export function ActivityFAQ({ activity }: { activity: Activity }) {

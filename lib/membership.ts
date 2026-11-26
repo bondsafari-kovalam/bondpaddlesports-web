@@ -1,31 +1,44 @@
 /**
- * Membership catalogue, Pearls rules and tiers. Source: the client brief.
+ * Membership catalogue: plans and prices, Season Pass, comparison, Pearl rules and tiers, from the Bond backend
+ * (GET /membership). The /membership page reads it live (lib/membership-live.ts); the build snapshot
+ * (scripts/sync-catalogue.mjs → lib/generated/catalogue.json) is the fallback. Edit it in the admin panel.
  *
- * Not supplied yet (left undefined, shown as "set by the programme rules"): Pearl earning rates,
- * expiry and redemption limits, tier thresholds, what each Bond Blue option covers (e.g. family
- * size), renewal/expiry terms. Sign-up, payment and member data are not connected.
+ * Not supplied yet (left undefined, shown as "set by the programme rules"): Pearl earning rates, expiry and
+ * redemption limits, tier thresholds, what each Bond Blue option covers (e.g. family size), renewal/expiry terms.
+ * Sign-up, payment and member data are not connected.
  */
+
+import catalogue from '@/lib/generated/catalogue.json'
 
 export const MEMBERSHIP_SIGNUP_CONNECTED = false
 
-export type BondBlueOption = { id: 'individual' | 'family' | 'digital'; name: string; price: number; highlight?: boolean; coverage?: string }
-
-export const BOND_BLUE_OPTIONS: BondBlueOption[] = [
-  { id: 'individual', name: 'Individual', price: 2499, highlight: true },
-  { id: 'family', name: 'Family', price: 5999 },
-  { id: 'digital', name: 'Digital', price: 999 },
-]
-
-export const SEASON_PASS = {
-  price: 7999,
-  season: 'October–May',
-  earlyBird: { price: 6399, window: 'June–September' },
-  /** Set by the business; the early-bird price is never shown unless this is true. */
-  earlyBirdEnabled: false,
+type ApiOption = { code: string; name: string; price: string; isHighlighted: boolean; coverage: string | null }
+type ApiPlan = {
+  code: string
+  name: string
+  tagline: string | null
+  description: string | null
+  benefits: string[]
+  ctaLabel: string | null
+  seasonLabel: string | null
+  earlyBird: { price: string | null; window: string | null } | null
+  options: ApiOption[]
+}
+/** GET /membership response. */
+export type ApiMembership = {
+  plans: ApiPlan[]
+  tiers: { code: string; name: string; description: string | null; threshold: string | null }[]
+  pearlRules: string[]
+  comparison: { benefit: string; values: Record<string, string> }[]
 }
 
+/** The page is built around these three plans (their codes in the admin panel). */
+const PLAN_CODES = ['club', 'bond-blue', 'season-pass'] as const
+
+export type BondBlueOption = { id: string; name: string; price: number; highlight?: boolean; coverage?: string }
+
 export type Plan = {
-  id: 'club' | 'bond-blue' | 'season-pass'
+  id: (typeof PLAN_CODES)[number]
   name: string
   tagline: string
   description: string
@@ -33,78 +46,71 @@ export type Plan = {
   cta: string
 }
 
-export const PLANS: Plan[] = [
-  {
-    id: 'club',
-    name: 'Bond Safari Club',
-    tagline: 'Your adventure starts here.',
-    description: 'Join the Bond Safari community and start earning rewards across participating Bond businesses.',
-    benefits: [
-      'Free membership',
-      'Shared member ID across participating Bond businesses',
-      'Earn Pearls on eligible purchases',
-      'Redeem Pearls for discounts',
-      'Access your membership details from your account',
-      'Relevant member updates, if you choose to opt in',
-    ],
-    cta: 'Join free',
-  },
-  {
-    id: 'bond-blue',
-    name: 'Bond Blue',
-    tagline: 'More adventures. More member benefits.',
-    description: 'An annual membership for people who paddle often.',
-    benefits: [
-      '15% off eligible activities and purchases, subject to applicable terms',
-      'Double Pearls on eligible transactions',
-      'One free paddle hour per month, subject to availability and booking rules',
-      'Digital membership pass',
-      'Member benefits at participating Bond Safari locations',
-    ],
-    cta: 'Explore Bond Blue',
-  },
-  {
-    id: 'season-pass',
-    name: 'Paddle Season Pass',
-    tagline: 'Make the most of paddle season.',
-    description: `Unlimited paddling through the ${SEASON_PASS.season} season.`,
-    benefits: [
-      'Unlimited paddling at participating operating sites during the season',
-      'Reservations subject to capacity and fair-use rules',
-      'Digital pass for convenient member identification',
-      'Access to eligible activities under the pass conditions',
-      'Book your seat even when the session price is ₹0',
-    ],
-    cta: 'Get the Season Pass',
-  },
-]
-
-export const COMPARISON: { benefit: string; values: [string, string, string] }[] = [
-  { benefit: 'Free to join', values: ['Yes', 'No', 'No'] },
-  { benefit: 'Earn Pearls', values: ['On eligible purchases', 'Double Pearls on eligible transactions', 'As defined by the programme rules'] },
-  { benefit: 'Activity discount', values: ['Standard eligible rewards', '15% on eligible purchases', 'Covered paddling, subject to pass terms'] },
-  { benefit: 'Monthly free paddle hour', values: ['No', 'One, subject to availability', 'Not applicable'] },
-  { benefit: 'Unlimited seasonal paddling', values: ['No', 'No', 'Yes, subject to capacity and fair use'] },
-  { benefit: 'Digital member identification', values: ['Account / member ID', 'Digital pass', 'Digital pass'] },
-]
-
-export const PEARL_RULES = [
-  '1 Pearl = ₹1 discount when redeemed under the programme rules.',
-  'Pearls can be redeemed for eligible discounts.',
-  'Pearls are not cash and cannot be exchanged or transferred for cash.',
-  'Expiry and redemption are subject to the approved loyalty programme rules.',
-  'Eligible purchases and redemption limits may vary by business.',
-]
-
 export type Tier = { name: string; description: string; threshold?: string }
 
-/** Thresholds and earning rates stay undefined until the approved programme rules are supplied. */
-export const TIERS: Tier[] = [
-  { name: 'Shore', description: 'Your starting tier.' },
-  { name: 'Reef', description: 'Progress through eligible activity.' },
-  { name: 'Ocean', description: 'Progress through eligible activity.' },
-  { name: 'Abyss', description: 'Our highest tier.' },
-]
+export type SeasonPass = { price: number; season: string; earlyBird: { price: number; window: string }; earlyBirdEnabled: boolean }
+
+/** Everything the membership page shows, in the shapes its sections use. */
+export type MembershipData = {
+  plans: Plan[]
+  bondBlueOptions: BondBlueOption[]
+  seasonPass: SeasonPass
+  /** Benefit rows with one value per plan, in the plans order. */
+  comparison: { benefit: string; values: [string, string, string] }[]
+  pearlRules: string[]
+  /** Thresholds and earning rates stay undefined until the approved programme rules are supplied. */
+  tiers: Tier[]
+}
+
+/** Maps the backend catalogue to the page's shapes. Throws when one of the three plans is missing or retired. */
+export function toMembershipData(api: ApiMembership): MembershipData {
+  const planFor = (code: (typeof PLAN_CODES)[number]) => {
+    const plan = api.plans.find((item) => item.code === code)
+    if (!plan) throw new Error(`Membership plan "${code}" is missing or retired in the admin panel.`)
+    return plan
+  }
+  const season = planFor('season-pass')
+  return {
+    plans: PLAN_CODES.map((code) => {
+      const plan = planFor(code)
+      return { id: code, name: plan.name, tagline: plan.tagline ?? '', description: plan.description ?? '', benefits: plan.benefits, cta: plan.ctaLabel ?? 'Join' }
+    }),
+    bondBlueOptions: planFor('bond-blue').options.map((option) => ({
+      id: option.code,
+      name: option.name,
+      price: Number(option.price),
+      highlight: option.isHighlighted || undefined,
+      coverage: option.coverage ?? undefined,
+    })),
+    seasonPass: {
+      price: Number(season.options[0]?.price ?? 0),
+      season: season.seasonLabel ?? '',
+      earlyBird: { price: Number(season.earlyBird?.price ?? 0), window: season.earlyBird?.window ?? '' },
+      // Set in the admin panel; the early-bird price is never shown unless the offer is enabled.
+      earlyBirdEnabled: season.earlyBird !== null,
+    },
+    comparison: api.comparison.map((row) => ({
+      benefit: row.benefit,
+      values: PLAN_CODES.map((code) => row.values[code] ?? '') as [string, string, string],
+    })),
+    pearlRules: api.pearlRules,
+    tiers: api.tiers.map((tier) => ({ name: tier.name, description: tier.description ?? '', threshold: tier.threshold ?? undefined })),
+  }
+}
+
+const snapshot = (catalogue as { membership?: ApiMembership }).membership
+if (!snapshot) throw new Error('Membership catalogue missing: run `npm run catalogue:sync` against the Bond backend.')
+
+/** Build snapshot (lib/generated/catalogue.json): the fallback when the live API cannot be reached. */
+export const SNAPSHOT_MEMBERSHIP: MembershipData = toMembershipData(snapshot)
+
+// Snapshot values for pages that are not live (e.g. About).
+export const PLANS = SNAPSHOT_MEMBERSHIP.plans
+export const BOND_BLUE_OPTIONS = SNAPSHOT_MEMBERSHIP.bondBlueOptions
+export const SEASON_PASS = SNAPSHOT_MEMBERSHIP.seasonPass
+export const COMPARISON = SNAPSHOT_MEMBERSHIP.comparison
+export const PEARL_RULES = SNAPSHOT_MEMBERSHIP.pearlRules
+export const TIERS = SNAPSHOT_MEMBERSHIP.tiers
 
 export function formatRupee(amount: number) {
   return `₹${amount.toLocaleString('en-IN')}`

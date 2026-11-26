@@ -1,5 +1,6 @@
 /**
- * Activity catalogue: single source of truth for /activities and every activity-to-location link.
+ * Activity catalogue for /activities and every activity-to-location link: types and helpers. The data comes from the
+ * Bond backend's public API (synced at build time into lib/generated/catalogue.json).
  *
  * Only brief-supported facts are recorded. Durations, skill levels, ages, group sizes, inclusions,
  * safety rules and prices are left undefined until Bond supplies approved values; the UI then
@@ -8,7 +9,8 @@
 
 import { locations, type Location, type LocationImage, type WaterType } from '@/lib/locations'
 import { BOOKING_ENGINE_CONNECTED } from '@/lib/booking-config'
-import { FILMS, type Film } from '@/lib/media'
+import catalogue from '@/lib/generated/catalogue.json'
+import type { Film } from '@/lib/media'
 
 export type ActivityCategory = 'Paddling' | 'Guided experience' | 'Private session' | 'White-water'
 export type ActivityStatus = 'available' | 'opening-soon' | 'coming-soon' | 'no-sessions'
@@ -31,7 +33,13 @@ export type Offering = {
   pricePerParticipant?: number
   duration?: string
   meetingPoint?: string
+  /** Live location (lib/catalogue-live.ts); otherwise looked up in the snapshot by slug. */
+  location?: Location
+  /** Earliest upcoming session with free places here (live data only). */
+  nextSession?: NextSessionInfo
 }
+
+export type NextSessionInfo = { date: string; time: string; seatsRemaining: number }
 
 export type Faq = { question: string; answer?: string }
 
@@ -53,172 +61,41 @@ export type Activity = {
   skillLevel?: 'Beginner' | 'Intermediate' | 'Advanced' | 'All levels'
   minimumAge?: string
   groupSize?: string
+  /** The activity's own water types (admin); location water types are preferred when the activity is offered. */
+  waterTypes?: WaterType[]
   sessionFormat?: string
   swimmingRequirement?: string
   healthRequirement?: string
   experienceHighlights?: string[]
   learningOutcomes?: string[]
   inclusions?: string[]
+  exclusions?: string[]
   whatToBring?: string[]
   safety?: { equipment?: string; supervision?: string; weather?: string }
+  /** General safety information from the admin panel. */
+  safetyInformation?: string
+  cancellationPolicy?: string
   related: string[]
   nextSteps: NextStep[]
   faqs: Faq[]
   featured?: boolean
   seo?: { title?: string; description?: string }
+  /** True when the offerings' `nextSession` values come from live backend sessions (lib/catalogue-live.ts). */
+  sessionsKnown?: boolean
 }
 
-const defaultFaqs = (name: string): Faq[] => [
-  { question: `Is ${name.toLowerCase()} suitable for beginners?` },
-  { question: 'What should I bring?' },
-  { question: 'What is included?' },
-  { question: 'What are the participation requirements?' },
-  { question: 'What happens if the weather is unsuitable?' },
-  { question: 'How do I change or cancel a booking?' },
-]
+type SyncedActivity = Omit<Activity, 'image' | 'video' | 'ambientVideo'> & { remoteImage?: LocationImage }
 
-// Preview pairing mirroring the homepage booking widget; replace with confirmed offerings from Bond.
-const muzirisDemo: Offering[] = [
-  { locationSlug: 'muziris-kottapuram', source: 'demo' },
-  { locationSlug: 'muziris-north-paravur', source: 'demo', meetingPoint: 'Thattukadavu Jetty' },
-]
-
-// Preview until Bond confirms Kovalam's activities and prices before launch. Then set source: 'confirmed' and add them.
-const kovalamDemo: Offering = { locationSlug: 'kovalam', source: 'demo' }
-
-export const activities: Activity[] = [
-  {
-    slug: 'kayaking',
-    name: 'Kayaking',
-    category: 'Paddling',
-    tags: ['paddling', 'kayak'],
-    summary: 'Glide through quiet waters, hidden channels and living landscapes.',
-    image: {
-      src: '/images/bond/afternoon-paddle-by-the-reeds.jpg',
-      alt: 'A paddler in a sun hat resting in an orange kayak beside the reeds in afternoon light',
-    },
-    ambientVideo: FILMS.kayaking,
-    offerings: [...muzirisDemo, kovalamDemo],
-    related: ['canoeing', 'guided-trails'],
-    nextSteps: ['academy', 'longer-experience', 'membership'],
-    faqs: defaultFaqs('Kayaking'),
-    featured: true,
-  },
-  {
-    slug: 'canoeing',
-    name: 'Canoeing',
-    category: 'Paddling',
-    tags: ['paddling', 'canoe', 'shared'],
-    summary: 'Find your rhythm on the water with a craft built for shared adventure.',
-    image: {
-      src: 'https://images.unsplash.com/photo-1635749687861-4341928cbf97?auto=format&fit=crop&w=1400&q=85',
-      alt: 'Paddler in a canoe on quiet, calm water',
-      illustrative: true,
-    },
-    ambientVideo: FILMS.canoeing,
-    offerings: [...muzirisDemo, kovalamDemo],
-    related: ['kayaking', 'private-sessions'],
-    nextSteps: ['academy', 'membership'],
-    faqs: defaultFaqs('Canoeing'),
-    featured: true,
-  },
-  {
-    slug: 'stand-up-paddleboarding',
-    name: 'Stand-up paddleboarding',
-    category: 'Paddling',
-    tags: ['paddling', 'sup'],
-    summary: 'A fresh perspective, a full-body workout and a slower way to explore.',
-    image: {
-      src: '/images/bond/sup-paddling-at-sunset.jpg',
-      alt: 'A paddler on a stand-up paddleboard pulling a stroke as the sun sets behind a rocky headland',
-    },
-    ambientVideo: FILMS.sup,
-    offerings: muzirisDemo,
-    related: ['sunrise-paddles', 'sunset-paddles'],
-    nextSteps: ['academy', 'season-pass'],
-    faqs: defaultFaqs('Stand-up paddleboarding'),
-    featured: true,
-  },
-  {
-    slug: 'guided-trails',
-    name: 'Guided trails',
-    category: 'Guided experience',
-    tags: ['guided', 'trail'],
-    summary: 'Paddle a set route on the water with a Bond guide.',
-    image: {
-      src: 'https://images.unsplash.com/photo-1533690117405-12bd19ce56e3?auto=format&fit=crop&w=1400&q=85',
-      alt: 'Illustrative kayak trail through a mangrove waterway',
-      illustrative: true,
-    },
-    offerings: [],
-    related: ['kayaking', 'canoeing'],
-    nextSteps: ['longer-experience', 'membership'],
-    faqs: defaultFaqs('Guided trails'),
-  },
-  {
-    slug: 'sunrise-paddles',
-    name: 'Sunrise paddles',
-    category: 'Guided experience',
-    tags: ['guided', 'sunrise', 'timed'],
-    summary: 'A paddle timed for the first light of the day.',
-    image: {
-      src: 'https://images.unsplash.com/photo-1647036003499-94eebb3388c7?auto=format&fit=crop&w=1400&q=85',
-      alt: 'Illustrative canoe paddle on a lake at sunrise',
-      illustrative: true,
-    },
-    offerings: [],
-    related: ['sunset-paddles', 'stand-up-paddleboarding'],
-    nextSteps: ['season-pass', 'membership'],
-    faqs: defaultFaqs('Sunrise paddles'),
-  },
-  {
-    slug: 'sunset-paddles',
-    name: 'Sunset paddles',
-    category: 'Guided experience',
-    tags: ['guided', 'sunset', 'timed'],
-    summary: 'A paddle timed for the evening light.',
-    image: {
-      src: '/images/bond/resting-on-a-sup-at-sunset.jpg',
-      alt: 'A swimmer resting on a stand-up paddleboard as the sea turns orange at sunset',
-    },
-    offerings: [],
-    related: ['sunrise-paddles', 'stand-up-paddleboarding'],
-    nextSteps: ['season-pass', 'membership'],
-    faqs: defaultFaqs('Sunset paddles'),
-  },
-  {
-    slug: 'private-sessions',
-    name: 'Private paddling sessions',
-    category: 'Private session',
-    tags: ['private', 'groups'],
-    summary: 'A paddling session reserved for just your group.',
-    image: {
-      src: 'https://images.unsplash.com/photo-1723215629906-bc05bd6f36a1?auto=format&fit=crop&w=1400&q=85',
-      alt: 'Illustrative group gathered on kayaks in the water',
-      illustrative: true,
-    },
-    offerings: [],
-    related: ['canoeing', 'guided-trails'],
-    nextSteps: ['membership'],
-    faqs: defaultFaqs('Private paddling sessions'),
-  },
-  {
-    slug: 'white-water',
-    name: 'White-water experiences',
-    category: 'White-water',
-    tags: ['white-water', 'river'],
-    summary: 'Moving-water paddling, planned for the Kodenchery white-water destination.',
-    image: {
-      src: 'https://images.unsplash.com/photo-1767471716671-60052b672451?auto=format&fit=crop&w=1400&q=85',
-      alt: 'Illustrative kayaker navigating white-water rapids',
-      illustrative: true,
-    },
-    offerings: [{ locationSlug: 'kodenchery-white-water', source: 'planned' }],
-    related: ['kayaking'],
-    nextSteps: ['academy'],
-    faqs: defaultFaqs('White-water experiences'),
-  },
-]
+/**
+ * Activities from the Bond backend (public API → scripts/sync-catalogue.mjs → lib/generated/catalogue.json), photos
+ * included: only the image uploaded in the admin panel is used. Offerings come from the backend too:
+ * `confirmed` = available at that location, `planned` = coming soon. The /activities pages read the same data live
+ * (lib/catalogue-live.ts).
+ */
+export const activities: Activity[] = (catalogue.activities as unknown as SyncedActivity[]).map(({ remoteImage, ...activity }) => ({
+  ...activity,
+  image: remoteImage,
+}))
 
 export const ACTIVITY_CATEGORIES: ActivityCategory[] = ['Paddling', 'Guided experience', 'Private session', 'White-water']
 export const ACTIVITY_STATUSES: ActivityStatus[] = ['available', 'opening-soon', 'coming-soon', 'no-sessions']
@@ -235,7 +112,7 @@ export type ResolvedOffering = Offering & { location: Location }
 
 export function offeringsFor(activity: Activity): ResolvedOffering[] {
   return activity.offerings.flatMap((offering) => {
-    const location = locations.find((item) => item.slug === offering.locationSlug)
+    const location = offering.location ?? locations.find((item) => item.slug === offering.locationSlug)
     return location ? [{ ...offering, location }] : []
   })
 }
@@ -269,7 +146,10 @@ export function activitiesAt(locationSlug: string) {
  */
 export function activityStatus(activity: Activity): ActivityStatus {
   const resolved = offeringsFor(activity)
-  if (BOOKING_ENGINE_CONNECTED && resolved.some((o) => o.source === 'confirmed' && o.location.status === 'operating')) return 'available'
+  // Live sessions known: "available" only when an operating location has an upcoming session with free places.
+  if (activity.sessionsKnown) {
+    if (resolved.some((o) => o.nextSession && o.source === 'confirmed' && o.location.status === 'operating')) return 'available'
+  } else if (BOOKING_ENGINE_CONNECTED && resolved.some((o) => o.source === 'confirmed' && o.location.status === 'operating')) return 'available'
   if (resolved.some((o) => o.location.status === 'operating')) return 'no-sessions'
   if (resolved.some((o) => o.location.status === 'opening-soon')) return 'opening-soon'
   if (resolved.some((o) => o.location.status === 'coming-soon')) return 'coming-soon'
@@ -277,7 +157,8 @@ export function activityStatus(activity: Activity): ActivityStatus {
 }
 
 export function waterTypesFor(activity: Activity): WaterType[] {
-  return [...new Set(offeringsFor(activity).flatMap((offering) => offering.location.waterTypes))]
+  const fromLocations = [...new Set(offeringsFor(activity).flatMap((offering) => offering.location.waterTypes))]
+  return fromLocations.length ? fromLocations : (activity.waterTypes ?? [])
 }
 
 export function startingPriceFor(activity: Activity) {

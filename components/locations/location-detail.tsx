@@ -2,11 +2,12 @@ import type { ReactNode } from 'react'
 import { ArrowRight, ArrowUpRight, Backpack, CalendarClock, ChevronRight, CloudRain, Compass, FileText, MapPin, MessageSquareQuote, ShieldCheck, Sparkles } from 'lucide-react'
 import { LocationImageFallback } from '@/components/locations/location-card'
 import { NotifyMeButton } from '@/components/locations/notify-me'
+import { LiveGallery } from '@/components/site/live-gallery'
 import { DevNote, Eyebrow, IllustrativeLabel, LocationStatusBadge, Pending, focusRing } from '@/components/locations/primitives'
 import { activityHref, offersAt } from '@/lib/activities'
 import { bookingHref } from '@/lib/group-booking'
 import { formatDate, formatPrice, type Location, type VisitorInfo } from '@/lib/locations'
-import { IS_DEV, ROUTES } from '@/lib/site'
+import { ROUTES } from '@/lib/site'
 import { HeroImage, RevealGroup, RevealLines } from '@/components/motion/reveal'
 import { SmartImage } from '@/components/site/smart-image'
 import { TourFilmThumb } from '@/components/media/tour-film'
@@ -72,7 +73,9 @@ export function LocationOverview({ location }: { location: Location }) {
           </div>
         ))}
       </dl>
-      <div className="mt-6"><DevNote title="Overview">Add the client-approved location description (experience, landscape, heritage) from the project documents. Do not add claims about wildlife, routes or attractions until supplied.</DevNote></div>
+      {location.description
+        ? <div className="mt-6 max-w-2xl space-y-4 text-base leading-7 text-slate-strong">{location.description.split(/\n\s*\n/).map((paragraph, index) => <p key={index} className="whitespace-pre-line">{paragraph.trim()}</p>)}</div>
+        : <div className="mt-6"><DevNote title="Overview">Add the client-approved location description (experience, landscape, heritage) from the project documents. Do not add claims about wildlife, routes or attractions until supplied.</DevNote></div>}
     </section>
   )
 }
@@ -201,20 +204,13 @@ export function LocationTourFilm({ location }: { location: Location }) {
 }
 
 export function LocationGallery({ location }: { location: Location }) {
-  const media = location.gallery ?? []
-  if (media.length === 0 && !IS_DEV) return null
+  // Website photos when configured; otherwise the location's images from the admin panel, loaded live.
   return (
-    <section aria-labelledby="gallery-title">
-      <h2 id="gallery-title" className="font-display text-2xl font-bold">Gallery</h2>
-      {media.length > 0 ? (
-        <RevealGroup className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-3">{media.map((image) => <div key={image.src} className="relative aspect-square overflow-hidden rounded-2xl"><SmartImage src={image.src} alt={image.alt} fill sizes="(min-width: 768px) 33vw, 50vw" className="object-cover" /></div>)}
-        </RevealGroup>
-      ) : (
-        <div className="mt-4">
-          <DevNote title="Gallery">No approved photos or videos are configured for {location.name}. Add them to <code>gallery</code>; guest images need recorded written permission, and identifiable children need parent or guardian consent. This section is hidden in production until media exists.</DevNote>
-        </div>
-      )}
-    </section>
+    <LiveGallery path={`/locations/${location.slug}`} name={location.name} media={location.gallery ?? []} fallback={
+      <div className="mt-4">
+        <DevNote title="Gallery">No approved photos or videos are configured for {location.name}. Add them in the admin panel (location images) or to <code>gallery</code>; guest images need recorded written permission, and identifiable children need parent or guardian consent. This section is hidden in production until media exists.</DevNote>
+      </div>
+    } />
   )
 }
 

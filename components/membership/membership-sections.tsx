@@ -4,7 +4,7 @@ import { BondBluePicker } from '@/components/membership/bond-blue-picker'
 import { NotifyMeButton } from '@/components/locations/notify-me'
 import { Eyebrow, focusRing } from '@/components/locations/primitives'
 import { BOND_PHOTOS } from '@/lib/gallery'
-import { BOND_BLUE_OPTIONS, COMPARISON, PEARL_RULES, PLANS, SEASON_PASS, TIERS, formatRupee, type Plan } from '@/lib/membership'
+import { formatRupee, type MembershipData, type Plan } from '@/lib/membership'
 import { ROUTES } from '@/lib/site'
 import { ParallaxImage, Reveal, RevealGroup, RevealLines } from '@/components/motion/reveal'
 import { HeroBackdrop } from '@/components/site/hero-backdrop'
@@ -25,19 +25,21 @@ export function Ripples({ className = '', tone = 'cyan' }: { className?: string;
 }
 
 /** "Join" actions register interest until sign-up and payment are connected; nothing is activated. */
-function JoinButton({ plan, variant = 'solid', label, className = '' }: { plan: Plan['id']; variant?: 'solid' | 'outline' | 'onDark'; label?: string; className?: string }) {
+function JoinButton({ plan, plans, variant = 'solid', label, className = '' }: { plan: Plan['id']; plans?: Plan[]; variant?: 'solid' | 'outline' | 'onDark'; label?: string; className?: string }) {
   const names = { club: 'Bond Safari Club', 'bond-blue': 'Bond Blue', 'season-pass': 'the Paddle Season Pass' }
   const titles = { club: 'Join Bond Safari Club', 'bond-blue': 'Join Bond Blue', 'season-pass': 'Paddle Season Pass' }
-  return <NotifyMeButton name={names[plan]} slug={`membership-${plan}`} event="opens for sign-up" title={titles[plan]} label={label ?? PLANS.find((p) => p.id === plan)!.cta} variant={variant} className={`min-h-12 ${className}`} />
+  return <NotifyMeButton name={names[plan]} slug={`membership-${plan}`} event="opens for sign-up" title={titles[plan]} label={label ?? plans?.find((p) => p.id === plan)?.cta ?? 'Join'} variant={variant} className={`min-h-12 ${className}`} />
 }
 
-const lowestBlue = Math.min(...BOND_BLUE_OPTIONS.map((option) => option.price))
+/** Sections receive the membership catalogue as `data` (live from the backend, see lib/membership-live.ts). */
+type WithData = { data: MembershipData }
 
-export function MembershipHero() {
+export function MembershipHero({ data }: WithData) {
+  const lowestBlue = Math.min(...data.bondBlueOptions.map((option) => option.price))
   const glance = [
     { href: '#club', name: 'Bond Safari Club', price: 'Free' },
     { href: '#bond-blue', name: 'Bond Blue', price: `From ${formatRupee(lowestBlue)}/yr` },
-    { href: '#season-pass', name: 'Paddle Season Pass', price: `${formatRupee(SEASON_PASS.price)}/season` },
+    { href: '#season-pass', name: 'Paddle Season Pass', price: `${formatRupee(data.seasonPass.price)}/season` },
   ]
   return (
     <section className="relative overflow-hidden bg-ink pb-16 pt-36 text-white lg:pb-20 lg:pt-44">
@@ -85,8 +87,9 @@ function Benefit({ children, tone }: { children: ReactNode; tone: 'light' | 'dar
   return <li className="flex gap-3 text-sm leading-6"><Check className={`mt-0.5 size-4 shrink-0 ${tone === 'dark' ? 'text-sand' : 'text-success'}`} aria-hidden /><span>{children}</span></li>
 }
 
-export function PlanCards() {
-  const [club, blue, pass] = PLANS
+export function PlanCards({ data }: WithData) {
+  const [club, blue, pass] = data.plans
+  const SEASON_PASS = data.seasonPass
   return (
     <section id="plans" className="mx-auto max-w-7xl scroll-mt-16 px-5 py-24 lg:px-8 lg:py-32" aria-labelledby="plans-title">
       <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
@@ -105,7 +108,7 @@ export function PlanCards() {
           <p className="mt-6 font-display text-5xl font-black">Free</p>
           <p className="mt-4 text-sm leading-6 text-slate-strong">{club.description}</p>
           <ul className="mt-6 flex-1 space-y-2.5 border-t border-line pt-6 text-ink">{club.benefits.map((b) => <Benefit key={b} tone="light">{b}</Benefit>)}</ul>
-          <JoinButton plan="club" variant="outline" className="mt-8 w-full" />
+          <JoinButton plan="club" plans={data.plans} variant="outline" className="mt-8 w-full" />
         </article>
 
         <article id="bond-blue" className="flex scroll-mt-20 flex-col rounded-3xl bg-ink p-7 text-white sm:p-8">
@@ -115,7 +118,7 @@ export function PlanCards() {
           </div>
           <h3 className="mt-6 font-display text-2xl font-bold tracking-tight">{blue.name}</h3>
           <p className="mt-1 text-sm text-white/70">{blue.tagline}</p>
-          <BondBluePicker />
+          <BondBluePicker options={data.bondBlueOptions} />
           <ul className="mt-6 flex-1 space-y-2.5 border-t border-white/10 pt-6">{blue.benefits.map((b) => <Benefit key={b} tone="dark">{b}</Benefit>)}</ul>
           <JoinButton plan="bond-blue" label="Join Bond Blue" variant="solid" className="mt-8 w-full" />
         </article>
@@ -129,7 +132,7 @@ export function PlanCards() {
           {SEASON_PASS.earlyBirdEnabled && <p className="mt-3 rounded-xl bg-sand-soft p-3 text-sm font-bold text-sand-ink">Early-bird: {formatRupee(SEASON_PASS.earlyBird.price)} when bought {SEASON_PASS.earlyBird.window}</p>}
           <p className="mt-4 text-sm leading-6 text-slate-strong">{pass.description}</p>
           <ul className="mt-6 flex-1 space-y-2.5 border-t border-line pt-6 text-ink">{pass.benefits.map((b) => <Benefit key={b} tone="light">{b}</Benefit>)}</ul>
-          <JoinButton plan="season-pass" variant="outline" className="mt-8 w-full" />
+          <JoinButton plan="season-pass" plans={data.plans} variant="outline" className="mt-8 w-full" />
         </article>
       </RevealGroup>
       <p className="mt-6 text-xs leading-5 text-slate">Membership sign-up and payment aren’t live yet. “Join” buttons let you register interest; we’ll tell you when sign-up opens. Benefits are subject to the membership terms.</p>
@@ -137,15 +140,15 @@ export function PlanCards() {
   )
 }
 
-const columnNames = PLANS.map((p) => p.name)
-
 function Cell({ value }: { value: string }) {
   if (value === 'Yes') return <span className="inline-flex items-center gap-1.5 font-semibold text-success"><Check className="size-4" aria-hidden />Yes</span>
   if (value === 'No' || value === 'Not applicable') return <span className="inline-flex items-center gap-1.5 text-slate"><Minus className="size-4" aria-hidden />{value}</span>
   return <span>{value}</span>
 }
 
-export function ComparisonTable() {
+export function ComparisonTable({ data }: WithData) {
+  const columnNames = data.plans.map((p) => p.name)
+  const COMPARISON = data.comparison
   return (
     <section id="compare" className="scroll-mt-16 border-t border-line px-5 py-24 lg:px-8 lg:py-32" aria-labelledby="compare-title">
       <div className="mx-auto max-w-7xl">
@@ -186,7 +189,7 @@ export function ComparisonTable() {
   )
 }
 
-export function PearlsSection() {
+export function PearlsSection({ data }: WithData) {
   const steps = [
     { icon: Compass, title: 'Book an adventure', text: 'Paddle, learn or shop with participating Bond businesses.' },
     { icon: Gem, title: 'Earn Pearls', text: 'Collect Pearls on eligible purchases.' },
@@ -219,7 +222,7 @@ export function PearlsSection() {
         <div className="mt-12 grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
           <div>
             <h3 className="font-display text-lg font-bold">The rules</h3>
-            <RevealGroup as="ul" className="mt-4 grid gap-2.5 sm:grid-cols-2">{PEARL_RULES.map((rule) => <li key={rule} className="flex gap-3 text-sm leading-6 text-white/80"><CircleDollarSign className="mt-0.5 size-4 shrink-0 text-teal-pale" aria-hidden />{rule}</li>)}</RevealGroup>
+            <RevealGroup as="ul" className="mt-4 grid gap-2.5 sm:grid-cols-2">{data.pearlRules.map((rule) => <li key={rule} className="flex gap-3 text-sm leading-6 text-white/80"><CircleDollarSign className="mt-0.5 size-4 shrink-0 text-teal-pale" aria-hidden />{rule}</li>)}</RevealGroup>
           </div>
           <a href="#tiers" className={gold}>Discover your rewards <ArrowRight className="ml-2 size-4" aria-hidden /></a>
         </div>
@@ -228,7 +231,8 @@ export function PearlsSection() {
   )
 }
 
-export function TierProgression() {
+export function TierProgression({ data }: WithData) {
+  const TIERS = data.tiers
   return (
     <section id="tiers" className="mx-auto max-w-7xl scroll-mt-16 px-5 py-24 lg:px-8 lg:py-32" aria-labelledby="tiers-title">
       <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
@@ -296,8 +300,9 @@ export function DashboardPreview() {
   )
 }
 
-export function FamilySection() {
-  const family = BOND_BLUE_OPTIONS.find((o) => o.id === 'family')!
+export function FamilySection({ data }: WithData) {
+  const family = data.bondBlueOptions.find((o) => o.id === 'family')
+  if (!family) return null
   return (
     <section id="family" className="mx-auto max-w-7xl scroll-mt-16 px-5 py-24 lg:px-8 lg:py-32" aria-labelledby="family-title">
       <div className="grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:items-center">
@@ -349,10 +354,10 @@ export function HowToJoin() {
 
 const contact = <a href={`${ROUTES.contact}?type=Membership`} className="font-bold text-teal underline-offset-2 hover:underline">contact us</a>
 
-const faqs: { id?: string; q: string; a: ReactNode }[] = [
+const faqsFor = ({ bondBlueOptions: BOND_BLUE_OPTIONS, seasonPass: SEASON_PASS }: MembershipData): { id?: string; q: string; a: ReactNode }[] => [
   { q: 'What is Bond Safari Club?', a: 'Our free membership. You get a shared member ID across participating Bond businesses, earn Pearls on eligible purchases and redeem them for discounts.' },
   { q: 'What is the difference between Bond Safari Club and Bond Blue?', a: 'Bond Safari Club is free. Bond Blue is a paid annual membership that adds 15% off eligible activities and purchases, double Pearls on eligible transactions, one free paddle hour per month (subject to availability and booking rules) and a digital membership pass.' },
-  { q: 'How much does Bond Blue cost?', a: `Individual ${formatRupee(2499)}/year, Family ${formatRupee(5999)}/year, Digital ${formatRupee(999)}/year.` },
+  { q: 'How much does Bond Blue cost?', a: `${BOND_BLUE_OPTIONS.map((option) => `${option.name} ${formatRupee(option.price)}/year`).join(', ')}.` },
   { q: 'What is the Paddle Season Pass?', a: `A ${formatRupee(SEASON_PASS.price)} pass for unlimited paddling at participating operating sites during the ${SEASON_PASS.season} season, with reservations subject to capacity and fair-use rules.` },
   { q: 'How do Bond Safari Pearls work?', a: 'You earn Pearls on eligible purchases. Each Pearl is worth ₹1 of discount when redeemed under the programme rules. Earning rates, expiry and redemption limits are set by the approved programme rules and may vary by business.' },
   { q: 'Can I redeem Pearls for cash?', a: 'No. Pearls are not cash and cannot be exchanged or transferred for cash.' },
@@ -362,7 +367,8 @@ const faqs: { id?: string; q: string; a: ReactNode }[] = [
   { q: 'What happens when my membership expires?', a: <>The membership terms will set out what happens at expiry, including to your Pearls. If you have a question now, please {contact}.</> },
 ]
 
-export function MembershipFAQ() {
+export function MembershipFAQ({ data }: WithData) {
+  const faqs = faqsFor(data)
   return (
     <section id="faq" className="scroll-mt-16 border-t border-line px-5 py-24 lg:px-8 lg:py-32" aria-labelledby="faq-title">
       <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1fr_1.6fr]">

@@ -4,10 +4,10 @@ import { useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { focusRing } from '@/components/locations/primitives'
 import { EXPO } from '@/components/motion/reveal'
-import { BOND_BLUE_OPTIONS, formatRupee } from '@/lib/membership'
+import { formatRupee, type BondBlueOption } from '@/lib/membership'
 
 /** Individual / Family / Digital switch: one clear price at a time instead of three stacked rows. */
-export function BondBluePicker() {
+export function BondBluePicker({ options: BOND_BLUE_OPTIONS }: { options: BondBlueOption[] }) {
   const [selected, setSelected] = useState(BOND_BLUE_OPTIONS.find((option) => option.highlight)?.id ?? BOND_BLUE_OPTIONS[0].id)
   const option = BOND_BLUE_OPTIONS.find((item) => item.id === selected)!
 

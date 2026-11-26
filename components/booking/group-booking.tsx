@@ -7,7 +7,7 @@ import { Stepper, openPicker } from '@/components/booking/stepper'
 import { DemoBanner, TextField } from '@/components/academy/form-kit'
 import { focusRing } from '@/components/locations/primitives'
 import { EMPTY_ATTRIBUTION, attributionNote, captureAttribution, readAttribution } from '@/lib/attribution'
-import { getAvailability, type Session } from '@/lib/booking'
+import { BOOKING_ENGINE_CONNECTED, fetchAvailability, getAvailability, sessionsFor, type Availability, type Session } from '@/lib/booking'
 import { trackBookingEvent } from '@/lib/booking-analytics'
 import { whatsappHref } from '@/lib/contact'
 import {
@@ -29,6 +29,8 @@ import {
   type LeadBooker,
 } from '@/lib/group-booking'
 import { submitGroupBooking, toGroupBookingPayload } from '@/lib/group-booking-service'
+import { newIdempotencyKey } from '@/lib/bond-api'
+import { bookAndPay } from '@/lib/payment-service'
 import { formatPrice } from '@/lib/locations'
 import { CONTACT, ROUTES } from '@/lib/site'
 import { cn } from '@/lib/utils'
@@ -122,7 +124,12 @@ export function GroupBooking({ start }: { start?: BookingStart }) {
   const [showErrors, setShowErrors] = useState(false)
   const [attempt, setAttempt] = useState(0)
   const [notice, setNotice] = useState('')
-  const [submitState, setSubmitState] = useState<'idle' | 'sending' | 'not-connected' | 'error'>('idle')
+  const [submitState, setSubmitState] = useState<'idle' | 'sending' | 'sent' | 'paid' | 'unconfirmed' | 'dismissed' | 'not-connected' | 'error'>('idle')
+  const [reference, setReference] = useState('')
+  const [paidAmount, setPaidAmount] = useState(0)
+  const [errorMessage, setErrorMessage] = useState('')
+  // One key per submission attempt: a retry of the same draft returns the same request instead of a duplicate.
+  const submissionKey = useRef<string | null>(null)
   const [attribution, setAttribution] = useState(EMPTY_ATTRIBUTION)
   const panelRef = useRef<HTMLElement>(null)
   const headingRef = useRef<HTMLHeadingElement>(null)
@@ -163,9 +170,26 @@ export function GroupBooking({ start }: { start?: BookingStart }) {
   const step = BOOKING_STEPS[stepIndex].id
   const location = allLocations.find((item) => item.slug === draft.locationSlug) ?? allLocations[0]
   const options = useMemo(() => (location ? groupActivitiesAt(location.slug) : []), [location])
-  const availability = useMemo(() => getAvailability(location?.slug ?? '', draft.date), [location, draft.date])
+  // Live sessions from the Bond backend (demo data only while it is not configured).
+  const [availability, setAvailability] = useState<Availability>(() =>
+    BOOKING_ENGINE_CONNECTED ? { ...getAvailability('', ''), source: 'live', sessions: [] } : getAvailability('', ''),
+  )
+  useEffect(() => {
+    let current = true
+    fetchAvailability(location?.slug ?? '', draft.date).then((next) => {
+      if (current) setAvailability(next)
+    })
+    return () => {
+      current = false
+    }
+  }, [location?.slug, draft.date])
+  useEffect(() => {
+    submissionKey.current = null
+  }, [draft])
   const quote = useMemo(() => quoteBooking(draft.picks, options, availability), [draft.picks, options, availability])
-  const context = { today, sessions: availability.sessions, options }
+  // Live times chosen for every activity: book and pay the deposit online (Razorpay). Otherwise a request as before.
+  const payOnline = availability.source === 'live' && !availability.unavailable && draft.picks.length > 0 && draft.picks.every((pick) => !!pick.sessionId)
+  const context = { today, sessions: availability.sessions, options, payOnline, live: availability.source === 'live' && !availability.unavailable }
   const errors: BookingErrors = showErrors ? validateStep(step, draft, context) : {}
   const isDemo = availability.source === 'demo'
   const contactHref = whatsappHref(attributionNote(attribution)) ?? (CONTACT.phone ? `tel:${CONTACT.phone.replace(/\s/g, '')}` : ROUTES.contact)
@@ -218,12 +242,31 @@ export function GroupBooking({ start }: { start?: BookingStart }) {
     if (Object.keys(found).length) return showFirstError(found)
     inFlight.current = true
     setSubmitState('sending')
+    setErrorMessage('')
     try {
       const held = readAttribution()
-      const result = await submitGroupBooking(toGroupBookingPayload(draft, quote, held))
-      // A real reference would move to a confirmation page; until the engine is connected this never succeeds.
-      if (result.ok) trackBookingEvent('booking_confirmed', draft.locationSlug, held)
-      setSubmitState(result.ok ? 'idle' : result.reason === 'not-connected' ? 'not-connected' : 'error')
+      submissionKey.current ??= newIdempotencyKey()
+      if (payOnline) {
+        const paid = await bookAndPay(draft, submissionKey.current)
+        if (paid.ok) {
+          trackBookingEvent('booking_confirmed', draft.locationSlug, held)
+          setReference(paid.reference)
+          setPaidAmount(Number(paid.paidMinor) / 100)
+          setSubmitState(['confirmed', 'late_confirmed', 'already_applied'].includes(paid.outcome) ? 'paid' : 'unconfirmed')
+          return
+        }
+        // An expired hold or a refused booking needs fresh bookings on the next attempt.
+        if (paid.reason === 'expired' || paid.code === 'BOOKING_NOT_PAYABLE') submissionKey.current = null
+        if (paid.reason === 'error' || paid.reason === 'expired') setErrorMessage(paid.reason === 'expired' ? 'Your places were held for 15 minutes and the hold has expired. Press Confirm to book again.' : paid.message)
+        setSubmitState(paid.reason === 'dismissed' ? 'dismissed' : paid.reason === 'not-connected' ? 'not-connected' : 'error')
+        return
+      }
+      const result = await submitGroupBooking(toGroupBookingPayload(draft, quote, held), submissionKey.current)
+      if (result.ok) {
+        trackBookingEvent('booking_confirmed', draft.locationSlug, held)
+        setReference(result.data.groupBookingId)
+      }
+      setSubmitState(result.ok ? 'sent' : result.reason === 'not-connected' ? 'not-connected' : 'error')
     } catch {
       setSubmitState('error')
     } finally {
@@ -238,6 +281,7 @@ export function GroupBooking({ start }: { start?: BookingStart }) {
     setShowErrors(false)
     setNotice('')
     setSubmitState('idle')
+    submissionKey.current = null
   }
 
   if (!location) {
@@ -263,7 +307,7 @@ export function GroupBooking({ start }: { start?: BookingStart }) {
           {step !== 'when' && <TripCard date={draft.date} people={draft.people} locationName={location.name} onChange={() => goTo(0)} />}
 
           <h2 id="booking-step-heading" ref={headingRef} tabIndex={-1} className={cn('font-display text-3xl font-bold outline-none sm:text-4xl', step !== 'when' && 'mt-8')}>{STEP_TITLES[step].title}</h2>
-          {STEP_TITLES[step].intro && <p className="mt-2 text-sm leading-6 text-slate-strong">{STEP_TITLES[step].intro}</p>}
+          {(step === 'times' && !isDemo ? LIVE_TIMES_INTRO : STEP_TITLES[step].intro) && <p className="mt-2 text-sm leading-6 text-slate-strong">{step === 'times' && !isDemo ? LIVE_TIMES_INTRO : STEP_TITLES[step].intro}</p>}
 
           <div className="mt-6">
             {step === 'when' && (
@@ -334,7 +378,7 @@ export function GroupBooking({ start }: { start?: BookingStart }) {
                     key={pick.slug}
                     name={option.name}
                     people={pick.people}
-                    sessions={availability.sessions}
+                    sessions={sessionsFor(availability, pick.slug)}
                     selected={pick.sessionId}
                     isDemo={isDemo}
                     error={errors[pickField(pick.slug, 'session')]}
@@ -353,7 +397,7 @@ export function GroupBooking({ start }: { start?: BookingStart }) {
               <div className="grid gap-5">
                 <TextField label="Your name" placeholder="Full name" autoComplete="name" maxLength={80} value={draft.lead.name} onChange={(event) => dispatch({ type: 'lead', patch: { name: event.target.value } })} error={errors['lead-name']} />
                 <TextField label="WhatsApp number" type="tel" placeholder="+91 98765 43210" autoComplete="tel" value={draft.lead.phone} onChange={(event) => dispatch({ type: 'lead', patch: { phone: event.target.value } })} error={errors['lead-phone']} hint="We confirm your times and send the booking here." />
-                <TextField label="Email" optional type="email" placeholder="you@example.com" autoComplete="email" value={draft.lead.email} onChange={(event) => dispatch({ type: 'lead', patch: { email: event.target.value } })} error={errors['lead-email']} />
+                <TextField label="Email" optional={!payOnline} type="email" placeholder="you@example.com" autoComplete="email" value={draft.lead.email} onChange={(event) => dispatch({ type: 'lead', patch: { email: event.target.value } })} error={errors['lead-email']} />
                 <div>
                   <label className="flex min-h-11 gap-3 text-sm leading-5 text-ink">
                     <input type="checkbox" checked={draft.acceptedTerms} onChange={(event) => dispatch({ type: 'terms', accepted: event.target.checked })} className="mt-0.5 size-5 shrink-0 accent-ink" aria-invalid={!!errors.terms} />
@@ -365,8 +409,20 @@ export function GroupBooking({ start }: { start?: BookingStart }) {
                 {submitState === 'not-connected' && (
                   <p role="status" className="flex gap-3 rounded-2xl bg-mist p-4 text-sm leading-6 text-slate-strong"><Info className="mt-0.5 size-5 shrink-0 text-teal" aria-hidden /><span><strong className="text-ink">Demo preview: no booking was created and no payment was taken.</strong> Once the booking engine is connected, this creates one booking for your group with all {quote.lines.length === 1 ? 'its activity' : `${quote.lines.length} activities`}, and we confirm the times on WhatsApp.</span></p>
                 )}
+                {submitState === 'sent' && (
+                  <p role="status" className="flex gap-3 rounded-2xl bg-mist p-4 text-sm leading-6 text-slate-strong"><Check className="mt-0.5 size-5 shrink-0 text-teal" aria-hidden /><span><strong className="text-ink">Request sent. Your reference is {reference}.</strong> We’ll confirm your times and the price on WhatsApp. No payment has been taken.</span></p>
+                )}
+                {submitState === 'paid' && (
+                  <p role="status" className="flex gap-3 rounded-2xl bg-mist p-4 text-sm leading-6 text-slate-strong"><Check className="mt-0.5 size-5 shrink-0 text-teal" aria-hidden /><span><strong className="text-ink">Booking confirmed. Your reference is {reference}.</strong> Deposit of {formatPrice(paidAmount)} paid; the balance is paid at the location. We’ll send the details on WhatsApp.</span></p>
+                )}
+                {submitState === 'unconfirmed' && (
+                  <p role="alert" className="flex gap-3 rounded-2xl bg-sand-soft p-4 text-sm leading-6 text-sand-ink"><Info className="mt-0.5 size-5 shrink-0" aria-hidden /><span><strong>Payment received ({reference}), but some places are no longer available.</strong> Our team will contact you on WhatsApp to rebook or refund.</span></p>
+                )}
+                {submitState === 'dismissed' && (
+                  <p role="status" className="flex gap-3 rounded-2xl bg-mist p-4 text-sm leading-6 text-slate-strong"><Info className="mt-0.5 size-5 shrink-0 text-teal" aria-hidden /><span>Payment wasn’t completed, so nothing was charged. Your places are held for a few minutes: press Confirm to pay.</span></p>
+                )}
                 {submitState === 'error' && (
-                  <p role="alert" className="flex gap-3 rounded-2xl bg-danger-soft p-4 text-sm text-danger"><AlertCircle className="size-5 shrink-0" aria-hidden />Something went wrong and the booking wasn’t sent. Your details are saved; please try again.</p>
+                  <p role="alert" className="flex gap-3 rounded-2xl bg-danger-soft p-4 text-sm text-danger"><AlertCircle className="size-5 shrink-0" aria-hidden />{errorMessage || 'Something went wrong and the booking wasn’t sent. Your details are saved; please try again.'}</p>
                 )}
               </div>
             )}
@@ -387,14 +443,16 @@ export function GroupBooking({ start }: { start?: BookingStart }) {
         <button type="button" onClick={goBack} aria-label={stepIndex > 0 ? `Back to ${BOOKING_STEPS[stepIndex - 1].label}` : 'Back to the previous page'} className={`inline-flex min-h-12 shrink-0 items-center gap-2 rounded-full border border-line px-3.5 text-sm font-bold uppercase tracking-widest text-ink transition hover:border-ink sm:px-5 ${focusRing}`}>
           <ArrowLeft className="size-4" aria-hidden /><span className="hidden sm:inline">Back</span>
         </button>
-        <button type="button" onClick={lastStep ? submit : () => goTo(stepIndex + 1)} disabled={!hydrated || submitState === 'sending'} className={`inline-flex min-h-12 shrink-0 items-center gap-3 rounded-full bg-sand py-1.5 pl-5 pr-1.5 text-sm font-extrabold uppercase tracking-widest text-ink transition hover:brightness-95 disabled:opacity-60 sm:pl-7 ${focusRing}`}>
-          {submitState === 'sending' ? 'Sending' : lastStep ? 'Confirm' : 'Continue'}
+        <button type="button" onClick={lastStep ? submit : () => goTo(stepIndex + 1)} disabled={!hydrated || submitState === 'sending' || submitState === 'paid'} className={`inline-flex min-h-12 shrink-0 items-center gap-3 rounded-full bg-sand py-1.5 pl-5 pr-1.5 text-sm font-extrabold uppercase tracking-widest text-ink transition hover:brightness-95 disabled:opacity-60 sm:pl-7 ${focusRing}`}>
+          {submitState === 'sending' ? 'Sending' : lastStep ? (payOnline ? 'Confirm & pay' : 'Confirm') : 'Continue'}
           <span className="flex size-10 items-center justify-center rounded-full bg-ink text-white" aria-hidden>{submitState === 'sending' ? <Loader2 className="size-4 animate-spin" /> : <ArrowRight className="size-4" />}</span>
         </button>
       </div>
     </section>
   )
 }
+
+const LIVE_TIMES_INTRO = 'Choose a time for each activity to book now and pay the deposit online. If no times are listed for a date, we send a request instead and confirm on WhatsApp.'
 
 const STEP_TITLES: Record<BookingStep, { title: string; intro?: string }> = {
   when: { title: 'When are you coming?' },
@@ -535,6 +593,7 @@ function TimeCard({ name, people, sessions, selected, isDemo, error, onSelect, o
         </div>
         <button type="button" onClick={onRemove} aria-label={`Remove ${name}`} className={`flex size-11 shrink-0 items-center justify-center rounded-full border border-line bg-paper-bright text-slate transition hover:border-danger hover:text-danger ${focusRing}`}><X className="size-4" aria-hidden /></button>
       </div>
+      {sessions.length === 0 && <p className="mt-4 text-sm text-slate">No times are listed for this date yet. We’ll confirm a time with you on WhatsApp.</p>}
       <fieldset className="mt-4" aria-invalid={!!error}>
         <legend className="sr-only">Preferred time for {name}</legend>
         <div className="grid gap-2 sm:grid-cols-2">

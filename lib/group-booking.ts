@@ -97,7 +97,7 @@ const isEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
 const isPhone = (value: string) => /^\+?[\d\s-]{10,16}$/.test(value)
 
 /** Errors for one step, keyed by field. Later steps re-check earlier ones so a stale draft can't slip through. */
-export function validateStep(step: BookingStep, draft: BookingDraft, context: { today: string; sessions: Session[]; options: GroupActivityOption[] }): BookingErrors {
+export function validateStep(step: BookingStep, draft: BookingDraft, context: { today: string; sessions: Session[]; options: GroupActivityOption[]; payOnline?: boolean; live?: boolean }): BookingErrors {
   const errors: BookingErrors = {}
   const order = BOOKING_STEPS.findIndex((item) => item.id === step)
   const reaches = (target: BookingStep) => order >= BOOKING_STEPS.findIndex((item) => item.id === target)
@@ -122,6 +122,11 @@ export function validateStep(step: BookingStep, draft: BookingDraft, context: { 
 
   if (reaches('times')) {
     for (const pick of draft.picks) {
+      // Live times listed for this activity: one must be chosen (booking + online payment). None listed → request.
+      if (!pick.sessionId && context.live && context.sessions.some((session) => session.activitySlug === pick.slug)) {
+        errors[pickField(pick.slug, 'session')] = 'Choose a time to book and pay online.'
+        continue
+      }
       if (!pick.sessionId) continue
       const session = context.sessions.find((item) => item.id === pick.sessionId)
       if (!session) errors[pickField(pick.slug, 'session')] = 'This time isn’t available on this date. Choose another.'
@@ -133,7 +138,9 @@ export function validateStep(step: BookingStep, draft: BookingDraft, context: { 
     if (!draft.lead.name.trim()) errors['lead-name'] = 'Enter your name.'
     else if (draft.lead.name.trim().length > 80) errors['lead-name'] = 'Use 80 characters or fewer.'
     if (!isPhone(draft.lead.phone.trim())) errors['lead-phone'] = 'Enter a valid WhatsApp number.'
-    if (draft.lead.email.trim() && !isEmail(draft.lead.email.trim())) errors['lead-email'] = 'Enter a valid email address, or leave it empty.'
+    // Paying online needs an email for the payment receipt; a request without payment does not.
+    if (context.payOnline && !draft.lead.email.trim()) errors['lead-email'] = 'Enter your email for the payment receipt.'
+    else if (draft.lead.email.trim() && !isEmail(draft.lead.email.trim())) errors['lead-email'] = context.payOnline ? 'Enter a valid email address.' : 'Enter a valid email address, or leave it empty.'
     if (!draft.acceptedTerms) errors.terms = 'Accept the booking terms to continue.'
   }
 

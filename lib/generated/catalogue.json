@@ -1,0 +1,749 @@
+{
+  "syncedAt": "2026-11-26T11:12:09.620Z",
+  "source": "http://127.0.0.1:3002/api/v1",
+  "locations": [
+    {
+      "slug": "kovalam",
+      "name": "kovalam TVM",
+      "status": "operating",
+      "region": "Central Kerala",
+      "context": "",
+      "waterTypes": [],
+      "summary": "test",
+      "description": "test description",
+      "meetingPoint": "kovalam Meeting point",
+      "activities": [],
+      "hasDetailPage": true,
+      "coordinates": {
+        "lat": 9.6176,
+        "lng": 76.43
+      },
+      "visitorInfo": {
+        "directions": "test kovalam  Meeting point",
+        "facilities": "Changing rooms, Drinking water",
+        "safetyRequirements": "test Safety information",
+        "contact": "+918956258741 · web@bondsafarikovalam.com"
+      }
+    }
+  ],
+  "activities": [
+    {
+      "slug": "kayaking",
+      "name": "Kayaking",
+      "category": "Paddling",
+      "tags": [],
+      "summary": "Glide through quiet waters, hidden channels and living landscapes.",
+      "offerings": [
+        {
+          "locationSlug": "kovalam",
+          "source": "confirmed",
+          "pricePerParticipant": 1000,
+          "duration": "60 min"
+        }
+      ],
+      "waterTypes": [
+        "Backwater",
+        "Sea"
+      ],
+      "related": [],
+      "nextSteps": [],
+      "faqs": [],
+      "seo": {
+        "title": "Kayaking in Kerala | Bond Safari Paddle Sports"
+      }
+    },
+    {
+      "slug": "canoeing",
+      "name": "Canoeing",
+      "category": "Paddling",
+      "tags": [],
+      "summary": "Find your rhythm on the water with a craft built for shared adventure.",
+      "description": "Find your rhythm on the water with a craft built for shared adventure. Find your rhythm on the water with a craft built for shared adventure. Find your rhythm on the water with a craft built for shared adventure.",
+      "offerings": [],
+      "durationMinutes": 60,
+      "skillLevel": "All levels",
+      "minimumAge": "10–50",
+      "groupSize": "10–50 people",
+      "waterTypes": [
+        "Backwater",
+        "Sea"
+      ],
+      "safetyInformation": "Safety information,\nSafety information",
+      "related": [],
+      "nextSteps": [],
+      "faqs": []
+    },
+    {
+      "slug": "stand-up-paddleboarding",
+      "name": "Stand-up paddleboarding",
+      "category": "Paddling",
+      "tags": [],
+      "summary": "A fresh perspective, a full-body workout and a slower way to explore.",
+      "offerings": [],
+      "waterTypes": [
+        "Backwater"
+      ],
+      "related": [],
+      "nextSteps": [],
+      "faqs": []
+    },
+    {
+      "slug": "guided-trails",
+      "name": "Guided trails",
+      "category": "Guided experience",
+      "tags": [],
+      "summary": "Paddle a set route on the water with a Bond guide.",
+      "offerings": [],
+      "related": [],
+      "nextSteps": [],
+      "faqs": []
+    },
+    {
+      "slug": "sunrise-paddles",
+      "name": "Sunrise paddles",
+      "category": "Guided experience",
+      "tags": [],
+      "summary": "A paddle timed for the first light of the day.",
+      "offerings": [],
+      "related": [],
+      "nextSteps": [],
+      "faqs": []
+    },
+    {
+      "slug": "sunset-paddles",
+      "name": "Sunset paddles",
+      "category": "Guided experience",
+      "tags": [],
+      "summary": "A paddle timed for the evening light.",
+      "offerings": [],
+      "related": [],
+      "nextSteps": [],
+      "faqs": []
+    },
+    {
+      "slug": "private-sessions",
+      "name": "Private paddling sessions",
+      "category": "Private session",
+      "tags": [],
+      "summary": "A paddling session reserved for just your group.",
+      "offerings": [],
+      "related": [],
+      "nextSteps": [],
+      "faqs": []
+    },
+    {
+      "slug": "white-water",
+      "name": "White-water experiences",
+      "category": "White-water",
+      "tags": [],
+      "summary": "Moving-water paddling, planned for the Kodenchery white-water destination.",
+      "offerings": [],
+      "related": [],
+      "nextSteps": [],
+      "faqs": []
+    }
+  ],
+  "academy": {
+    "categories": [
+      {
+        "id": "start-paddling",
+        "name": "Start Paddling",
+        "summary": "First paddles, personal skills and safety awards for new and improving paddlers."
+      },
+      {
+        "id": "become-an-instructor",
+        "name": "Become an Instructor",
+        "summary": "Training for people interested in teaching paddlesport, subject to entry requirements."
+      },
+      {
+        "id": "lead-and-coach",
+        "name": "Lead and Coach",
+        "summary": "Progression routes for people taking on greater responsibility on the water."
+      },
+      {
+        "id": "programmes",
+        "name": "Programmes",
+        "summary": "Longer programmes, bundles, schools and private coaching."
+      }
+    ],
+    "courses": [
+      {
+        "slug": "paddle-start",
+        "name": "Paddle Start",
+        "category": "start-paddling",
+        "level": "Personal award",
+        "summary": "A first step into paddlesport.",
+        "price": 1200,
+        "status": "dates-coming-soon",
+        "professional": false,
+        "featured": true,
+        "faqs": [
+          {
+            "question": "Who is this course for?"
+          },
+          {
+            "question": "What are the entry requirements?"
+          },
+          {
+            "question": "What equipment do I need?"
+          }
+        ]
+      },
+      {
+        "slug": "paddle-safer",
+        "name": "Paddle Safer",
+        "category": "start-paddling",
+        "level": "Personal award",
+        "summary": "Safety skills for paddlers.",
+        "price": 1500,
+        "status": "dates-coming-soon",
+        "professional": false,
+        "faqs": [
+          {
+            "question": "Who is this course for?"
+          },
+          {
+            "question": "What are the entry requirements?"
+          },
+          {
+            "question": "What equipment do I need?"
+          }
+        ]
+      },
+      {
+        "slug": "sup-safer",
+        "name": "SUP Safer",
+        "category": "start-paddling",
+        "level": "Personal award",
+        "discipline": "SUP",
+        "summary": "Safety skills for stand-up paddleboarders.",
+        "price": 2500,
+        "status": "dates-coming-soon",
+        "professional": false,
+        "faqs": [
+          {
+            "question": "Who is this course for?"
+          },
+          {
+            "question": "What are the entry requirements?"
+          },
+          {
+            "question": "What equipment do I need?"
+          }
+        ]
+      },
+      {
+        "slug": "paddle-discover",
+        "name": "Paddle Discover",
+        "category": "start-paddling",
+        "level": "Personal award",
+        "summary": "Build on your first paddles and develop personal skills.",
+        "price": 9500,
+        "status": "dates-coming-soon",
+        "professional": false,
+        "featured": true,
+        "faqs": [
+          {
+            "question": "Who is this course for?"
+          },
+          {
+            "question": "What are the entry requirements?"
+          },
+          {
+            "question": "What equipment do I need?"
+          }
+        ]
+      },
+      {
+        "slug": "paddle-explore",
+        "name": "Paddle Explore",
+        "category": "start-paddling",
+        "level": "Personal award",
+        "summary": "Develop your personal paddling further.",
+        "price": 11000,
+        "status": "dates-coming-soon",
+        "professional": false,
+        "faqs": [
+          {
+            "question": "Who is this course for?"
+          },
+          {
+            "question": "What are the entry requirements?"
+          },
+          {
+            "question": "What equipment do I need?"
+          }
+        ]
+      },
+      {
+        "slug": "safety-and-rescue",
+        "name": "Safety and Rescue",
+        "category": "start-paddling",
+        "level": "Safety",
+        "summary": "Safety and rescue skills on the water.",
+        "price": 7500,
+        "status": "dates-coming-soon",
+        "professional": false,
+        "faqs": [
+          {
+            "question": "Who is this course for?"
+          },
+          {
+            "question": "What are the entry requirements?"
+          },
+          {
+            "question": "What equipment do I need?"
+          }
+        ]
+      },
+      {
+        "slug": "sup-instructor",
+        "name": "SUP Instructor",
+        "category": "become-an-instructor",
+        "level": "Instructor",
+        "discipline": "SUP",
+        "summary": "Instructor training for stand-up paddleboarding.",
+        "price": 42500,
+        "status": "launching-2027",
+        "professional": true,
+        "featured": true,
+        "faqs": [
+          {
+            "question": "Who is this course for?"
+          },
+          {
+            "question": "What are the entry requirements?"
+          },
+          {
+            "question": "What equipment do I need?"
+          }
+        ]
+      },
+      {
+        "slug": "paddlesport-instructor",
+        "name": "Paddlesport Instructor",
+        "category": "become-an-instructor",
+        "level": "Instructor",
+        "discipline": "Multi-discipline",
+        "summary": "Instructor training for paddlesport.",
+        "price": 42500,
+        "status": "launching-2027",
+        "professional": true,
+        "faqs": [
+          {
+            "question": "Who is this course for?"
+          },
+          {
+            "question": "What are the entry requirements?"
+          },
+          {
+            "question": "What equipment do I need?"
+          }
+        ]
+      },
+      {
+        "slug": "preparation-day",
+        "name": "Preparation Day",
+        "category": "become-an-instructor",
+        "level": "Preparation",
+        "summary": "A day of preparation before instructor training.",
+        "price": 6500,
+        "status": "launching-2027",
+        "professional": true,
+        "faqs": [
+          {
+            "question": "Who is this course for?"
+          },
+          {
+            "question": "What are the entry requirements?"
+          },
+          {
+            "question": "What equipment do I need?"
+          }
+        ]
+      },
+      {
+        "slug": "paddlesport-leader",
+        "name": "Paddlesport Leader",
+        "category": "lead-and-coach",
+        "level": "Leader",
+        "discipline": "Multi-discipline",
+        "summary": "Leader training for paddlesport.",
+        "price": 49000,
+        "status": "launching-2027",
+        "professional": true,
+        "featured": true,
+        "faqs": [
+          {
+            "question": "Who is this course for?"
+          },
+          {
+            "question": "What are the entry requirements?"
+          },
+          {
+            "question": "What equipment do I need?"
+          }
+        ]
+      },
+      {
+        "slug": "open-water-canoe-leader",
+        "name": "Open Water Canoe Leader",
+        "category": "lead-and-coach",
+        "level": "Leader",
+        "discipline": "Canoe",
+        "summary": "Leader training for open-water canoeing.",
+        "price": 54500,
+        "status": "launching-2027",
+        "professional": true,
+        "faqs": [
+          {
+            "question": "Who is this course for?"
+          },
+          {
+            "question": "What are the entry requirements?"
+          },
+          {
+            "question": "What equipment do I need?"
+          }
+        ]
+      },
+      {
+        "slug": "sea-kayak-leader",
+        "name": "Sea Kayak Leader",
+        "category": "lead-and-coach",
+        "level": "Leader",
+        "discipline": "Sea kayak",
+        "summary": "Leader training for sea kayaking.",
+        "price": 64500,
+        "status": "launching-2027",
+        "professional": true,
+        "faqs": [
+          {
+            "question": "Who is this course for?"
+          },
+          {
+            "question": "What are the entry requirements?"
+          },
+          {
+            "question": "What equipment do I need?"
+          }
+        ]
+      },
+      {
+        "slug": "coach",
+        "name": "Coach",
+        "category": "lead-and-coach",
+        "level": "Coach",
+        "summary": "Coach training for paddlesport.",
+        "price": 83000,
+        "status": "launching-2027",
+        "professional": true,
+        "faqs": [
+          {
+            "question": "Who is this course for?"
+          },
+          {
+            "question": "What are the entry requirements?"
+          },
+          {
+            "question": "What equipment do I need?"
+          }
+        ]
+      },
+      {
+        "slug": "white-water-safety",
+        "name": "White Water Safety",
+        "category": "lead-and-coach",
+        "level": "Safety",
+        "discipline": "White water",
+        "summary": "Safety training for white water.",
+        "price": 28000,
+        "status": "launching-2027",
+        "professional": true,
+        "faqs": [
+          {
+            "question": "Who is this course for?"
+          },
+          {
+            "question": "What are the entry requirements?"
+          },
+          {
+            "question": "What equipment do I need?"
+          }
+        ]
+      },
+      {
+        "slug": "bond-paddle-guide-programme",
+        "name": "Bond Paddle Guide Programme",
+        "category": "programmes",
+        "level": "Programme",
+        "summary": "Bond’s professional guide-training programme.",
+        "price": 136000,
+        "status": "dates-coming-soon",
+        "professional": true,
+        "featured": true,
+        "enquiryHref": "/academy/careers",
+        "faqs": [
+          {
+            "question": "Who is this course for?"
+          },
+          {
+            "question": "What are the entry requirements?"
+          },
+          {
+            "question": "What equipment do I need?"
+          }
+        ]
+      },
+      {
+        "slug": "pathway-bundles",
+        "name": "Pathway bundles",
+        "category": "programmes",
+        "level": "Programme",
+        "summary": "Combine courses along your pathway.",
+        "status": "enquiry",
+        "professional": false,
+        "faqs": [
+          {
+            "question": "Who is this course for?"
+          },
+          {
+            "question": "What are the entry requirements?"
+          },
+          {
+            "question": "What equipment do I need?"
+          }
+        ]
+      },
+      {
+        "slug": "schools-paddle-year",
+        "name": "Schools Paddle Year",
+        "category": "programmes",
+        "level": "Programme",
+        "summary": "A structured paddling programme for schools and colleges.",
+        "status": "enquiry",
+        "professional": false,
+        "enquiryHref": "/academy/schools",
+        "groupEnrolment": true,
+        "faqs": [
+          {
+            "question": "Who is this course for?"
+          },
+          {
+            "question": "What are the entry requirements?"
+          },
+          {
+            "question": "What equipment do I need?"
+          }
+        ]
+      },
+      {
+        "slug": "private-coaching",
+        "name": "Private coaching",
+        "category": "programmes",
+        "level": "Programme",
+        "summary": "One-to-one or small-group coaching.",
+        "status": "enquiry",
+        "professional": false,
+        "faqs": [
+          {
+            "question": "Who is this course for?"
+          },
+          {
+            "question": "What are the entry requirements?"
+          },
+          {
+            "question": "What equipment do I need?"
+          }
+        ]
+      }
+    ],
+    "sessions": []
+  },
+  "membership": {
+    "plans": [
+      {
+        "code": "club",
+        "name": "Bond Safari Club",
+        "tagline": "Your adventure starts here.",
+        "description": "Join the Bond Safari community and start earning rewards across participating Bond businesses.",
+        "planType": "free",
+        "status": "active",
+        "benefits": [
+          "Free membership",
+          "Shared member ID across participating Bond businesses",
+          "Earn Pearls on eligible purchases",
+          "Redeem Pearls for discounts",
+          "Access your membership details from your account",
+          "Relevant member updates, if you choose to opt in"
+        ],
+        "ctaLabel": "Join free",
+        "seasonLabel": null,
+        "earlyBird": null,
+        "currency": "INR",
+        "options": [
+          {
+            "code": "free",
+            "name": "Free",
+            "price": "0.00",
+            "isHighlighted": true,
+            "coverage": null
+          }
+        ]
+      },
+      {
+        "code": "bond-blue",
+        "name": "Bond Blue",
+        "tagline": "More adventures. More member benefits.",
+        "description": "An annual membership for people who paddle often.",
+        "planType": "annual",
+        "status": "active",
+        "benefits": [
+          "15% off eligible activities and purchases, subject to applicable terms",
+          "Double Pearls on eligible transactions",
+          "One free paddle hour per month, subject to availability and booking rules",
+          "Digital membership pass",
+          "Member benefits at participating Bond Safari locations"
+        ],
+        "ctaLabel": "Explore Bond Blue",
+        "seasonLabel": null,
+        "earlyBird": null,
+        "currency": "INR",
+        "options": [
+          {
+            "code": "individual",
+            "name": "Individual",
+            "price": "2499.00",
+            "isHighlighted": true,
+            "coverage": null
+          },
+          {
+            "code": "family",
+            "name": "Family",
+            "price": "5999.00",
+            "isHighlighted": false,
+            "coverage": null
+          },
+          {
+            "code": "digital",
+            "name": "Digital",
+            "price": "999.00",
+            "isHighlighted": false,
+            "coverage": null
+          }
+        ]
+      },
+      {
+        "code": "season-pass",
+        "name": "Paddle Season Pass",
+        "tagline": "Make the most of paddle season.",
+        "description": "Unlimited paddling through the October–May season.",
+        "planType": "season",
+        "status": "active",
+        "benefits": [
+          "Unlimited paddling at participating operating sites during the season",
+          "Reservations subject to capacity and fair-use rules",
+          "Digital pass for convenient member identification",
+          "Access to eligible activities under the pass conditions",
+          "Book your seat even when the session price is ₹0"
+        ],
+        "ctaLabel": "Get the Season Pass",
+        "seasonLabel": "October–May",
+        "earlyBird": null,
+        "currency": "INR",
+        "options": [
+          {
+            "code": "standard",
+            "name": "Season",
+            "price": "7999.00",
+            "isHighlighted": true,
+            "coverage": null
+          }
+        ]
+      }
+    ],
+    "tiers": [
+      {
+        "code": "shore",
+        "name": "Shore",
+        "description": "Your starting tier.",
+        "threshold": null
+      },
+      {
+        "code": "reef",
+        "name": "Reef",
+        "description": "Progress through eligible activity.",
+        "threshold": null
+      },
+      {
+        "code": "ocean",
+        "name": "Ocean",
+        "description": "Progress through eligible activity.",
+        "threshold": null
+      },
+      {
+        "code": "abyss",
+        "name": "Abyss",
+        "description": "Our highest tier.",
+        "threshold": null
+      }
+    ],
+    "pearlRules": [
+      "1 Pearl = ₹1 discount when redeemed under the programme rules.",
+      "Pearls can be redeemed for eligible discounts.",
+      "Pearls are not cash and cannot be exchanged or transferred for cash.",
+      "Expiry and redemption are subject to the approved loyalty programme rules.",
+      "Eligible purchases and redemption limits may vary by business."
+    ],
+    "comparison": [
+      {
+        "values": {
+          "club": "Yes",
+          "bond-blue": "No",
+          "season-pass": "No"
+        },
+        "benefit": "Free to join"
+      },
+      {
+        "values": {
+          "club": "On eligible purchases",
+          "bond-blue": "Double Pearls on eligible transactions",
+          "season-pass": "As defined by the programme rules"
+        },
+        "benefit": "Earn Pearls"
+      },
+      {
+        "values": {
+          "club": "Standard eligible rewards",
+          "bond-blue": "15% on eligible purchases",
+          "season-pass": "Covered paddling, subject to pass terms"
+        },
+        "benefit": "Activity discount"
+      },
+      {
+        "values": {
+          "club": "No",
+          "bond-blue": "One, subject to availability",
+          "season-pass": "Not applicable"
+        },
+        "benefit": "Monthly free paddle hour"
+      },
+      {
+        "values": {
+          "club": "No",
+          "bond-blue": "No",
+          "season-pass": "Yes, subject to capacity and fair use"
+        },
+        "benefit": "Unlimited seasonal paddling"
+      },
+      {
+        "values": {
+          "club": "Account / member ID",
+          "bond-blue": "Digital pass",
+          "season-pass": "Digital pass"
+        },
+        "benefit": "Digital member identification"
+      }
+    ]
+  }
+}

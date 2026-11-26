@@ -19,6 +19,8 @@
  * - Admin: products, images, variants, SKUs, prices, stock by location, orders, returns, collection
  *   options, hygiene flags, bulk enquiries, starter kits; role checks enforced on the server.
  */
+import { checked, keyFor, submitEnquiryTo, text, toE164, whole } from '@/lib/bond-api'
+import { SHOP_CATEGORIES } from '@/lib/shop'
 
 export const SHOP_BACKEND_CONNECTED = false
 
@@ -71,6 +73,33 @@ export async function getOrders(): Promise<Result<Order[]>> {
   return notConnected('Customer accounts')
 }
 
-export async function submitShopEnquiry(_kind: 'bulk-order' | 'made-to-order', _payload: Record<string, unknown>): Promise<Result<{ reference: string }>> {
-  return notConnected('Enquiry handling')
+const PRODUCT_INTEREST_KEYS = ['apparel', 'waterwear', 'paddling_equipment', 'academy_starter_kits', 'sup_boards_and_kayaks'] as const
+const QUANTITY_LABELS = ['1', '2–5', '6+']
+const QUANTITY_KEYS = ['1', '2_to_5', '6_plus'] as const
+
+/** Shop enquiry forms → Bond backend (bulk-order quote, made-to-order request). */
+export async function submitShopEnquiry(kind: 'bulk-order' | 'made-to-order', payload: Record<string, unknown>): Promise<Result<{ reference: string }>> {
+  if (kind === 'bulk-order') {
+    return submitEnquiryTo('/enquiries/bulk-order', {
+      organisation: text(payload.organisation),
+      name: text(payload.name),
+      email: text(payload.email),
+      phone: toE164(payload.phone),
+      productInterest: keyFor(payload.interest, SHOP_CATEGORIES.map((category) => category.name), PRODUCT_INTEREST_KEYS),
+      quantity: whole(payload.quantity),
+      deliveryDate: text(payload.date),
+      gstNumber: text(payload.gst),
+      branding: text(payload.branding),
+      consent: checked(payload.consent),
+    })
+  }
+  return submitEnquiryTo('/enquiries/made-to-order', {
+    product: text(payload.product),
+    name: text(payload.name),
+    email: text(payload.email),
+    phone: toE164(payload.phone),
+    quantity: keyFor(payload.quantity, QUANTITY_LABELS, QUANTITY_KEYS),
+    message: text(payload.message),
+    consent: checked(payload.consent),
+  })
 }

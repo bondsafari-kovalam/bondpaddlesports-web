@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from 'react'
 import { Bell, CheckCircle2, X } from 'lucide-react'
 import { focusRing } from '@/components/locations/primitives'
+import { BOND_API_CONNECTED, checked, submitEnquiryTo, text, toE164 } from '@/lib/bond-api'
 
 /** `event` completes “We’ll message you when {name} …”, e.g. “opens for enrolment” for courses. */
 type Target = { name: string; slug: string; event?: string; title?: string }
@@ -42,13 +43,17 @@ function NotifyMeDialog({ target, onClose }: { target: Target; onClose: () => vo
   const [method, setMethod] = useState<ContactMethod>('email')
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [submitted, setSubmitted] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [reference, setReference] = useState('')
+  const [failure, setFailure] = useState('')
 
   useEffect(() => {
     ref.current?.showModal()
   }, [])
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    if (sending) return
     const data = new FormData(event.currentTarget)
     const contact = String(data.get('contact') ?? '').trim()
     const next: Record<string, string> = {}
@@ -56,8 +61,26 @@ function NotifyMeDialog({ target, onClose }: { target: Target; onClose: () => vo
     if (method === 'whatsapp' && !/^\+?[\d\s-]{10,16}$/.test(contact)) next.contact = 'Enter a valid mobile number, including country code if outside India.'
     if (!data.get('consent')) next.consent = 'Please confirm you would like to be notified.'
     setErrors(next)
-    // No notification backend is configured yet: nothing is sent or stored.
-    if (Object.keys(next).length === 0) setSubmitted(true)
+    setFailure('')
+    if (Object.keys(next).length > 0) return
+    // Not configured (no API URL): nothing is sent or stored, and the panel says so.
+    if (!BOND_API_CONNECTED) return setSubmitted(true)
+    setSending(true)
+    const result = await submitEnquiryTo('/enquiries/notify-me', {
+      targetSlug: target.slug,
+      targetName: target.name,
+      event: text(target.event),
+      name: text(data.get('name')),
+      method,
+      email: method === 'email' ? text(contact) : undefined,
+      phone: method === 'whatsapp' ? toE164(contact) : undefined,
+      consent: checked(data.get('consent')),
+      newsletterOptIn: checked(data.get('marketing')),
+    }).finally(() => setSending(false))
+    if (result.ok) {
+      setReference(result.data.reference)
+      setSubmitted(true)
+    } else setFailure(result.reason === 'error' ? 'Something went wrong. Please try again.' : result.message)
   }
 
   const fieldClass = `mt-2 block w-full rounded-xl border border-line bg-paper-bright px-4 py-3 text-sm font-semibold text-ink outline-none focus:border-teal focus:ring-2 focus:ring-teal/30`
@@ -76,8 +99,17 @@ function NotifyMeDialog({ target, onClose }: { target: Target; onClose: () => vo
         {submitted ? (
           <div className="mt-6" role="status">
             <CheckCircle2 className="size-8 text-success" />
-            <p className="mt-3 font-bold">Thanks — your request looks good.</p>
-            <p className="mt-2 rounded-xl bg-sand-soft p-3 text-sm leading-6 text-sand-ink"><strong>Demo preview:</strong> the notification service is not connected yet, so your details were not sent or saved and you will not receive a message.</p>
+            {BOND_API_CONNECTED ? (
+              <>
+                <p className="mt-3 font-bold">Thanks — you’re on the list.</p>
+                <p className="mt-2 text-sm leading-6 text-slate">We’ll send one message when {target.name} {target.event ?? 'opens for bookings'}. Reference: {reference}</p>
+              </>
+            ) : (
+              <>
+                <p className="mt-3 font-bold">Thanks — your request looks good.</p>
+                <p className="mt-2 rounded-xl bg-sand-soft p-3 text-sm leading-6 text-sand-ink"><strong>Demo preview:</strong> the notification service is not connected yet, so your details were not sent or saved and you will not receive a message.</p>
+              </>
+            )}
             <button type="button" onClick={() => ref.current?.close()} className={`mt-6 w-full rounded-2xl bg-ink px-5 py-4 text-sm font-extrabold uppercase tracking-[0.1em] text-white ${focusRing}`}>Done</button>
           </div>
         ) : (
@@ -109,8 +141,9 @@ function NotifyMeDialog({ target, onClose }: { target: Target; onClose: () => vo
               <input type="checkbox" name="marketing" className="mt-0.5 size-4 shrink-0 accent-ink" />
               <span>Also send me Bond Safari news and offers. <span className="text-slate">Optional.</span></span>
             </label>
-            <button type="submit" className={`w-full rounded-2xl bg-ink px-5 py-4 text-sm font-extrabold uppercase tracking-[0.1em] text-white transition hover:bg-ink-soft ${focusRing}`}>Notify me</button>
-            <p className="text-center text-xs text-slate">Demo form — submissions are not saved.</p>
+            {failure && <p role="alert" className="text-xs font-semibold text-danger">{failure}</p>}
+            <button type="submit" disabled={sending} className={`w-full rounded-2xl bg-ink px-5 py-4 text-sm font-extrabold uppercase tracking-[0.1em] text-white transition hover:bg-ink-soft disabled:opacity-60 ${focusRing}`}>{sending ? 'Sending…' : 'Notify me'}</button>
+            {!BOND_API_CONNECTED && <p className="text-center text-xs text-slate">Demo form — submissions are not saved.</p>}
           </form>
         )}
       </div>

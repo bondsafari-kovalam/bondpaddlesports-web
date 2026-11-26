@@ -11,6 +11,7 @@
  */
 
 import { CONTACT } from '@/lib/site'
+import { checked, keyFor, submitEnquiryTo, text, toE164 } from '@/lib/bond-api'
 
 export const CONTACT_ENQUIRY_TYPES = [
   'General Enquiry',
@@ -49,6 +50,22 @@ export function contactChannels() {
 
 export type SubmitResult = { ok: true; data: { reference: string } } | { ok: false; reason: 'not-connected' | 'error'; message: string }
 
-export async function submitContactEnquiry(_payload: Record<string, unknown>): Promise<SubmitResult> {
-  return { ok: false, reason: 'not-connected', message: 'Contact enquiries are not connected yet.' }
+/** Backend keys of CONTACT_ENQUIRY_TYPES, in the same order (POST /enquiries `enquiryType`). */
+const CONTACT_TOPIC_KEYS = ['general_enquiry', 'existing_booking', 'new_booking', 'location_information', 'activities', 'academy_courses', 'groups_corporate', 'shop_orders', 'membership', 'partnership', 'other'] as const
+
+/** POST /enquiries on the Bond backend; answers with the enquiry reference. */
+export async function submitContactEnquiry(payload: Record<string, unknown>): Promise<SubmitResult> {
+  return submitEnquiryTo('/enquiries', {
+    name: text(payload.name),
+    email: text(payload.email),
+    phone: toE164(payload.phone),
+    enquiryType: keyFor(payload.type, CONTACT_ENQUIRY_TYPES, CONTACT_TOPIC_KEYS),
+    // The select shows "Name — Status"; the team needs the location name.
+    preferredLocation: text(String(payload.location ?? '').split(' — ')[0]),
+    bookingReference: text(payload.bookingReference),
+    subject: text(payload.subject),
+    message: text(payload.message),
+    consent: checked(payload.consent),
+    newsletterOptIn: checked(payload.marketing),
+  })
 }

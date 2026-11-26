@@ -1,10 +1,14 @@
 /**
- * Single source of truth for Bond Safari Paddle Sports locations.
+ * Bond Safari Paddle Sports locations: types and helpers. The data comes from the Bond backend's public API
+ * (synced at build time into lib/generated/catalogue.json); photos stay in /public (lib/catalogue-media.ts).
  *
- * Only facts from the approved brief are recorded here. Anything not yet supplied by the client
+ * Only approved facts are recorded. Anything not yet supplied by the client
  * (activities per location, policies, coordinates, media, reviews) is left undefined so the UI
  * can show a marked placeholder instead of an invented value.
  */
+
+import { LOCATION_MEDIA } from '@/lib/catalogue-media'
+import catalogue from '@/lib/generated/catalogue.json'
 
 export type LocationStatus = 'operating' | 'opening-soon' | 'coming-soon'
 export type WaterType = 'Sea' | 'Backwater' | 'Lake' | 'River'
@@ -83,6 +87,8 @@ export type Location = {
   context: string
   waterTypes: WaterType[]
   summary?: string
+  /** Full location description from the admin panel (plain text, paragraphs separated by blank lines). */
+  description?: string
   /** ISO date, operating locations only. */
   operatingSince?: string
   plannedOpening?: string
@@ -103,125 +109,16 @@ export type Location = {
   relatedExperiences?: RelatedExperience[]
 }
 
-const kovalamCrossSell: RelatedExperience[] = [
-  { name: 'Discover Scuba Diving', description: 'A Bond Safari Kovalam experience.', approved: false },
-  { name: 'Parasailing', description: 'A Bond Safari Kovalam experience.', approved: false },
-]
+type SyncedLocation = Omit<Location, 'image' | 'gallery'> & { remoteImage?: LocationImage }
 
-const roadmap = (name: string, region: Region, phase: Location['phase'], waterTypes: WaterType[] = []): Location => ({
-  slug: name.toLowerCase().replace(/[–\s]+/g, '-'),
-  name,
-  status: 'coming-soon',
-  region,
-  context: region,
-  waterTypes,
-  phase,
-  activities: [],
-  hasDetailPage: false,
-  visitorInfo: {},
+/**
+ * Locations from the Bond backend (public API → scripts/sync-catalogue.mjs → lib/generated/catalogue.json), with the
+ * website's own photos matched by slug (lib/catalogue-media.ts). Edit content in the admin panel, then rebuild.
+ */
+export const locations: Location[] = (catalogue.locations as unknown as SyncedLocation[]).map(({ remoteImage, ...location }) => {
+  const media = LOCATION_MEDIA[location.slug] ?? {}
+  return { ...location, image: media.image ?? remoteImage, gallery: media.gallery }
 })
-
-export const locations: Location[] = [
-  {
-    slug: 'muziris-kottapuram',
-    name: 'Muziris–Kottapuram',
-    status: 'operating',
-    region: 'Central Kerala',
-    context: 'Kottapuram, Kerala',
-    waterTypes: ['Backwater'],
-    summary: 'Backwater paddling from Kottapuram, operating since 4 October 2026.',
-    operatingSince: '2026-10-04',
-    activities: [],
-    startingPrice: 1200,
-    image: {
-      src: '/images/bond/paddling-under-monsoon-skies.jpg',
-      alt: 'Two paddlers in red and yellow kayaks on the backwater, with coconut palms under monsoon clouds',
-    },
-    hasDetailPage: true,
-    map: {
-      placeName: 'Muziris Heritage Watertrails by Bond Safari',
-      embedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3732.493055370176!2d76.2033723747964!3d10.197928089917845!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b081b610f2b8caf%3A0x57ee3f356bafc031!2sMuziris%20Heritage%20Watertrails%20by%20Bond%20Safari!5e1!3m2!1sen!2sin!4v1793176113819!5m2!1sen!2sin',
-      directionsUrl: 'https://maps.google.com/?cid=6336071224429363249',
-    },
-    visitorInfo: {},
-  },
-  {
-    slug: 'muziris-north-paravur',
-    name: 'Muziris–North Paravur',
-    status: 'operating',
-    region: 'Central Kerala',
-    context: 'Thattukadavu Jetty, North Paravur',
-    waterTypes: ['Backwater'],
-    summary: 'Backwater paddling from Thattukadavu Jetty, operating since 17 October 2026.',
-    operatingSince: '2026-10-17',
-    meetingPoint: 'Thattukadavu Jetty',
-    activities: [],
-    startingPrice: 1200,
-    image: {
-      src: 'https://images.unsplash.com/photo-1554200429-bd32416aca62?auto=format&fit=crop&w=1600&q=85',
-      alt: 'Illustrative image of two people paddling a tandem kayak near Paravoor, Kerala',
-      illustrative: true,
-    },
-    hasDetailPage: true,
-    map: {
-      placeName: 'Muziris Heritage Watertrails by Bond Safari',
-      embedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3733.011718315951!2d76.21926737479576!3d10.153573889959837!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b081bb22829ac7b%3A0x2850301a795ee52b!2sMuziris%20Heritage%20Watertrails%20by%20Bond%20Safari!5e1!3m2!1sen!2sin!4v1793175681529!5m2!1sen!2sin',
-      directionsUrl: 'https://maps.google.com/?cid=2904874649917515051',
-    },
-    visitorInfo: { meetingPointAddress: 'North Paravur, Thattukadavu Boat Jetty, Ernakulam, Keralam 683513' },
-  },
-  {
-    slug: 'kovalam',
-    name: 'Kovalam',
-    status: 'operating',
-    region: 'South Kerala',
-    context: 'Kovalam coast, Kerala',
-    waterTypes: ['Sea'],
-    summary: 'Sea and coastal paddling on the Kovalam coast. Kayaking and canoeing are running now.',
-    // Opening date and session prices not supplied yet; add operatingSince and startingPrice when confirmed.
-    activities: [{ id: 'kayaking' }, { id: 'canoeing' }],
-    image: {
-      src: '/images/bond/red-kayak-at-the-shoreline-from-above.jpg',
-      alt: 'A paddler lying back in a red kayak where the waves meet the sand, seen from above',
-    },
-    hasDetailPage: true,
-    visitorInfo: {},
-    relatedExperiences: kovalamCrossSell,
-  },
-  {
-    slug: 'poovar',
-    name: 'Poovar',
-    status: 'opening-soon',
-    region: 'South Kerala',
-    context: 'Poovar, Kerala',
-    waterTypes: [],
-    summary: 'Planned to open in January 2027, subject to confirmation.',
-    plannedOpening: 'January 2027, subject to confirmation',
-    activities: [],
-    image: {
-      src: 'https://images.unsplash.com/photo-1516428516769-3056248b7f97?auto=format&fit=crop&w=1600&q=85',
-      alt: 'Illustrative image of a kayak bow on calm open water',
-      illustrative: true,
-    },
-    hasDetailPage: true,
-    visitorInfo: {},
-    relatedExperiences: kovalamCrossSell,
-  },
-  roadmap('Kochi–Kumbalangi', 'Central Kerala', 'Phase 2 · FY28'),
-  roadmap('Kumarakom', 'Central Kerala', 'Phase 2 · FY28'),
-  roadmap('Alappuzha', 'Central Kerala', 'Phase 2 · FY28'),
-  roadmap('Cherai', 'Central Kerala', 'Phase 2 · FY28'),
-  roadmap('Varkala–Kappil', 'South Kerala', 'Phase 2 · FY28'),
-  roadmap('Kollam–Munroe', 'South Kerala', 'Phase 2 · FY28'),
-  roadmap('Kozhikode–Kadalundi', 'North Kerala', 'Phase 3 · FY29'),
-  roadmap('Kodenchery white-water', 'North Kerala', 'Phase 3 · FY29'),
-  roadmap('Pookode Lake', 'North Kerala', 'Phase 3 · FY29', ['Lake']),
-  roadmap('Valiyaparamba', 'North Kerala', 'Phase 4 · FY30–31'),
-  roadmap('Parassinikkadavu', 'North Kerala', 'Phase 4 · FY30–31'),
-  roadmap('Irringal', 'North Kerala', 'Phase 4 · FY30–31'),
-  roadmap('Bekal', 'North Kerala', 'Phase 4 · FY30–31'),
-  roadmap('Vellayani', 'South Kerala', 'Phase 4 · FY30–31'),
-]
 
 export const PHASES = ['Phase 2 · FY28', 'Phase 3 · FY29', 'Phase 4 · FY30–31'] as const
 export const HUBS = ['Kovalam', 'Kochi', 'Kozhikode', 'Payyanur']

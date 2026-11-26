@@ -43,7 +43,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${sans.variable} ${display.variable}`}>
-      <body className="antialiased">
+      {/* Browser extensions (e.g. ColorZilla's cz-shortcut-listen) add attributes to <body>; ignore those mismatches. */}
+      <body className="antialiased" suppressHydrationWarning>
         <MotionProvider>
           <CartProvider>{children}</CartProvider>
           <ConnectionStatus />

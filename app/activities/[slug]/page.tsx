@@ -21,19 +21,29 @@ import {
 import { NotifyMeProvider } from '@/components/locations/notify-me'
 import { SiteFooter } from '@/components/site/site-footer'
 import { SiteHeader } from '@/components/site/site-header'
-import { activities, activityHref, getActivity, type Activity } from '@/lib/activities'
+import { activityHref, type Activity } from '@/lib/activities'
+import { getLiveCatalogue } from '@/lib/catalogue-live'
 import { SITE_NAME, SITE_URL } from '@/lib/site'
 
 type Props = { params: Promise<{ slug: string }> }
 
-export const dynamicParams = false
+// Live from the Bond backend: regenerated at most once a minute (keep in sync with LIVE_REVALIDATE_SECONDS).
+// Activities added in the admin panel after the build get their page on first visit.
+export const revalidate = 60
+export const dynamicParams = true
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const { activities } = await getLiveCatalogue()
   return activities.map((activity) => ({ slug: activity.slug }))
 }
 
+async function liveActivity(slug: string) {
+  const { activities } = await getLiveCatalogue()
+  return { activity: activities.find((item) => item.slug === slug), activities }
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const activity = getActivity((await params).slug)
+  const { activity } = await liveActivity((await params).slug)
   if (!activity) return {}
   const title = activity.seo?.title ?? `${activity.name} in Kerala | ${SITE_NAME}`
   const description = activity.seo?.description ?? `${activity.summary} ${activity.name} with ${SITE_NAME}: see where it runs, what to expect and how to book.`
@@ -66,7 +76,7 @@ function breadcrumbs(activity: Activity) {
 }
 
 export default async function ActivityPage({ params }: Props) {
-  const activity = getActivity((await params).slug)
+  const { activity, activities } = await liveActivity((await params).slug)
   if (!activity) notFound()
 
   return (
@@ -96,7 +106,7 @@ export default async function ActivityPage({ params }: Props) {
           <ActivityGallery activity={activity} />
           <ActivityReviews activity={activity} />
           <ActivityFAQ activity={activity} />
-          <RelatedActivities activity={activity} />
+          <RelatedActivities activity={activity} all={activities} />
         </div>
 
         <ActivityFinalCTA />

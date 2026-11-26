@@ -55,7 +55,8 @@ export function matchesActivityFilters(activity: Activity, filters: ActivityFilt
 }
 
 function facetValues(activities: Activity[]): Record<FacetKey, { value: string; label: string }[]> {
-  const offeredLocations = locations.filter((location) => activities.some((activity) => offeringsFor(activity).some((o) => o.location.slug === location.slug)))
+  // Locations offering these activities, taken from the activities' own (possibly live) offerings.
+  const offeredLocations = [...new Map(activities.flatMap((activity) => offeringsFor(activity).map((o) => [o.location.slug, o.location] as const))).values()]
   const skills = [...new Set(activities.map((a) => a.skillLevel).filter(Boolean))] as string[]
   return {
     category: ACTIVITY_CATEGORIES.map((value) => ({ value, label: value })),

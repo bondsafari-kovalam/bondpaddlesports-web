@@ -16,14 +16,14 @@ export const metadata: Metadata = {
 }
 
 export default function CareersPage() {
-  const programme = getCourse('bond-paddle-guide-programme')!
+  const programme = getCourse('bond-paddle-guide-programme')
   const details: [string, string | undefined][] = [
-    ['Who it’s for', programme.description],
-    ['Programme structure', programme.format],
+    ['Who it’s for', programme?.description],
+    ['Programme structure', programme?.format],
     ['Skills & learning outcomes', undefined],
     ['Training locations', undefined],
-    ['Entry requirements', programme.entryRequirements],
-    ['Schedule', programme.duration],
+    ['Entry requirements', programme?.entryRequirements],
+    ['Schedule', programme?.duration],
     ['Placement opportunities', undefined],
   ]
   return (
@@ -50,7 +50,7 @@ export default function CareersPage() {
           <div className="rounded-3xl bg-ink p-7 text-white">
             <Briefcase className="size-8 text-sand" strokeWidth={1.4} aria-hidden />
             <p className="mt-6 text-xs text-white/60">Programme fee (2027 rate)</p>
-            <p className="mt-1 font-display text-4xl font-bold text-sand">{formatRupees(programme.price!)}</p>
+            <p className="mt-1 font-display text-4xl font-bold text-sand">{programme?.price ? formatRupees(programme.price) : 'To be confirmed'}</p>
             <p className="mt-2 text-xs text-white/60">Tax inclusion to be confirmed. A deposit option applies to courses over ₹25,000 once the amount is configured.</p>
             <a href="/academy/courses/bond-paddle-guide-programme" className="mt-6 inline-flex min-h-11 items-center text-sm font-bold text-teal-pale">Programme details <ArrowRight className="ml-1 size-4" aria-hidden /></a>
           </div>

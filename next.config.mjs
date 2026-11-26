@@ -19,7 +19,8 @@ const nextConfig = {
     formats: ['image/avif', 'image/webp'],
     // 60 for film posters under the ink wash, 75 (the default) for everything else.
     qualities: [60, 75],
-    remotePatterns: [{ protocol: 'https', hostname: 'images.unsplash.com' }],
+    // Activity/location images uploaded in the Bond admin panel (S3; signed URLs carry query strings).
+    remotePatterns: [{ protocol: 'https', hostname: 'images.unsplash.com' }, { protocol: 'https', hostname: '**.amazonaws.com' }],
     deviceSizes: [420, 640, 828, 1080, 1280, 1600, 2048],
     imageSizes: [96, 160, 256, 384],
     minimumCacheTTL: 2592000,
